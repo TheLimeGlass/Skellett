@@ -1,4 +1,4 @@
-# Skellett v1.3.5
+# Skellett v1.3.4
 The Skript addon with the beast name
 
 Change log v1.3.5:
