@@ -9,3 +9,5 @@ Change log v1.3.4:
 - Added Scoreboard API (Beta)
 
 ##API documentation coming soon
+
+Beast! https://youtu.be/7ZSSxA96yLo?t=2m58s
