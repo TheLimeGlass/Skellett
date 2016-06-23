@@ -33,6 +33,13 @@ public class SkellettNametags {
 				p.setScoreboard(board);
 			}
 		}
+		if (clientPlayers == null) {
+			for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+				if (clientPlayers != null) {
+					((Player)p).setScoreboard(board);
+				}
+			}
+		}
 	}
 	@SuppressWarnings("deprecation")
 	public static void resetNametagPrefix(Player player, Player clientPlayers) {
@@ -82,6 +89,13 @@ public class SkellettNametags {
 				}
 			} else {
 				p.setScoreboard(board);
+			}
+		}
+		if (clientPlayers == null) {
+			for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+				if (clientPlayers != null) {
+					((Player)p).setScoreboard(board);
+				}
 			}
 		}
 	}
