@@ -1,2 +1,53 @@
-#Suh dude
-testing: true
+# Skellett the addon with the beast name
+# By the one and only LimeBae
+
+version: "1.3.5"
+debug: false
+
+# Here you can enable or disable syntax.
+# If a syntax is enabled, Skellett will register that syntax class.
+
+Syntax:
+
+# This will enable or disable all effects
+  Effects: true
+# Enable or disable different effect syntax here, if the above boolean is true
+  EffectsSyntax:
+    Sound: true
+    SleepIgnored: true
+    SprintingState: true
+    SneakingState: true
+    ForceRespawn: true
+    CollidableState: true
+    ClientWeather: true
+    ClientTime: true
+    Holograms: true
+    Nametags: true
+    Download: true
+#	These below are beta
+    Scoreboards: false
+    ClientWorldborder: false
+
+  Expressions: true
+# Enable or disable different expression syntax here, if the above boolean is true
+  ExpressionsSyntax:
+    SleepIgnored: true
+    SneakingState: true
+    SprintingState: true
+    CollidableState: true
+    RoundDecimal: true
+    ClientWeather: true
+    ClientTime: true
+    Holograms: true
+    Nametags: true
+
+  Conditions: true
+# Enable or disable different expression syntax here, if the above boolean is true
+  ConditionsSyntax:
+    LineOfSight: true
+    ClientTime: true
+
+  Events: true
+# Enable or disable different expression syntax here, if the above boolean is true
+  EventsSyntax:
+    Download: true
