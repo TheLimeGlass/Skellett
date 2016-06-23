@@ -58,7 +58,10 @@ public class SkellettHolograms implements Listener {
 				}
 			}, (long)(time * 20));
 		} else {
-			NewId = Main.randomNumber(1, 2000);
+			int NewID = 0;
+			while(Holo.containsKey(NewID)) {
+				NewID++;
+			}
 			SkellettHolograms.createHologram(loc, name, NewId, glowing, small);
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask((Plugin)registerclass, new Runnable(){
 				public void run() {
