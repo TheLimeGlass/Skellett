@@ -5,10 +5,13 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import ch.njol.skript.classes.Changer;
+import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import ch.njol.util.coll.CollectionUtils;
 
 public class ExprSneakState extends SimpleExpression<Boolean>{
 	
@@ -37,5 +40,19 @@ public class ExprSneakState extends SimpleExpression<Boolean>{
 	@Nullable
 	protected Boolean[] get(Event e) {
 		return new Boolean[]{player.getSingle(e).isSneaking()};
+	}
+	@Override
+	public void change(Event e, Object[] delta, Changer.ChangeMode mode){
+		if (mode == ChangeMode.SET)
+			player.getSingle(e).setSneaking((Boolean)delta[0]);
+		if (mode == ChangeMode.RESET)
+			player.getSingle(e).setSneaking(false);
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
+		if (mode == ChangeMode.SET || mode == ChangeMode.RESET)
+			return CollectionUtils.array(Boolean.class);
+		return null;
 	}
 }
