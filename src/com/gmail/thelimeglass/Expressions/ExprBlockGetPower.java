@@ -2,23 +2,23 @@ package com.gmail.thelimeglass.Expressions;
 
 import javax.annotation.Nullable;
 
+import org.bukkit.Location;
 import org.bukkit.event.Event;
-
-import com.gmail.thelimeglass.SkellettAPI.SkellettNametags;
 
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 
-public class ExprGetNametagPrefix extends SimpleExpression<String>{
+public class ExprBlockGetPower extends SimpleExpression<Integer>{
 	
-	//[skellett] [get] prefix [of] [the] [name][ ]tag [with] [id] %string%
+	//[redstone] power [[being] receiv(ed|ing) [(from|at)]] %location%
+	//%location% [redstone] power [[being] received]
 	
-	private Expression<String> nametag;
+	private Expression<Location> loc;
 	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
+	public Class<? extends Integer> getReturnType() {
+		return Integer.class;
 	}
 	@Override
 	public boolean isSingle() {
@@ -27,16 +27,16 @@ public class ExprGetNametagPrefix extends SimpleExpression<String>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
-		nametag = (Expression<String>) e[0];
+		loc = (Expression<Location>) e[0];
 		return true;
 	}
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[skellett] [get] prefix [of] [the] [name][ ]tag [with] [id] %string%";
+		return "[redstone] power [[being] receiv(ed|ing) [(from|at)]] %location%";
 	}
 	@Override
 	@Nullable
-	protected String[] get(Event e) {
-		return new String[]{SkellettNametags.getNametagPrefix(nametag.getSingle(e))};
+	protected Integer[] get(Event e) {
+		return new Integer[]{loc.getSingle(e).getBlock().getBlockPower()};
 	}
 }
