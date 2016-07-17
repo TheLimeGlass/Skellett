@@ -2,7 +2,6 @@ package com.gmail.thelimeglass.SkellettAPI;
 
 import org.bukkit.Bukkit;
 
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -11,128 +10,120 @@ import org.bukkit.scoreboard.Team;
 import com.gmail.thelimeglass.Main;
 
 public class SkellettNametags {
-	@SuppressWarnings("deprecation")
-	public static void setNametagPrefix(Player player, String tag, Player clientPlayers) {
-		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team team = board.getTeam(player.getName());
-		if (team == null) {
-			team = board.registerNewTeam(player.getName());
-		}
-		String s = Main.cc(tag);
-		if(s.length() > 15) {
-            s = s.substring(0, 15);
+	public static void createNametag(String nametag) {
+		if(nametag.length() > 16) {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cA nametag ID name can't have more than 16 characters!"));
+            return;
         }
-		team.setPrefix(s);
-		team.addPlayer((OfflinePlayer)player);
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (clientPlayers != null) {
-				if (clientPlayers == p) {
-					p.setScoreboard(board);
-				}
-			} else {
-				p.setScoreboard(board);
-			}
-		}
-		if (clientPlayers == null) {
-			for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-				if (clientPlayers != null) {
-					((Player)p).setScoreboard(board);
-				}
-			}
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Team team = board.getTeam(nametag);
+		if (team == null) {
+			team = board.registerNewTeam(nametag);
 		}
 	}
 	@SuppressWarnings("deprecation")
-	public static void resetNametagPrefix(Player player, Player clientPlayers) {
+	public static void addPlayerNametag(Player player, String nametag) {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team team = board.getTeam(player.getName());
+		Team team = board.getTeam(nametag);
+		if (team == null) {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			return;
+		}
+		team.addPlayer((OfflinePlayer)player);
+		player.setScoreboard(board);
+	}
+	@SuppressWarnings("deprecation")
+	public static void removePlayerNametag(Player player, String nametag) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Team team = board.getTeam(nametag);
+		if (team == null) {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			return;
+		}
+		team.removePlayer((OfflinePlayer)player);
+	}
+	public static void setNametagPrefix(String nametag, String tag) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Team team = board.getTeam(nametag);
+		if (team == null) {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			return;
+		}
+		String s = Main.cc(tag);
+		if(s.length() > 16) {
+            s = s.substring(0, 16);
+        }
+		team.setPrefix(tag);
+	}
+	public static void setNametagSuffix(String nametag, String tag) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Team team = board.getTeam(nametag);
+		if (team == null) {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			return;
+		}
+		String s = Main.cc(tag);
+		if(s.length() > 16) {
+            s = s.substring(0, 16);
+        }
+		team.setSuffix(tag);
+	}
+	public static void resetNametag(String nametag) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Team team = board.getTeam(nametag);
 		if (team != null) {
 			team.setPrefix("");
-			team.addPlayer((OfflinePlayer)player);
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (clientPlayers != null) {
-					if (clientPlayers == p) {
-						p.setScoreboard(board);
-					}
-				} else {
-					p.setScoreboard(board);
-				}
-			}
+			team.setSuffix("");
 		} else {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
-	public static String getNametagPrefix(Player player) {
-		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(player.getName());
+	public static void resetNametagPrefix(String nametag) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Team team = board.getTeam(nametag);
 		if (team != null) {
-			return team.getPrefix();
+			team.setPrefix("");
 		} else {
-			return null;
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			return;
 		}
 	}
-	@SuppressWarnings("deprecation")
-	public static void setNametagSuffix(Player player, String tag, Player clientPlayers) {
+	public static void resetNametagSuffix(String nametag) {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team team = board.getTeam(player.getName());
-		if (team == null) {
-			team = board.registerNewTeam(player.getName());
-		}
-		String s = Main.cc(tag);
-		if(s.length() > 15) {
-            s = s.substring(0, 15);
-        }
-		team.setSuffix(s);
-		team.addPlayer((OfflinePlayer)player);
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (clientPlayers != null) {
-				if (clientPlayers == p) {
-					p.setScoreboard(board);
-				}
-			} else {
-				p.setScoreboard(board);
-			}
-		}
-		if (clientPlayers == null) {
-			for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-				if (clientPlayers != null) {
-					((Player)p).setScoreboard(board);
-				}
-			}
-		}
-	}
-	@SuppressWarnings("deprecation")
-	public static void resetNametagSuffix(Player player, Player clientPlayers) {
-		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team team = board.getTeam(player.getName());
+		Team team = board.getTeam(nametag);
 		if (team != null) {
 			team.setSuffix("");
-			team.addPlayer((OfflinePlayer)player);
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (clientPlayers != null) {
-					if (clientPlayers == p) {
-						p.setScoreboard(board);
-					}
-				} else {
-					p.setScoreboard(board);
-				}
-			}
 		} else {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
-	public static void resetNametag(Player player) {
+	public static void deleteNametag(String nametag) {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team team = board.getTeam(player.getName());
+		Team team = board.getTeam(nametag);
 		if (team != null) {
 			team.unregister();
 		} else {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
-	public static String getNametagSuffix(Player player) {
-		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(player.getName());
+	public static String getNametagPrefix(String nametag) {
+		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(nametag);
+		if (team != null) {
+			return team.getPrefix();
+		} else {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			return null;
+		}
+	}
+	public static String getNametagSuffix(String nametag) {
+		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(nametag);
 		if (team != null) {
 			return team.getSuffix();
 		} else {
+			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return null;
 		}
 	}
