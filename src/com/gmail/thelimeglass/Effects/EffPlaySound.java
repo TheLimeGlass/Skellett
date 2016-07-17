@@ -36,7 +36,7 @@ public class EffPlaySound extends Effect {
 	protected void execute(Event e) {
 		Sound s = Sound.valueOf(sound.getSingle(e).replace("\"", "").trim().replace(" ", "_").toUpperCase());
 		try {
-			Sound.valueOf(s.toString().replace("\"", "").trim().replace(" ", "_").toUpperCase());
+			s = Sound.valueOf(s.toString().replace("\"", "").trim().replace(" ", "_").toUpperCase());
 		} catch (IllegalArgumentException t) {
 			Skript.error(s.toString() + " Unknown sound type");
 			return;

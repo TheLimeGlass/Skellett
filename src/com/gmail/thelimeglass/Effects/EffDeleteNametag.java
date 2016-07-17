@@ -11,9 +11,9 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-public class EffResetNametagSuffix extends Effect {
+public class EffDeleteNametag extends Effect {
 
-	//[skellett] reset [the] [name][ ]tag suffix [(with|of)] [id] %string%
+	//[skellett] delete [the] [name][ ]tag [with] [id] %string%
 	
 	private Expression<String> nametag;
 	@SuppressWarnings("unchecked")
@@ -24,10 +24,10 @@ public class EffResetNametagSuffix extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "[skellett] reset [the] [name][ ]tag suffix [(with|of)] [id] %string%";
+		return "[skellett] delete [the] [name][ ]tag [with] [id] %string%";
 	}
 	@Override
 	protected void execute(Event e) {
-		SkellettNametags.resetNametagSuffix(nametag.getSingle(e));
+		SkellettNametags.deleteNametag(nametag.getSingle(e));
 	}
 }
