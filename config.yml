@@ -1,10 +1,27 @@
 # Skellett the addon with the beast name
 # By the one and only LimeBae
 
-version: "1.3.5"
+version: "1.5.4"
 debug: false
 
-# Here you can enable or disable syntax.
+# Enable Bungee to get bungee hooks and stuff (Needs Bungee Bridge API https://www.spigotmc.org/resources/bungeebridge.5820/)
+bungee: false
+# This is a prefix you can adjust for the bungee syntax. It goes before the registered syntax.
+# SkellettCord will still be registered this is just an alt method.
+# This is an option because Nfell and Joey want to be unique... Screw that, it's my addon! Here you go.
+BungeeSyntaxPrefix: "[Skellett[ ][proxy]]"
+
+# I mainly use this feature to beta test new syntax, but you can view source code and
+# play around with these beta features. Keep in mind they are in beta for a reason
+# Any damage done to the server is not reliable under Skellett.
+beta: false
+
+# Use LibsDisguises?
+Disguises: false
+
+# Custom Syntax register toggles
+# Here you can enable or disable every single syntax in Skellett.
+
 # If a syntax is enabled, Skellett will register that syntax class.
 
 Syntax:
@@ -14,19 +31,22 @@ Syntax:
 # Enable or disable different effect syntax here, if the above boolean is true
   EffectsSyntax:
     Sound: true
-    SleepIgnored: true
-    SprintingState: true
-    SneakingState: true
     ForceRespawn: true
     CollidableState: true
     ClientWeather: true
-    ClientTime: true
     Holograms: true
     Nametags: true
     Download: true
-#	These below are beta
-    Scoreboards: false
-    ClientWorldborder: false
+    Whitelist: true
+    Files: true
+    OITB: false
+    CustomName: true
+    TabName: true
+    CenterMessage: true
+    BlockConstructor: true
+    SetStack: true
+    ClearSlot: true
+    WindowProperty: true
 
   Expressions: true
 # Enable or disable different expression syntax here, if the above boolean is true
@@ -37,17 +57,77 @@ Syntax:
     CollidableState: true
     RoundDecimal: true
     ClientWeather: true
-    ClientTime: true
     Holograms: true
     Nametags: true
+    OfflinePlayers: true
+    Operators: true
+    Files: true
+    OITB: false
+#	This loop contain. Particle types and Armour Stands (1.9+)
+    Loops: true
+    SizeOfInventory: true
+    AmountOfItem: true
+#	Grabs the type of inventory clicked from
+    ClickedInventory: true
+    ClickedAction: true
+    AmountOfVariables: true
+    BlockStates: true
+#	Final damage will return the final damage including all effects such as criticals, enchantments, etc
+    FinalDamage: true
+#	Fix missing event values in the "on shoot:" event, Such as:
+#	Grab the speed an arrow was shot at using the "on shoot:" event (event-float)
+#	Also grab the entity data of the arrow. (event-item)
+    FixShoot: true
+    FixFishing: true
+    InstaBreak: true
+    RedstoneCurrent: true
+    SpreadSource: true
+    Spectate: true
+    Exhaustion: true
+    NextEmptySlot: true
+    MathExpressions: true
+    ItemsWithin: true
+    SpectralArrow: true
+    SlimeSize: true
+    GroundState: true
+    CrytalBeamTarget: true
+    CrytalShowingBase: true
+    Metadata: true
+    MaxDamageTicks: true
+    SpawnReason: true
+    TeleportCause: true
+    TargetReason: true
+    InvulnerableState: true
 
   Conditions: true
 # Enable or disable different expression syntax here, if the above boolean is true
   ConditionsSyntax:
     LineOfSight: true
     ClientTime: true
+    OITB: false
+    ScoreboardExists: true
+    Whitelist: true
+    SquidHQ: false
 
   Events: true
 # Enable or disable different expression syntax here, if the above boolean is true
   EventsSyntax:
     Download: true
+    FireworkExplode: true
+    ItemDespawn: true
+    ItemMerge: true
+    MultiBlockPlace: true
+#	1.9 offhand switch only
+    OffhandSwitch: true
+    CreativeInventoryClick: true
+    EntityTeleport: true
+    VehicleMove: true
+#	You can use EntityBlockChange to get crop tramples.
+    EntityBlockChange: true
+    HotbarSwitch: true
+#	SmashHit is a plugin that handles damage asynchronous and not on the load of the server
+#	Find the plugin here https://aquifermc.org/resources/smashhit-async-hit-detection.15/
+    SmashHit: false
+#	Breeding is only 1.10+
+    Breeding: true
+    WorldChange: true

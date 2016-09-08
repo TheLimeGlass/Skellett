@@ -1,7 +1,7 @@
 name: Skellett
 author: LimeGlass
 description: The addon with the beast name
-version: 1.4.5
-main: com.gmail.thelimeglass.Main
+version: 1.5.4
+main: com.gmail.thelimeglass.Skellett
 depend: [Skript]
-softdepend: [OneInTheBattle, BungeeBridge, GuardianBeamAPI]
+softdepend: [OneInTheBattle, BungeeBridge, LibsDisguises, SmashHit, SquidHQ]
