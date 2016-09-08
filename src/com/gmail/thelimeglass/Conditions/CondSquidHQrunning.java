@@ -5,39 +5,37 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import com.squidhq.plugin.APISingleton;
+
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-public class CondClientTimeRelative extends Condition {
+public class CondSquidHQrunning extends Condition {
 	
-	//[skellett] [client] relative time of %player% [is] [%-boolean%] [relative] [to] [server]
+	//%player% is running [client] SquidHQ
+	//%player%'s client is SquidHQ
 	
 	private Expression<Player> player;
-	private Expression<Boolean> boo;
 	@SuppressWarnings("unchecked")
 	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
 		player = (Expression<Player>) e[0];
-		if (e[1] != null) {
-			boo = (Expression<Boolean>) e[1];
-		}
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[skellett] [client] relative time of %player% [is] [%-boolean%] [relative] [to] [server]";
+		return "%player% is running [client] SquidHQ";
 	}
 	public boolean check(Event e) {
-		if (boo != null) {
-			return player.getSingle(e).isPlayerTimeRelative();
-		} else {
-			try {
-				player.getSingle(e).isPlayerTimeRelative();
+		try {
+			if (APISingleton.getAPI().isRunning(player.getSingle(e))) {
 				return true;
+			} else {
+				return false;					
 			}
-			catch (Exception e1) {
-				return false;
-			}
+		}
+		catch (Exception e1) {
+			return false;
 		}
 	}
 }
