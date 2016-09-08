@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
@@ -14,7 +14,7 @@ import ch.njol.util.Kleenean;
 
 public class EffMessageCenter extends Effect {
 	
-	//(message|send [message]) center[ed] %string% to %player% [[with[ text]] %-string%]
+	//(message|send [message]) center[ed] %string% to %players% [[with[ text]] %-string%]
 	
 	private Expression<String> string;
 	private Expression<Player> player;
@@ -29,7 +29,7 @@ public class EffMessageCenter extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "(message|send [message]) center[ed] %string% to %player% [[with[ text]] %-string%]";
+		return "(message|send [message]) center[ed] %string% to %players% [[with[ text]] %-string%]";
 	}
 	@Override
 	protected void execute(Event e) {
@@ -37,7 +37,7 @@ public class EffMessageCenter extends Effect {
 		int num = (62 - string.getSingle(e).length()) / 2;
 		for ( int i = 0; i < num; i++ ) {
 			if (centersymbol != null) {
-				message += Main.cc("&r" + centersymbol.getSingle(e));
+				message += Skellett.cc("&r" + centersymbol.getSingle(e));
 			} else {
 				message += " ";
 			}
@@ -45,7 +45,7 @@ public class EffMessageCenter extends Effect {
 		message += string.getSingle(e);
 		for ( int i = 0; i < num; i++ ) {
 			if (centersymbol != null) {
-				message += Main.cc("&r" + centersymbol.getSingle(e));
+				message += Skellett.cc("&r" + centersymbol.getSingle(e));
 			} else {
 				message += " ";
 			}

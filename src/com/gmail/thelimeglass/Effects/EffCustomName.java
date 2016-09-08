@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 
 public class EffCustomName extends Effect {
 
@@ -31,7 +31,7 @@ public class EffCustomName extends Effect {
 	}
 	@Override
 	protected void execute(Event e) {
-		((LivingEntity)entity.getSingle(e)).setCustomName(Main.cc(tag.getSingle(e)));
+		((LivingEntity)entity.getSingle(e)).setCustomName(Skellett.cc(tag.getSingle(e)));
 		((LivingEntity)entity.getSingle(e)).setCustomNameVisible(true);
 	}
 }
