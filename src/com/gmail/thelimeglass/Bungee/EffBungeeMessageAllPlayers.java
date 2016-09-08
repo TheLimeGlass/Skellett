@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.event.Event;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 
 public class EffBungeeMessageAllPlayers extends Effect {
 
@@ -30,7 +30,7 @@ public class EffBungeeMessageAllPlayers extends Effect {
 	}
 	@Override
 	protected void execute(Event e) {
-		PacketMessageAllPlayers packet = new PacketMessageAllPlayers(Main.cc(msg.getSingle(e)));
+		PacketMessageAllPlayers packet = new PacketMessageAllPlayers(Skellett.cc(msg.getSingle(e)));
 		packet.send();
 	}
 }

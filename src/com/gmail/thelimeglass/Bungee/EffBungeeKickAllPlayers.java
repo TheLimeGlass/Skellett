@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.event.Event;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 
 public class EffBungeeKickAllPlayers extends Effect {
 
@@ -34,7 +34,7 @@ public class EffBungeeKickAllPlayers extends Effect {
 		if (msg == null) {
 			msg = "Kicked from the bungeecord";
 		}
-		PacketKickAllPlayers packet = new PacketKickAllPlayers(Main.cc(msg));
+		PacketKickAllPlayers packet = new PacketKickAllPlayers(Skellett.cc(msg));
 		packet.send();
 	}
 }
