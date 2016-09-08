@@ -3,21 +3,21 @@ package com.gmail.thelimeglass.Expressions;
 import javax.annotation.Nullable;
 
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
-
+import org.bukkit.event.entity.EntityBreedEvent;
+import ch.njol.skript.ScriptLoader;
+import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-public class ExprAmountOfItem extends SimpleExpression<Number>{
+public class ExprBreedingXP extends SimpleExpression<Number>{
 	
-	//[skellett] [get] (size|number|amount) of %itemstack%
+	//bre[e]d[ing] (xp|experience)
 	
-	private Expression<ItemStack> item;
 	@Override
 	public Class<? extends Number> getReturnType() {
 		return Number.class;
@@ -26,38 +26,42 @@ public class ExprAmountOfItem extends SimpleExpression<Number>{
 	public boolean isSingle() {
 		return true;
 	}
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
-		item = (Expression<ItemStack>) e[0];
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public boolean init(Expression<?>[] args, int arg1, Kleenean arg2, SkriptParser.ParseResult arg3) {
+		if (!ScriptLoader.isCurrentEvent((Class)EntityBreedEvent.class)) {
+			Skript.error((String)"You can not use Bred xp expression in any event but on breeding event!");
+			return false;
+		}
 		return true;
 	}
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[skellett] [get] (size|number|amount) of %itemstack%";
+		return "bre[e]d[ing] (xp|experience)";
 	}
 	@Override
 	@Nullable
 	protected Number[] get(Event e) {
-		return new Number[]{item.getSingle(e).getAmount()};
+		return new Number[]{((EntityBreedEvent)e).getExperience()};
 	}
 	@Override
 	public void change(Event e, Object[] delta, Changer.ChangeMode mode){
+		Number xp = (Number)delta[0];
+		Number xpNow = ((EntityBreedEvent)e).getExperience();
 		if (mode == ChangeMode.SET) {
-			item.getSingle(e).setAmount((Integer)delta[0]);
+			((EntityBreedEvent)e).setExperience(xp.intValue());
 		} else if (mode == ChangeMode.RESET) {
-			item.getSingle(e).setAmount(1);
+			((EntityBreedEvent)e).setExperience(0);
 		} else if (mode == ChangeMode.ADD) {
-			item.getSingle(e).setAmount(item.getSingle(e).getAmount() + (Integer)delta[0]);
+			((EntityBreedEvent)e).setExperience(xpNow.intValue() + xp.intValue());
 		} else if (mode == ChangeMode.REMOVE) {
-			item.getSingle(e).setAmount(item.getSingle(e).getAmount() - (Integer)delta[0]);
+			((EntityBreedEvent)e).setExperience(xpNow.intValue() - xp.intValue());
 		}
 	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
 		if (mode == ChangeMode.SET || mode == ChangeMode.RESET || mode == ChangeMode.ADD || mode == ChangeMode.REMOVE)
-			return CollectionUtils.array(Integer.class);
+			return CollectionUtils.array(Number.class);
 		return null;
 	}
 }

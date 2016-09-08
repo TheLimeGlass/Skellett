@@ -1,7 +1,5 @@
 package com.gmail.thelimeglass.Expressions;
 
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
@@ -33,12 +31,6 @@ public class ExprOfflinePlayers extends SimpleExpression<OfflinePlayer> {
 	}
 	@Override
 	protected OfflinePlayer[] get(final Event e) {
-		ArrayList<OfflinePlayer> offlineplayers = new ArrayList<>();
-		for (final OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-			if (p != null) {
-				offlineplayers.add((OfflinePlayer)p);
-			}
-		}
-		return offlineplayers.toArray(new OfflinePlayer[offlineplayers.size()]);
+		return Bukkit.getOfflinePlayers();
 	}
 }

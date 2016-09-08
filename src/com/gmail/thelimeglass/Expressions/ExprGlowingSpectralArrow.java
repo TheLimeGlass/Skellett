@@ -3,8 +3,7 @@ package com.gmail.thelimeglass.Expressions;
 import javax.annotation.Nullable;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.Slime;
+import org.bukkit.entity.SpectralArrow;
 import org.bukkit.event.Event;
 
 import ch.njol.skript.classes.Changer;
@@ -15,12 +14,12 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-public class ExprSlimeSize extends SimpleExpression<Number>{
+public class ExprGlowingSpectralArrow extends SimpleExpression<Number>{
 	
-	//[skellett] slime size of %entity%
-	//[skellett] %entity%'s slime size
+	//[spectral] arrow glowing time of %entity%
+	//%entity%'s [spectral] arrow glowing time
 	
-	private Expression<Entity> entity;
+	private Expression<Entity> arrow;
 	@Override
 	public Class<? extends Number> getReturnType() {
 		return Number.class;
@@ -32,36 +31,41 @@ public class ExprSlimeSize extends SimpleExpression<Number>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
-		entity = (Expression<Entity>) e[0];
+		arrow = (Expression<Entity>) e[0];
 		return true;
 	}
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[skellett] slime size of %entity%";
+		return "[spectral] arrow glowing time of %entity%";
 	}
 	@Override
 	@Nullable
 	protected Number[] get(Event e) {
-		if (e instanceof Slime || e instanceof MagmaCube) {
-			return new Number[]{((Slime)entity.getSingle(e)).getSize()};
+		if (e instanceof SpectralArrow) {
+			return new Number[]{((SpectralArrow)arrow.getSingle(e)).getGlowingTicks()};
+		} else {
+			return new Number[]{0};
 		}
-		return null;
 	}
 	@Override
 	public void change(Event e, Object[] delta, Changer.ChangeMode mode){
-		if (e instanceof Slime || e instanceof MagmaCube) {
+		if (e instanceof SpectralArrow) {
+			Number data = (Number)delta[0];
 			if (mode == ChangeMode.SET) {
-				Number data = (Number)delta[0];
-				((Slime)entity.getSingle(e)).setSize(data.intValue());
+				((SpectralArrow)arrow.getSingle(e)).setGlowingTicks(data.intValue());
+			} else if (mode == ChangeMode.ADD) {
+				((SpectralArrow)arrow.getSingle(e)).setGlowingTicks(((SpectralArrow)arrow.getSingle(e)).getGlowingTicks() + data.intValue());
+			} else if (mode == ChangeMode.REMOVE) {
+				((SpectralArrow)arrow.getSingle(e)).setGlowingTicks(((SpectralArrow)arrow.getSingle(e)).getGlowingTicks() - data.intValue());
 			}
 		}
+		return;
 	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
-		if (mode == ChangeMode.SET) {
+		if (mode == ChangeMode.SET || mode == ChangeMode.ADD || mode == ChangeMode.REMOVE)
 			return CollectionUtils.array(Number.class);
-		}
 		return null;
 	}
 }
