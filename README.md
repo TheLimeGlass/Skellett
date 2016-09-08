@@ -1,6 +1,6 @@
-# Skellett v1.4.4
+# Skellett v1.5.3.1
 The Skript addon with the beast name
 
-##API documentation coming soon
+Skellett is an addon for the Skript plugin https://dev.bukkit.org/bukkit-plugins/skript
 
-Beast!
+Updated the github.
