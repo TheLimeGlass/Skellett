@@ -1,12 +1,12 @@
 package com.gmail.thelimeglass.SkellettAPI;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 import org.bukkit.event.Listener;
 
 public class SkellettHologramsUtils implements Listener {
-    static Main registerclass;
+    static Skellett registerclass;
 
-    public SkellettHologramsUtils(Main c) {
+    public SkellettHologramsUtils(Skellett c) {
     	registerclass = c;
     }
 }

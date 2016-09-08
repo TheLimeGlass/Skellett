@@ -10,7 +10,7 @@ import java.util.zip.ZipInputStream;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 
 public class SkellettFiles {
 	public static String getString(String fileLoc, String tag, boolean color) {
@@ -18,7 +18,7 @@ public class SkellettFiles {
 		YamlConfiguration configuration = YamlConfiguration.loadConfiguration((File)f);
 		if (configuration.get(tag) != null) {
 			if (color) {
-				return Main.cc(configuration.getString(tag));
+				return Skellett.cc(configuration.getString(tag));
 			} else {
 				return configuration.getString(tag);
 			}

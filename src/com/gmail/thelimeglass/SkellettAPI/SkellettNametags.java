@@ -7,12 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 
 public class SkellettNametags {
 	public static void createNametag(String nametag) {
 		if(nametag.length() > 16) {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cA nametag ID name can't have more than 16 characters!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cA nametag ID name can't have more than 16 characters!"));
             return;
         }
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
@@ -26,7 +26,7 @@ public class SkellettNametags {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		Team team = board.getTeam(nametag);
 		if (team == null) {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 		team.addPlayer((OfflinePlayer)player);
@@ -37,7 +37,7 @@ public class SkellettNametags {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		Team team = board.getTeam(nametag);
 		if (team == null) {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 		team.removePlayer((OfflinePlayer)player);
@@ -46,10 +46,10 @@ public class SkellettNametags {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		Team team = board.getTeam(nametag);
 		if (team == null) {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
-		String s = Main.cc(tag);
+		String s = Skellett.cc(tag);
 		if(s.length() > 16) {
             s = s.substring(0, 16);
         }
@@ -59,10 +59,10 @@ public class SkellettNametags {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		Team team = board.getTeam(nametag);
 		if (team == null) {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
-		String s = Main.cc(tag);
+		String s = Skellett.cc(tag);
 		if(s.length() > 16) {
             s = s.substring(0, 16);
         }
@@ -75,7 +75,7 @@ public class SkellettNametags {
 			team.setPrefix("");
 			team.setSuffix("");
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
@@ -85,7 +85,7 @@ public class SkellettNametags {
 		if (team != null) {
 			team.setPrefix("");
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
@@ -95,7 +95,7 @@ public class SkellettNametags {
 		if (team != null) {
 			team.setSuffix("");
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
@@ -105,7 +105,7 @@ public class SkellettNametags {
 		if (team != null) {
 			team.unregister();
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return;
 		}
 	}
@@ -114,7 +114,7 @@ public class SkellettNametags {
 		if (team != null) {
 			return team.getPrefix();
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return null;
 		}
 	}
@@ -123,7 +123,7 @@ public class SkellettNametags {
 		if (team != null) {
 			return team.getSuffix();
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cNo nametag under the name " + nametag + " &cwas found!"));
 			return null;
 		}
 	}

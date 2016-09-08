@@ -2,7 +2,7 @@ package com.gmail.thelimeglass.SkellettAPI;
 
 import java.util.HashMap;
 
-import com.gmail.thelimeglass.Main;
+import com.gmail.thelimeglass.Skellett;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -16,14 +16,14 @@ import org.bukkit.plugin.Plugin;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class SkellettHolograms implements Listener {
-	private static Main registerclass;
+	private static Skellett registerclass;
 	public static HashMap<Integer, Entity> Holo;
 	public static Integer NewId;
 	static {
 		Holo = new HashMap();
 	}
-	public SkellettHolograms(Main main) {
-		registerclass = main;
+	public SkellettHolograms(Skellett Skellett) {
+		registerclass = Skellett;
 	}
 	@EventHandler
 	public void z(EntityCombustEvent e) {
@@ -35,7 +35,7 @@ public class SkellettHolograms implements Listener {
 		if (!Holo.containsKey(ID)) {
 			ArmorStand stand = (ArmorStand)loc.getWorld().spawn(loc.add(0.5, 0.0, 0.5), (Class)ArmorStand.class);
 			stand.setVisible(false);
-			stand.setCustomName(Main.cc(Name));
+			stand.setCustomName(Skellett.cc(Name));
 			stand.setCustomNameVisible(true);
 			stand.setInvulnerable(true);
 			stand.setGravity(false);
@@ -46,7 +46,7 @@ public class SkellettHolograms implements Listener {
 			stand.setGliding(false);
 			Holo.put(ID, (Entity)stand);
 		} else {
-			Bukkit.getConsoleSender().sendMessage(Main.cc(Main.prefix + "&cHologram " + ID + " already exists!"));
+			Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cHologram " + ID + " already exists!"));
 		}
 	}
 	public static void createTempHologram(Location loc, String name, Integer ID, Integer time, boolean glowing, boolean small, boolean firework, Color color1, Color color2, Color color3) {
@@ -101,7 +101,7 @@ public class SkellettHolograms implements Listener {
 	}
 	public static void renameHologram(Integer ID, String Name) {
 		if (Holo.containsKey(ID)) {
-			Holo.get(ID).setCustomName(Main.cc(Name));
+			Holo.get(ID).setCustomName(Skellett.cc(Name));
 			Holo.get(ID).setCustomNameVisible(true);
 		} else {
 			return;
