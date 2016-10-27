@@ -60,7 +60,7 @@ public class ExprMetadata extends SimpleExpression<Object>{
 					metadata.removeMetadata(string.getSingle(e), Skellett.getPlugin());
 				}
 				metadata.setMetadata(string.getSingle(e), (MetadataValue)new FixedMetadataValue(Skellett.getPlugin(), (Object)(delta[0])));
-			} else if (mode == ChangeMode.RESET) {
+			} else if (mode == ChangeMode.RESET || mode == ChangeMode.DELETE) {
 				if (metadata.hasMetadata(string.getSingle(e))) {
 					metadata.removeMetadata(string.getSingle(e), Skellett.getPlugin());
 				}
@@ -70,7 +70,7 @@ public class ExprMetadata extends SimpleExpression<Object>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
-		if (mode == ChangeMode.SET || mode == ChangeMode.RESET)
+		if (mode == ChangeMode.SET || mode == ChangeMode.RESET || mode == ChangeMode.DELETE)
 			return CollectionUtils.array(Object.class);
 		return null;
 	}

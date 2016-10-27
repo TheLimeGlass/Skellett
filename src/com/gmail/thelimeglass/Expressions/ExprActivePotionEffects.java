@@ -13,14 +13,14 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 
-public class ExprActivePotionEffects extends SimpleExpression<PotionEffect>{
+public class ExprActivePotionEffects extends SimpleExpression<String>{
 	
 	//[(the|all)] [of] [the] [active] potion[s] [effects] (on|of) %entity%
 	
 	private Expression<LivingEntity> entity;
 	@Override
-	public Class<? extends PotionEffect> getReturnType() {
-		return PotionEffect.class;
+	public Class<? extends String> getReturnType() {
+		return String.class;
 	}
 	@Override
 	public boolean isSingle() {
@@ -38,9 +38,15 @@ public class ExprActivePotionEffects extends SimpleExpression<PotionEffect>{
 	}
 	@Override
 	@Nullable
-	protected PotionEffect[] get(Event e) {
-		ArrayList<PotionEffect> potions = new ArrayList<>();
-		potions.addAll(entity.getSingle(e).getActivePotionEffects());
-		return potions.toArray(new PotionEffect[potions.size()]);
+	protected String[] get(Event e) {
+		ArrayList<String> potions = new ArrayList<>();
+		for (final PotionEffect effect : entity.getSingle(e).getActivePotionEffects()) {
+			if (effect.getAmplifier() != 0) {
+				potions.add(effect.getType().getName() + " " + effect.getAmplifier());
+			} else {
+				potions.add(effect.getType().getName());
+			}
+		}
+		return potions.toArray(new String[potions.size()]);
 	}
 }
