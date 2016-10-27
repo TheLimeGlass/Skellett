@@ -2,9 +2,9 @@ package com.gmail.thelimeglass;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fish;
@@ -24,7 +25,10 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExpEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
@@ -37,7 +41,6 @@ import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -45,18 +48,30 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Team;
 
 import com.gmail.thelimeglass.Bungee.CondOnlinePlayer;
+import com.gmail.thelimeglass.Bungee.EffBungeeActionbar;
+import com.gmail.thelimeglass.Bungee.EffBungeeChat;
 import com.gmail.thelimeglass.Bungee.EffBungeeKickAllPlayers;
+import com.gmail.thelimeglass.Bungee.EffBungeeKickPlayer;
 import com.gmail.thelimeglass.Bungee.EffBungeeMessageAllPlayers;
+import com.gmail.thelimeglass.Bungee.EffBungeeMessagePlayer;
+import com.gmail.thelimeglass.Bungee.EffBungeeSendServer;
 import com.gmail.thelimeglass.Bungee.EffExecuteBungeeCommand;
 import com.gmail.thelimeglass.Bungee.EffStopProxy;
 import com.gmail.thelimeglass.Bungee.ExprBungeeCount;
 import com.gmail.thelimeglass.Bungee.ExprBungeeCountServer;
+import com.gmail.thelimeglass.Bungee.ExprBungeePlayerIP;
+import com.gmail.thelimeglass.Bungee.ExprBungeePlayerName;
+import com.gmail.thelimeglass.Bungee.ExprBungeePlayerServer;
+import com.gmail.thelimeglass.Bungee.ExprBungeeServerIP;
 import com.gmail.thelimeglass.Bungee.ExprBungeeServerMOTD;
 import com.gmail.thelimeglass.Bungee.ExprBungeeUUID;
 import com.gmail.thelimeglass.Bungee.ExprPlayerSlotsOfServer;
@@ -68,18 +83,21 @@ import com.gmail.thelimeglass.Conditions.CondScoreboardExists;
 import com.gmail.thelimeglass.Conditions.CondSquidHQrunning;
 import com.gmail.thelimeglass.Conditions.CondSquidHQrunning2;
 import com.gmail.thelimeglass.Disguises.CondIsDisguised;
+import com.gmail.thelimeglass.Disguises.EffDisguiseNextEntity;
 import com.gmail.thelimeglass.Disguises.EffDisguiseToAll;
 import com.gmail.thelimeglass.Disguises.EffUnDisguiseToAll;
 import com.gmail.thelimeglass.Disguises.ExprGetDisguise;
+import com.gmail.thelimeglass.Disguises.ExprSelfViewDisguise;
 import com.gmail.thelimeglass.Effects.EffBlockConstructor;
 import com.gmail.thelimeglass.Effects.EffClearSlot;
-import com.gmail.thelimeglass.Effects.EffCustomName;
 import com.gmail.thelimeglass.Effects.EffDownload;
 import com.gmail.thelimeglass.Effects.EffFilesCreate;
 import com.gmail.thelimeglass.Effects.EffFilesDelete;
 import com.gmail.thelimeglass.Effects.EffFilesSet;
+import com.gmail.thelimeglass.Effects.EffFirework;
 import com.gmail.thelimeglass.Effects.EffForceRespawn;
 import com.gmail.thelimeglass.Effects.EffMessageCenter;
+import com.gmail.thelimeglass.Effects.EffOpenInventory;
 import com.gmail.thelimeglass.Effects.EffPlaySound;
 import com.gmail.thelimeglass.Effects.EffPlaySoundPlayer;
 import com.gmail.thelimeglass.Effects.EffReloadWhitelist;
@@ -102,13 +120,21 @@ import com.gmail.thelimeglass.Expressions.ExprAmountOfVariables;
 import com.gmail.thelimeglass.Expressions.ExprAsyncDamage;
 import com.gmail.thelimeglass.Expressions.ExprBlockGetDrops;
 import com.gmail.thelimeglass.Expressions.ExprBlockGetPower;
+import com.gmail.thelimeglass.Expressions.ExprBlockXP;
 import com.gmail.thelimeglass.Expressions.ExprBreedingBreeder;
 import com.gmail.thelimeglass.Expressions.ExprBreedingEntity;
 import com.gmail.thelimeglass.Expressions.ExprBreedingFather;
 import com.gmail.thelimeglass.Expressions.ExprBreedingItem;
 import com.gmail.thelimeglass.Expressions.ExprBreedingMother;
 import com.gmail.thelimeglass.Expressions.ExprBreedingXP;
+import com.gmail.thelimeglass.Expressions.ExprClickedInventory;
+import com.gmail.thelimeglass.Expressions.ExprCropState;
+import com.gmail.thelimeglass.Expressions.ExprCropStateOfBlock;
+import com.gmail.thelimeglass.Expressions.ExprCustomName;
+import com.gmail.thelimeglass.Expressions.ExprEnchantmentNumber;
+import com.gmail.thelimeglass.Expressions.ExprEntityID;
 import com.gmail.thelimeglass.Expressions.ExprExhaustion;
+import com.gmail.thelimeglass.Expressions.ExprFallDistance;
 import com.gmail.thelimeglass.Expressions.ExprFilesGetBoolean;
 import com.gmail.thelimeglass.Expressions.ExprFilesGetConfigurationSection;
 import com.gmail.thelimeglass.Expressions.ExprFilesGetString;
@@ -121,19 +147,23 @@ import com.gmail.thelimeglass.Expressions.ExprFixFishingState;
 import com.gmail.thelimeglass.Expressions.ExprFixShootArrowSpeed;
 import com.gmail.thelimeglass.Expressions.ExprFixShootGetArrow;
 import com.gmail.thelimeglass.Expressions.ExprFixShootGetBow;
+import com.gmail.thelimeglass.Expressions.ExprFuseTime;
 import com.gmail.thelimeglass.Expressions.ExprGetClientWeather;
 import com.gmail.thelimeglass.Expressions.ExprGetItemOfEntity;
 import com.gmail.thelimeglass.Expressions.ExprGlowingSpectralArrow;
+import com.gmail.thelimeglass.Expressions.ExprGroundState;
+import com.gmail.thelimeglass.Expressions.ExprHideEnchants;
 import com.gmail.thelimeglass.Expressions.ExprInstaBreak;
-import com.gmail.thelimeglass.Expressions.ExprInventory;
 import com.gmail.thelimeglass.Expressions.ExprInventoryAction;
+import com.gmail.thelimeglass.Expressions.ExprInventoryType;
 import com.gmail.thelimeglass.Expressions.ExprInventoryViewers;
 import com.gmail.thelimeglass.Expressions.ExprInvulnerableState;
 import com.gmail.thelimeglass.Expressions.ExprIsCollidable;
-import com.gmail.thelimeglass.Expressions.ExprIsOnGround;
 import com.gmail.thelimeglass.Expressions.ExprMaxDamageTicks;
 import com.gmail.thelimeglass.Expressions.ExprMetadata;
+import com.gmail.thelimeglass.Expressions.ExprNearbyEntities;
 import com.gmail.thelimeglass.Expressions.ExprNextEmptySlot;
+import com.gmail.thelimeglass.Expressions.ExprNoItemNBT;
 import com.gmail.thelimeglass.Expressions.ExprSleepIgnored;
 import com.gmail.thelimeglass.Expressions.ExprSlimeSize;
 import com.gmail.thelimeglass.Expressions.ExprNumberOfSlots;
@@ -142,6 +172,7 @@ import com.gmail.thelimeglass.Expressions.ExprOperators;
 import com.gmail.thelimeglass.Expressions.ExprParticles;
 import com.gmail.thelimeglass.Expressions.ExprRedstoneNewCurrent;
 import com.gmail.thelimeglass.Expressions.ExprRedstoneOldCurrent;
+import com.gmail.thelimeglass.Expressions.ExprRemoveItemNBT;
 import com.gmail.thelimeglass.Expressions.ExprRoundDecimal;
 import com.gmail.thelimeglass.Expressions.ExprSneakState;
 import com.gmail.thelimeglass.Expressions.ExprSpawnReason;
@@ -151,6 +182,14 @@ import com.gmail.thelimeglass.Expressions.ExprSprintState;
 import com.gmail.thelimeglass.Expressions.ExprTargetReason;
 import com.gmail.thelimeglass.Expressions.ExprTeleportCause;
 import com.gmail.thelimeglass.Expressions.ExprWorldChangeFrom;
+import com.gmail.thelimeglass.Feudal.ExprFeudalKingdomDescription;
+import com.gmail.thelimeglass.Feudal.ExprFeudalKingdomFighters;
+import com.gmail.thelimeglass.Feudal.ExprFeudalKingdomHome;
+import com.gmail.thelimeglass.Feudal.ExprFeudalLocationKingdom;
+import com.gmail.thelimeglass.Feudal.ExprFeudalLocationKingdomName;
+import com.gmail.thelimeglass.Feudal.ExprFeudalMessage;
+import com.gmail.thelimeglass.Feudal.ExprFeudalPlayerKingdom;
+import com.gmail.thelimeglass.Feudal.ExprFeudalPlayerKingdomName;
 import com.gmail.thelimeglass.Holograms.EffCreateHologram;
 import com.gmail.thelimeglass.Holograms.EffRemoveHologram;
 import com.gmail.thelimeglass.Holograms.EffRenameHologram;
@@ -191,11 +230,49 @@ import com.gmail.thelimeglass.OITB.ExprOITBGetTopPlayersWithScore;
 import com.gmail.thelimeglass.OITB.ExprOITBGetTopScores;
 import com.gmail.thelimeglass.OITB.ExprOITBGetTournamentWins;
 import com.gmail.thelimeglass.OITB.ExprOITBGetZombieKills;
+import com.gmail.thelimeglass.Scoreboards.CondObjectiveExists;
+import com.gmail.thelimeglass.Scoreboards.CondObjectiveIsModifiable;
+import com.gmail.thelimeglass.Scoreboards.CondTeamHasEntry;
+import com.gmail.thelimeglass.Scoreboards.EffRegisterObjective;
+import com.gmail.thelimeglass.Scoreboards.EffRegisterTeam;
+import com.gmail.thelimeglass.Scoreboards.EffResetEntryScores;
+import com.gmail.thelimeglass.Scoreboards.EffScoreboardClearSlot;
+import com.gmail.thelimeglass.Scoreboards.EffTeamAddEntry;
+import com.gmail.thelimeglass.Scoreboards.EffTeamRemoveEntry;
+import com.gmail.thelimeglass.Scoreboards.EffUnregisterObjective;
+import com.gmail.thelimeglass.Scoreboards.EffUnregisterTeam;
+import com.gmail.thelimeglass.Scoreboards.ExprEntries;
+import com.gmail.thelimeglass.Scoreboards.ExprGetEntryScores;
+import com.gmail.thelimeglass.Scoreboards.ExprGetEntryTeam;
+import com.gmail.thelimeglass.Scoreboards.ExprGetObjective;
+import com.gmail.thelimeglass.Scoreboards.ExprGetTeam;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectiveCriteria;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectiveDisplayName;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectiveDisplaySlot;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectiveGetScore;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectiveName;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectives;
+import com.gmail.thelimeglass.Scoreboards.ExprObjectivesByCriteria;
+import com.gmail.thelimeglass.Scoreboards.ExprScore;
+import com.gmail.thelimeglass.Scoreboards.ExprScoreEntry;
+import com.gmail.thelimeglass.Scoreboards.ExprScoreObjective;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamDisplayName;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamEntries;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamFriendlyFire;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamFriendlyInvisibles;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamName;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamOptions;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamPrefix;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamSize;
+import com.gmail.thelimeglass.Scoreboards.ExprTeamSuffix;
+import com.gmail.thelimeglass.Scoreboards.ExprTeams;
 import com.gmail.thelimeglass.SkellettAPI.SkellettHolograms;
 import com.gmail.thelimeglass.SkellettAPI.SkellettHologramsUtils;
 import com.gmail.thelimeglass.SkellettStateExpressions.ExprHotbarSwitchSlot;
 import com.gmail.thelimeglass.Utils.ExprNewMaterial;
 import com.gmail.thelimeglass.Utils.SkellettState;
+import com.gmail.thelimeglass.versionControl.ExprGravityState;
+import com.gmail.thelimeglass.versionControl.ExprSilentState;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
@@ -208,6 +285,8 @@ import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import ch.njol.skript.util.Timespan;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import us.forseth11.feudal.core.Feudal;
+import us.forseth11.feudal.kingdoms.Kingdom;
 
 @SuppressWarnings("deprecation")
 public class Skellett extends JavaPlugin {
@@ -215,25 +294,41 @@ public class Skellett extends JavaPlugin {
 	public static String prefix = "&8[&aSkellett&8] &e";
 	String enable = prefix + "&aHas been enabled!";
 	String noConfig = prefix + "&cconfig.yml not found, generating a new config!";
+	String noCe = prefix + "&cCustomEvents.yml not found, generating a new file!";
 	FileConfiguration config = getConfig();
 	private static Skellett Instance = null;
 	private static Plugin plugin = null;
+	private File ceFile;
+	private FileConfiguration ceData;
 	
 	public void onEnable(){
+		Instance = this;
+		plugin = this;
 		try {
 			if (!getDataFolder().exists()) {
 				getDataFolder().mkdirs();
 			}
 			File file = new File(getDataFolder(), "config.yml");
+			ceFile = new File(getDataFolder(), "CustomEvents.yml");
+			plugin = Skellett.getPlugin(Skellett.class);
 			if (!file.exists()) {
 				Bukkit.getConsoleSender().sendMessage(cc(noConfig));
 				saveDefaultConfig();
 			}
+			if (!ceFile.exists()) {
+				ceFile.getParentFile().mkdirs();
+				Bukkit.getConsoleSender().sendMessage(cc(noCe));
+				saveResource("CustomEvents.yml", false);
+			}
+			ceData = new YamlConfiguration();
+			try {
+				ceData.load(ceFile);
+		 	} catch (IOException e) {
+		 		e.printStackTrace();
+		 	}
 		} catch (Exception error) {
 			error.printStackTrace();
 		}
-		Instance = this;
-		plugin = this;
 		Skript.registerAddon(this);
 		if (!Objects.equals(getDescription().getVersion(), config.getString("version"))) {
 			File f = new File(getDataFolder(), "config.yml");
@@ -244,22 +339,24 @@ public class Skellett extends JavaPlugin {
 			saveDefaultConfig();
 		}
 		Classes.registerClass(new ClassInfo<SkellettState>(SkellettState.class, "skellettstate")
-			.name("skellettstate").parser(new Parser<SkellettState>() {
+			.name("skellettstate")
+			.description("Returns a state used in Skellett")
+			.parser(new Parser<SkellettState>() {
 				@Override
 				@Nullable
-				public SkellettState parse(String s, ParseContext context) {
+				public SkellettState parse(String state, ParseContext context) {
 					try {
-						return SkellettState.valueOf(s.toUpperCase());
+						return SkellettState.valueOf(state.toUpperCase());
 					} catch (Exception e) {}
 					return null;
 				}
 				@Override
-				public String toString(SkellettState c, int flags) {
-					return null;
+				public String toString(SkellettState s, int flags) {
+					return s.toString();
 				}
 				@Override
-				public String toVariableNameString(SkellettState c) {
-					return null;
+				public String toVariableNameString(SkellettState s) {
+					return s.toString();
 				}
 				public String getVariableNamePattern() {
 					return ".+";
@@ -355,12 +452,6 @@ public class Skellett extends JavaPlugin {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered OITB effects! (15)"));
 				}
 			}
-			if (config.getBoolean("Syntax.EffectsSyntax.CustomName")) {
-				Skript.registerEffect(EffCustomName.class, "[skellett] [set] custom[ ]name of %entity% to %string%");
-				if (config.getBoolean("debug")) {
-					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered custom name effect! (16)"));
-				}
-			}
 			if (config.getBoolean("Syntax.EffectsSyntax.TabName")) {
 				Skript.registerEffect(EffSetTabName.class, "[skellett] set tab name of %player% to %string%");
 				if (config.getBoolean("debug")) {
@@ -368,13 +459,13 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 			if (config.getBoolean("Syntax.EffectsSyntax.CenterMessage")) {
-				Skript.registerEffect(EffMessageCenter.class, "(message|send [message]) center[ed] %string% to %players% [[with[ text]] %-string%]");
+				Skript.registerEffect(EffMessageCenter.class, "(message|send [message]) center[ed] %strings% to %players% [[with[ text]] %-string%]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered center message effect! (18)"));
 				}
 			}
 			if (config.getBoolean("Syntax.EffectsSyntax.BlockConstructor")) {
-				Skript.registerEffect(EffBlockConstructor.class, "(create|start|make|build|construct) %string% with %string% at %location% [[with effect[s]] %-boolean%]");
+				Skript.registerEffect(EffBlockConstructor.class, "(create|start|make|build|construct) %string% with %itemtype% at %location% [[with effect[s]] %-boolean%]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered block constructor effect! (19)"));
 				}
@@ -386,155 +477,161 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 			if (config.getBoolean("Syntax.EffectsSyntax.ClearSlot")) {
-				Skript.registerEffect(EffClearSlot.class, "(clear|empty|reset) (inventory|menu|gui) [slot %-integer% [(of|in)]] %inventory%");
+				Skript.registerEffect(EffClearSlot.class, "(clear|empty|reset) (inventory|menu|gui) [slot %-integer%] [(of|in)] %inventory%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered clear slot effect! (21)"));
+				}
+			}
+			if (config.getBoolean("Syntax.EffectsSyntax.OpenInventory")) {
+				Skript.registerEffect(EffOpenInventory.class, "[skellett] open [[better] inventory [type]] %string% [with %-number% row[s]] [named %-string%] to %players%");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered open inventory effect! (22)"));
 				}
 			}
 		}
 		if (config.getBoolean("Syntax.Expressions")) {
 			if (config.getBoolean("Syntax.ExpressionsSyntax.SleepIgnored")) {
-				Skript.registerExpression(ExprSleepIgnored.class,Boolean.class,ExpressionType.PROPERTY, "ignored sleep[ing] [state] of %player%");
+				Skript.registerExpression(ExprSleepIgnored.class,Boolean.class,ExpressionType.SIMPLE, "ignored sleep[ing] [state] of %player%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered sleep ignored expression! (1)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.SneakingState")) {
-				Skript.registerExpression(ExprSneakState.class,Boolean.class,ExpressionType.PROPERTY, "(sneak|shift|crouch)[ing] [state] of %player%");
+				Skript.registerExpression(ExprSneakState.class,Boolean.class,ExpressionType.SIMPLE, "(sneak|shift|crouch)[ing] [state] of %player%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered sneak state expression! (2)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.SprintingState")) {
-				Skript.registerExpression(ExprSprintState.class,Boolean.class,ExpressionType.PROPERTY, "(sprint|run)[ing] [state] of %player%");
+				Skript.registerExpression(ExprSprintState.class,Boolean.class,ExpressionType.SIMPLE, "(sprint|run)[ing] [state] of %player%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered sprint state expression! (3)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.CollidableState")) {
-				Skript.registerExpression(ExprIsCollidable.class,Boolean.class,ExpressionType.PROPERTY, "collid(e|able) [state] [of] %entity%");
+				Skript.registerExpression(ExprIsCollidable.class,Boolean.class,ExpressionType.SIMPLE, "collid(e|able) [state] [of] %entity%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered collidable state expression! (4)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.RoundDecimal")) {
-				Skript.registerExpression(ExprRoundDecimal.class,Number.class,ExpressionType.PROPERTY, "[Skellett] %number% round[ed] [to] %number% decimal (digit[s]|place[s]");
+				Skript.registerExpression(ExprRoundDecimal.class,Number.class,ExpressionType.SIMPLE, "[Skellett] %number% round[ed] [to] %number% decimal (digit[s]|place[s]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered round decimal expression! (5)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.ClientWeather")) {
-				Skript.registerExpression(ExprGetClientWeather.class,String.class,ExpressionType.PROPERTY, "[get] [client] weather of %player%");
+				Skript.registerExpression(ExprGetClientWeather.class,String.class,ExpressionType.SIMPLE, "[get] [client] weather of %player%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered client weather expression! (6)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Holograms")) {
-				Skript.registerExpression(ExprGetHologramLocation.class,Location.class,ExpressionType.PROPERTY, "[get] location of holo[gram] [with] [id] %integer%");
-				Skript.registerExpression(ExprGetHologramName.class,String.class,ExpressionType.PROPERTY, "[get] (string|text|name) of holo[gram] [with] [id] %integer%");
+				Skript.registerExpression(ExprGetHologramLocation.class,Location.class,ExpressionType.SIMPLE, "[get] location of holo[gram] [with] [id] %integer%");
+				Skript.registerExpression(ExprGetHologramName.class,String.class,ExpressionType.SIMPLE, "[get] (string|text|name) of holo[gram] [with] [id] %integer%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered hologram expressions! (8)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Nametags")) {
-				Skript.registerExpression(ExprGetNametagPrefix.class,String.class,ExpressionType.PROPERTY, "[skellett] [get] prefix [of] [the] [name][ ]tag [with] [id] %string%");
-				Skript.registerExpression(ExprGetNametagSuffix.class,String.class,ExpressionType.PROPERTY, "[skellett] [get] suffix [of] [the] [name][ ]tag [with] [id] %string%");
+				Skript.registerExpression(ExprGetNametagPrefix.class,String.class,ExpressionType.SIMPLE, "[skellett] [get] prefix [of] [the] [name][ ]tag [with] [id] %string%");
+				Skript.registerExpression(ExprGetNametagSuffix.class,String.class,ExpressionType.SIMPLE, "[skellett] [get] suffix [of] [the] [name][ ]tag [with] [id] %string%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered nametag expressions! (9)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.OfflinePlayers")) {
-				Skript.registerExpression(ExprOfflinePlayers.class,OfflinePlayer.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] offline[ ]player[s]");
+				Skript.registerExpression(ExprOfflinePlayers.class,OfflinePlayer.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] offline[ ]player[s]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered offline player expression! (10)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Operators")) {
-				Skript.registerExpression(ExprOperators.class,OfflinePlayer.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] Op[erator][(s|ed)] [players]");
+				Skript.registerExpression(ExprOperators.class,OfflinePlayer.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] Op[erator][(s|ed)] [players]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered operator expression! (11)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Files")) {
-				Skript.registerExpression(ExprFilesGetString.class,String.class,ExpressionType.PROPERTY, "[skellett] [get] (string|value) [of] [node] %string% from [file] %string%");
-				Skript.registerExpression(ExprFilesGetBoolean.class,Boolean.class,ExpressionType.PROPERTY, "[skellett] [get] boolean [of] [node] %string% from [file] %string%");
-				Skript.registerExpression(ExprFilesGetConfigurationSection.class,ConfigurationSection.class,ExpressionType.PROPERTY, "[skellett] [get] [config][uration] section [of] [node] %string% from [file] %string%");
-				Skript.registerExpression(ExprFilesIsSet.class,Boolean.class,ExpressionType.PROPERTY, "[skellett] node %string% (from|of) [file] %string% [is set]");
+				Skript.registerExpression(ExprFilesGetString.class,String.class,ExpressionType.SIMPLE, "[skellett] [get] (string|value) [of] [node] %string% from [file] %string%");
+				Skript.registerExpression(ExprFilesGetBoolean.class,Boolean.class,ExpressionType.SIMPLE, "[skellett] [get] boolean [of] [node] %string% from [file] %string%");
+				Skript.registerExpression(ExprFilesGetConfigurationSection.class,ConfigurationSection.class,ExpressionType.SIMPLE, "[skellett] [get] [config][uration] section [of] [node] %string% from [file] %string%");
+				Skript.registerExpression(ExprFilesIsSet.class,Boolean.class,ExpressionType.SIMPLE, "[skellett] node %string% (from|of) [file] %string% [is set]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered file expressions! (13)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.OITB")) {
 				if (getServer().getPluginManager().isPluginEnabled("OneInTheBattle")) {
-					Skript.registerExpression(ExprOITBGetChallengeWins.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] Challenge[s][ ](win[s]|won) of %player%");
-					Skript.registerExpression(ExprOITBGetCoins.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] coins of %player%");
-					Skript.registerExpression(ExprOITBGetDeaths.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] deaths of %player%");
-					Skript.registerExpression(ExprOITBGetHighestZombiesWave.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] [Player]['][s][ ]High[est][ ][Zombie][s][ ]Wave of %player%");
-					Skript.registerExpression(ExprOITBGetHits.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] hits of %player%");
-					Skript.registerExpression(ExprOITBGetKills.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] kills of %player%");
-					Skript.registerExpression(ExprOITBGetModifier.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] modifier of %player%");
-					Skript.registerExpression(ExprOITBGetPlayerExp.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] [Player][ ]E[x]p[eri[(e|a)]nce] of %player%");
-					Skript.registerExpression(ExprOITBGetPlayerRank.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] [Player][ ]rank of %player%");
-					Skript.registerExpression(ExprOITBGetPlayTime.class,String.class,ExpressionType.PROPERTY, "[OITB] [get] play[er][ ]time of %player%");
-					Skript.registerExpression(ExprOITBGetShotsfired.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] Shots[ ]fired of %player%");
-					Skript.registerExpression(ExprOITBGetTopPlayers.class,String.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] top %integer% players of [the] [OITB] [stat][istic] %StatType%");
-					Skript.registerExpression(ExprOITBGetTopPlayersWithScore.class,String.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] top %integer% player[s] with score[s] of [the] [OITB] [stat][istic] %StatType%");
-					Skript.registerExpression(ExprOITBGetTopScores.class,Integer.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] top %integer% scores of [the] [OITB] [stat][istic] %StatType%");
-					Skript.registerExpression(ExprOITBGetTournamentWins.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] Tournament[s][ ](win[s]|won) of %player%");
-					Skript.registerExpression(ExprOITBGetZombieKills.class,Integer.class,ExpressionType.PROPERTY, "[OITB] [get] zombie[ ]kills of %player%");
+					Skript.registerExpression(ExprOITBGetChallengeWins.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] Challenge[s][ ](win[s]|won) of %player%");
+					Skript.registerExpression(ExprOITBGetCoins.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] coins of %player%");
+					Skript.registerExpression(ExprOITBGetDeaths.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] deaths of %player%");
+					Skript.registerExpression(ExprOITBGetHighestZombiesWave.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] [Player]['][s][ ]High[est][ ][Zombie][s][ ]Wave of %player%");
+					Skript.registerExpression(ExprOITBGetHits.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] hits of %player%");
+					Skript.registerExpression(ExprOITBGetKills.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] kills of %player%");
+					Skript.registerExpression(ExprOITBGetModifier.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] modifier of %player%");
+					Skript.registerExpression(ExprOITBGetPlayerExp.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] [Player][ ]E[x]p[eri[(e|a)]nce] of %player%");
+					Skript.registerExpression(ExprOITBGetPlayerRank.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] [Player][ ]rank of %player%");
+					Skript.registerExpression(ExprOITBGetPlayTime.class,String.class,ExpressionType.SIMPLE, "[OITB] [get] play[er][ ]time of %player%");
+					Skript.registerExpression(ExprOITBGetShotsfired.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] Shots[ ]fired of %player%");
+					Skript.registerExpression(ExprOITBGetTopPlayers.class,String.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] top %integer% players of [the] [OITB] [stat][istic] %StatType%");
+					Skript.registerExpression(ExprOITBGetTopPlayersWithScore.class,String.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] top %integer% player[s] with score[s] of [the] [OITB] [stat][istic] %StatType%");
+					Skript.registerExpression(ExprOITBGetTopScores.class,Integer.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] top %integer% scores of [the] [OITB] [stat][istic] %StatType%");
+					Skript.registerExpression(ExprOITBGetTournamentWins.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] Tournament[s][ ](win[s]|won) of %player%");
+					Skript.registerExpression(ExprOITBGetZombieKills.class,Integer.class,ExpressionType.SIMPLE, "[OITB] [get] zombie[ ]kills of %player%");
 				}
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered OITB expressions! (14)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Loops")) {
-				Skript.registerExpression(ExprParticles.class,Effect.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] particle[[ ]types]");
-				Skript.registerExpression(ExprInventoryViewers.class,HumanEntity.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] [player[']s] view(er[s]|ing) [of] %inventory%");
-				Skript.registerExpression(ExprActivePotionEffects.class,PotionEffect.class,ExpressionType.PROPERTY, "[(the|all)] [of] [the] [active] potion[s] [effects] (on|of) %entity%");
+				Skript.registerExpression(ExprParticles.class,Effect.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] particle[[ ]types]");
+				Skript.registerExpression(ExprInventoryViewers.class,HumanEntity.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] [player[']s] view(er[s]|ing) [of] %inventory%");
+				Skript.registerExpression(ExprActivePotionEffects.class, String.class,ExpressionType.SIMPLE, "[(the|all)] [of] [the] [active] potion[s] [effects] (on|of) %entity%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered some loop expressions! (15)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.SizeOfInventory")) {
-				Skript.registerExpression(ExprNumberOfSlots.class,Integer.class,ExpressionType.PROPERTY, "[skellett] (gui|menu|inventory|chest|window) (size|number|slots) (of|from) %inventory%");
+				Skript.registerExpression(ExprNumberOfSlots.class,Integer.class,ExpressionType.SIMPLE, "[skellett] (gui|menu|inventory|chest|window) (size|number|slots) (of|from) %inventory%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered number of slots expression! (16)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.AmountOfItem")) {
-				Skript.registerExpression(ExprAmountOfItem.class,Number.class,ExpressionType.PROPERTY, "(skellett|better|fixed|working|get) (size|number|amount) of %itemstack%");
-				Skript.registerExpression(ExprAmountOfDroppedItem.class,Number.class,ExpressionType.PROPERTY, "[skellett] [get] (size|number|amount) of dropped %entity%");
+				Skript.registerExpression(ExprAmountOfItem.class,Number.class,ExpressionType.SIMPLE, "(skellett|better|fixed|working|get) (size|number|amount) of %itemstack%");
+				Skript.registerExpression(ExprAmountOfDroppedItem.class,Number.class,ExpressionType.SIMPLE, "[skellett] [get] (size|number|amount) of dropped %entity%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered amount of item expression! (17)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.ClickedInventory")) {
-				Skript.registerExpression(ExprInventory.class, InventoryType.class, ExpressionType.PROPERTY, "click[ed] inventory");
+				Skript.registerExpression(ExprClickedInventory.class, Inventory.class, ExpressionType.SIMPLE, "click[ed] inventory");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered clicked inventory expression! (19)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.ClickedAction")) {
-				Skript.registerExpression(ExprInventoryAction.class, InventoryAction.class, ExpressionType.PROPERTY, "(click[ed]|inventory) action");
+				Skript.registerExpression(ExprInventoryAction.class, InventoryAction.class, ExpressionType.SIMPLE, "(click[ed]|inventory) action");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered clicked action expression! (20)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.AmountOfVariables")) {
-				Skript.registerExpression(ExprAmountOfVariables.class, Number.class, ExpressionType.PROPERTY, "(size|amount) of [all] variables");
+				Skript.registerExpression(ExprAmountOfVariables.class, Number.class, ExpressionType.SIMPLE, "(size|amount) of [all] variables");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered amount of variables expression! (21)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.BlockStates")) {
-				Skript.registerExpression(ExprBlockGetPower.class, Integer.class, ExpressionType.PROPERTY, "[redstone] power [[being] receiv(ed|ing) [(from|at)]] %location%", "%location% [redstone] power [[being] received]");
-				Skript.registerExpression(ExprBlockGetDrops.class, ItemStack.class, ExpressionType.PROPERTY, "[(the|all)] [of] [the] [possible] drop[(ped|s)] [items] (from|of) [block [at]] %location% [(with|using) %-itemstack%]");
+				Skript.registerExpression(ExprBlockGetPower.class, Integer.class, ExpressionType.SIMPLE, "[redstone] power [[being] receiv(ed|ing) [(from|at)]] %location%", "%location% [redstone] power [[being] received]");
+				Skript.registerExpression(ExprBlockGetDrops.class, ItemStack.class, ExpressionType.SIMPLE, "[(the|all)] [of] [the] [possible] drop[(ped|s)] [items] (from|of) [block [at]] %location% [(with|using) %-itemstack%]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered block state expressions! (22)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.FinalDamage")) {
-				Skript.registerExpression(ExprFinalDamage.class, Double.class, ExpressionType.PROPERTY, "[skellett] final damage");
+				Skript.registerExpression(ExprFinalDamage.class, Double.class, ExpressionType.SIMPLE, "[skellett] final damage");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered final damage expression! (23)"));
 				}
@@ -548,53 +645,53 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.FixFishing")) {
-				Skript.registerExpression(ExprFixFishingGetCaught.class, Entity.class, ExpressionType.PROPERTY, "[skellett] caught (fish|item|entity)");
-				Skript.registerExpression(ExprFixFishingGetXP.class, Integer.class, ExpressionType.PROPERTY, "[skellett] [fish[ing]] (xp|experience) [earned]");
-				Skript.registerExpression(ExprFixFishingGetHook.class, Fish.class, ExpressionType.PROPERTY, "[skellett] [fish[ing]] hook");
-				Skript.registerExpression(ExprFixFishingState.class, PlayerFishEvent.State.class, ExpressionType.PROPERTY, "[skellett] [fish[ing]] state");
+				Skript.registerExpression(ExprFixFishingGetCaught.class, Entity.class, ExpressionType.SIMPLE, "[skellett] caught (fish|item|entity)");
+				Skript.registerExpression(ExprFixFishingGetXP.class, Integer.class, ExpressionType.SIMPLE, "[skellett] [fish[ing]] (xp|experience) [earned]");
+				Skript.registerExpression(ExprFixFishingGetHook.class, Fish.class, ExpressionType.SIMPLE, "[skellett] [fish[ing]] hook");
+				Skript.registerExpression(ExprFixFishingState.class, PlayerFishEvent.State.class, ExpressionType.SIMPLE, "[skellett] [fish[ing]] state");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered fixed fishing expressions! (25)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.InstaBreak")) {
-				Skript.registerExpression(ExprInstaBreak.class, Boolean.class, ExpressionType.PROPERTY, "[event] inst(ant|a) break [state]");
+				Skript.registerExpression(ExprInstaBreak.class, Boolean.class, ExpressionType.SIMPLE, "[event] inst(ant|a) break [state]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered insta break expression! (26)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.RedstoneCurrent")) {
-				Skript.registerExpression(ExprRedstoneOldCurrent.class, Integer.class, ExpressionType.PROPERTY, "old [event] [redstone] current");
-				Skript.registerExpression(ExprRedstoneNewCurrent.class, Integer.class, ExpressionType.PROPERTY, "new [event] [redstone] current");
+				Skript.registerExpression(ExprRedstoneOldCurrent.class, Integer.class, ExpressionType.SIMPLE, "old [event] [redstone] current");
+				Skript.registerExpression(ExprRedstoneNewCurrent.class, Integer.class, ExpressionType.SIMPLE, "new [event] [redstone] current");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered redstone current expressions! (27)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.SpreadSource")) {
-				Skript.registerExpression(ExprSpreadSource.class, Block.class, ExpressionType.PROPERTY, "[spread] source [block]");
+				Skript.registerExpression(ExprSpreadSource.class, Block.class, ExpressionType.SIMPLE, "[spread] source [block]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered spread source expression! (28)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Spectate")) {
-				Skript.registerExpression(ExprSpectate.class, Entity.class, ExpressionType.PROPERTY, "(spec[tat(e|or|ing)]|view[ing]) [(target|state)] of %player%", "%player%'s (spec[tat(e|or|ing)]|view[ing]) [(target|state)]");
+				Skript.registerExpression(ExprSpectate.class, Entity.class, ExpressionType.SIMPLE, "(spec[tat(e|or|ing)]|view[ing]) [(target|state)] of %player%", "%player%'s (spec[tat(e|or|ing)]|view[ing]) [(target|state)]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered spectate expressions! (29)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.Exhaustion")) {
-				Skript.registerExpression(ExprExhaustion.class, Number.class, ExpressionType.PROPERTY, "exhaustion of %player%" ,"%player%'s exhaustion");
+				Skript.registerExpression(ExprExhaustion.class, Number.class, ExpressionType.SIMPLE, "exhaustion of %player%" ,"%player%'s exhaustion");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered exhaustion expression! (30)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.NextEmptySlot")) {
-				Skript.registerExpression(ExprNextEmptySlot.class, Integer.class, ExpressionType.PROPERTY, "(next|first) empty slot of %inventory%");
+				Skript.registerExpression(ExprNextEmptySlot.class, Integer.class, ExpressionType.SIMPLE, "(next|first) empty slot of %inventory%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered empty slot expression! (31)"));
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.MathExpressions")) {
-				Skript.registerExpression(ExprAbsoluteValue.class, Number.class, ExpressionType.PROPERTY, "absolute [value] of %number%");
+				Skript.registerExpression(ExprAbsoluteValue.class, Number.class, ExpressionType.SIMPLE, "absolute [value] of %number%");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered math expressions! (32)"));
 				}
@@ -622,7 +719,7 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.GroundState")) {
-				Skript.registerExpression(ExprIsOnGround.class, Boolean.class, ExpressionType.SIMPLE, "[(is|are)] [on] [the] ground [state] [of] [entity] %entity%", "[entity] %entity% [(is|are)] [on] [the] ground [state]");
+				Skript.registerExpression(ExprGroundState.class, Boolean.class, ExpressionType.SIMPLE, "[(is|are)] [on] [the] ground [state] [of] [entity] %entity%", "[entity] %entity% [(is|are)] [on] [the] ground [state]");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered ground state expression! (35)"));
 				}
@@ -658,9 +755,91 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 			if (config.getBoolean("Syntax.ExpressionsSyntax.InvulnerableState")) {
-				Skript.registerExpression(ExprInvulnerableState.class, Boolean.class, ExpressionType.SIMPLE, "invulnerable state of entity", "%entity%'s invulnerable state");
+				if (Bukkit.getVersion().contains("1.9") || Bukkit.getVersion().contains("1.10") || Bukkit.getVersion().contains("1.11") || Bukkit.getVersion().contains("1.12")) {
+					Skript.registerExpression(ExprInvulnerableState.class, Boolean.class, ExpressionType.SIMPLE, "invulnerable state of %entity%", "%entity%'s invulnerable state");
+					if (config.getBoolean("debug")) {
+						Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered invulnerable state expression! (41)"));
+					}
+				} else {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "The invulnerable state expression is only for 1.9+ versions!"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.GravityState")) {
+				if (Bukkit.getVersion().contains("1.10")) {
+					Skript.registerExpression(ExprGravityState.class, Boolean.class, ExpressionType.SIMPLE, "gravity [state] [of] [entit(y|ies)] %entitys%");
+					if (config.getBoolean("debug")) {
+						Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered gravity state expression! (42)"));
+					}
+				} else {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "The gravity state expression is only for 1.10+ versions!"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.SilentState")) {
+				if (Bukkit.getVersion().contains("1.10")) {
+					Skript.registerExpression(ExprSilentState.class, Boolean.class, ExpressionType.SIMPLE, "(silent|quiet) [state] [of] [entit(y|ies)] %entitys%");
+					if (config.getBoolean("debug")) {
+						Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered silent state expression! (43)"));
+					}
+				} else {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "The silent state expression is only for 1.10+ versions!"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.NearbyEntities")) {
+				Skript.registerExpression(ExprNearbyEntities.class, Entity.class, ExpressionType.SIMPLE, "[skellett] [all] [nearby] entit(y|ies) (within|in) [a] radius [of] %number%[(,| and) %-number%(,| and) %-number%] (within|around|near) %location%");
 				if (config.getBoolean("debug")) {
-					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered invulnerable state expression! (41)"));
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered nearby entities expression! (44)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.CropState")) {
+				Skript.registerExpression(ExprCropState.class, String.class, ExpressionType.SIMPLE, "crop state");
+				Skript.registerExpression(ExprCropStateOfBlock.class, String.class, ExpressionType.SIMPLE, "crop state of %block%");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered crop state expression! (45)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.NoNBT")) {
+				Skript.registerExpression(ExprNoItemNBT.class, ItemStack.class, ExpressionType.SIMPLE, "%itemstacks% with(out [any]| no) NBT");
+				Skript.registerExpression(ExprRemoveItemNBT.class, ItemStack.class, ExpressionType.SIMPLE, "%itemstacks% with [all] removed NBT", "remove[ed] [all] NBT [from] %itemstacks%");
+				Skript.registerExpression(ExprHideEnchants.class, ItemStack.class, ExpressionType.SIMPLE, "%itemstacks% with hid(den|ing) enchant[ment][s]", "[skellett] (shiny|hidden enchant[ment][s]|glow|glowing) [item] %itemstack%");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered no NBT expressions! (46)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.CustomName")) {
+				Skript.registerExpression(ExprCustomName.class, String.class, ExpressionType.SIMPLE, "[skellett] [get] custom name of %entity%");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered custom name expression! (47)"));
+				}
+			
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.InventoryType")) {
+				Skript.registerExpression(ExprInventoryType.class, String.class, ExpressionType.SIMPLE, "inventory type of %inventory%", "%inventory%'s [inventory] type");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered inventory type expression! (48)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.EnchantmentLevel")) {
+				Skript.registerExpression(ExprEnchantmentNumber.class, Number.class, ExpressionType.COMBINED, "[skellett] [the] enchant[ment] level (from|of) %enchantment% (of|in) %itemstack%", "[skellett] %itemstack%'s enchant[ment] level (from|of) %enchantment%");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered enchantment level expression! (49)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.TNTFuseTime")) {
+				Skript.registerExpression(ExprFuseTime.class, Number.class, ExpressionType.SIMPLE, "[skellett] [the] (fuse time|time until blowup) of [the] [primed] [tnt] %entity%", "[skellett] [primed] [tnt] %entity%['s] (fuse time|time until blowup)");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered fuse time expression! (50)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.FallDistance")) {
+				Skript.registerExpression(ExprFallDistance.class, Number.class, ExpressionType.SIMPLE, "[the] fall distance (from|of) %entity%", "%entity%'s fall distance");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered fall distance expression! (51)"));
+				}
+			}
+			if (config.getBoolean("Syntax.ExpressionsSyntax.EntityID")) {
+				Skript.registerExpression(ExprEntityID.class, Number.class, ExpressionType.SIMPLE, "[the] [entity] [number] id (of|from) %entity%", "%entity%'s [entity] [number] id");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered entity id expression! (52)"));
 				}
 			}
 		}
@@ -684,7 +863,7 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 			if (config.getBoolean("Syntax.ConditionsSyntax.ScoreboardExists")) {
-				Skript.registerCondition(CondScoreboardExists.class, "score[ ][board] %string% (is set|exists)");
+				Skript.registerCondition(CondScoreboardExists.class, "score[ ][board] %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered scoreboard exists condition! (4)"));
 				}
@@ -859,7 +1038,7 @@ public class Skellett extends JavaPlugin {
 			}
 			if (config.getBoolean("Syntax.EventsSyntax.EntityBlockChange")) {
 				Skript.registerEvent("[on] entity block (change|modify):", SimpleEvent.class, EntityChangeBlockEvent.class, "[on] entity block (change|modify)");
-				Skript.registerExpression(ExprNewMaterial.class, Material.class, ExpressionType.PROPERTY, "[skellett] new [changed] material");
+				Skript.registerExpression(ExprNewMaterial.class, Material.class, ExpressionType.SIMPLE, "[skellett] new [changed] material");
 				EventValues.registerEventValue(EntityChangeBlockEvent.class, Block.class, new Getter<Block, EntityChangeBlockEvent>() {
 					@Override
 					public Block get(EntityChangeBlockEvent e) {
@@ -937,6 +1116,19 @@ public class Skellett extends JavaPlugin {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered on world change event + event expressions! (12)"));
 				}
 			}
+			if (config.getBoolean("Syntax.EventsSyntax.CropGrow")) {
+				Skript.registerEvent("[on] [skellett] (block|crop) grow[ing]:", SimpleEvent.class, BlockGrowEvent.class, "[on] [skellett] (block|crop) grow[ing]");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered on crop grow event! (13)"));
+				}
+			}
+			if (config.getBoolean("Syntax.EventsSyntax.BlockExperienceDrop")) {
+				Skript.registerEvent("[on] block [break] (xp|exp|experience) [drop]:", SimpleEvent.class, BlockExpEvent.class, "[on] block [break] (xp|exp|experience) [drop]");
+				Skript.registerExpression(ExprBlockXP.class, Number.class,ExpressionType.SIMPLE, "[dropped] block[[']s] (xp|experience)");
+				if (config.getBoolean("debug")) {
+					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered on block xp drop event! (14)"));
+				}
+			}
 		}
 		if (config.getBoolean("bungee")) {
 			String bungeeprefix = config.getString("BungeeSyntaxPrefix");
@@ -944,26 +1136,220 @@ public class Skellett extends JavaPlugin {
 				bungeeprefix = "[Skellett[ ][cord]]";
 			}
 			Skript.registerCondition(CondOnlinePlayer.class, bungeeprefix + "%string% is online bungee[[ ]cord]");
-			Skript.registerExpression(ExprBungeeCount.class,Integer.class,ExpressionType.PROPERTY, bungeeprefix + "[Skellett[ ][cord]] [get] online bungee[[ ]cord] players");
-			Skript.registerExpression(ExprBungeeCountServer.class,Integer.class,ExpressionType.PROPERTY, bungeeprefix + "[Skellett[ ][cord]] [get] online bungee[[ ]cord] players on [server] %string%");
-			Skript.registerExpression(ExprPlayerSlotsOfServer.class,Integer.class,ExpressionType.PROPERTY, bungeeprefix + "[Skellett[ ][cord]] [get] [(player|server)] slot[s] of server %string%");
-			Skript.registerExpression(ExprServerOnline.class,Boolean.class,ExpressionType.PROPERTY, bungeeprefix + "[Skellett[ ][cord]] [get] [(online|offline)] status of [bungee[ ][cord]] server %string%");
+			Skript.registerExpression(ExprBungeeCount.class,Integer.class,ExpressionType.SIMPLE, bungeeprefix + "[Skellett[ ][cord]] [get] online bungee[[ ]cord] players");
+			Skript.registerExpression(ExprBungeeCountServer.class,Integer.class,ExpressionType.SIMPLE, bungeeprefix + "[Skellett[ ][cord]] [get] online bungee[[ ]cord] players on [server] %string%");
+			Skript.registerExpression(ExprPlayerSlotsOfServer.class,Integer.class,ExpressionType.SIMPLE, bungeeprefix + "[Skellett[ ][cord]] [get] [(player|server)] slot[s] of server %string%");
+			Skript.registerExpression(ExprServerOnline.class,Boolean.class,ExpressionType.SIMPLE, bungeeprefix + "[Skellett[ ][cord]] [get] [(online|offline)] status of [bungee[ ][cord]] server %string%");
 			Skript.registerEffect(EffBungeeKickAllPlayers.class, bungeeprefix + "[Skellett[ ][cord]] kick [all] [bungee[ ][cord]] players [from bungee[ ][cord]] [(by reason of|because [of]|on account of|due to)] %string%");
 			Skript.registerEffect(EffBungeeMessageAllPlayers.class, bungeeprefix + "[Skellett[ ][cord]] (message|send|msg) %string% to [all] bungee[[ ][cord]] players");
+			Skript.registerEffect(EffBungeeChat.class, bungeeprefix + "[skellett[cord]] (force|make) %string% [to] (say|chat|(run|execute)[ command]) %string% [on bungee[ ][cord]]");
+			Skript.registerEffect(EffBungeeSendServer.class, bungeeprefix + "[skellett[cord]] (send|connect) %string% to [[bungee[ ][cord]] server] %string%");
 			Skript.registerEffect(EffExecuteBungeeCommand.class, bungeeprefix + "[Skellett[ ][cord]] (make|run|execute) bungee[[ ][cord]] [console] command %string%");
 			Skript.registerEffect(EffStopProxy.class, bungeeprefix + "[Skellett[ ][cord]] (stop|kill|end) [bungee[[ ][cord]] proxy [[with] (msg|string|text)] %string%");
-			Skript.registerExpression(ExprBungeeUUID.class,String.class,ExpressionType.PROPERTY, bungeeprefix + "[skellett[cord]] [get] [player] bungee[[ ][cord]] uuid [of] %string%");
-			Skript.registerExpression(ExprBungeeServerMOTD.class,String.class,ExpressionType.PROPERTY, bungeeprefix + "[skellett[cord]] [get] MOTD of [server] %string%");
+			Skript.registerExpression(ExprBungeeUUID.class,String.class,ExpressionType.SIMPLE, bungeeprefix + "[skellett[cord]] [get] [player] bungee[[ ][cord]] uuid [of] %string%");
+			Skript.registerExpression(ExprBungeeServerMOTD.class,String.class,ExpressionType.SIMPLE, bungeeprefix + "[skellett[cord]] [get] MOTD of [server] %string%");
+			Skript.registerExpression(ExprBungeePlayerName.class, String.class, ExpressionType.SIMPLE, bungeeprefix + "[skellett[cord]] [bungee[ ][cord]] [player] name of [uuid] %string%");
+			Skript.registerExpression(ExprBungeePlayerIP.class, InetSocketAddress.class, ExpressionType.SIMPLE, bungeeprefix + "[skellett[cord]] [bungee[ ][cord]] player ip [address] of [uuid] %string%");
+			Skript.registerExpression(ExprBungeePlayerServer.class, String.class, ExpressionType.SIMPLE, bungeeprefix + "[skellett[cord]] [bungee[ ][cord]] [current] server of [uuid] %string%", "[skellett[cord]] %string%'s [bungee[ ][cord]] [current] server");
+			Skript.registerExpression(ExprBungeeServerIP.class, InetSocketAddress.class, ExpressionType.SIMPLE, bungeeprefix + "[skellett[cord]] [bungee[ ][cord]] server ip [address] of [server] %string%");
+			Skript.registerEffect(EffBungeeKickPlayer.class, bungeeprefix + "[skellett[cord]] kick %string% from bungee[ ][cord] (by reason of|because [of]|on account of|due to) %string%", "[skellett[cord]] bungee[ ][cord] kick %string% (by reason of|because [of]|on account of|due to) %string%");
+			Skript.registerEffect(EffBungeeMessagePlayer.class, bungeeprefix + "[skellett[cord]] (message|send|msg) %string% to bungee[ ][cord] [player] %string%");
+			Skript.registerEffect(EffBungeeActionbar.class, bungeeprefix + "[skellett[cord]] (send|display|show) action[ ]bar [with [text]] %string% to bungee[ ][cord] [player] %string%");
 		}
 		if (config.getBoolean("Disguises")) {
 			if (Bukkit.getPluginManager().getPlugin("LibsDisguises") != null) {
-				Skript.registerExpression(ExprGetDisguise.class, DisguiseType.class, ExpressionType.PROPERTY, "[skellett] [[Libs]Disguises] Disguise of %entities%[[']s]", "[skellett] [[Libs]Disguises] %entity%'s disguise");
+				Skript.registerExpression(ExprGetDisguise.class, DisguiseType.class, ExpressionType.SIMPLE, "[skellett] [[Libs]Disguises] Disguise of %entities%[[']s]", "[skellett] [[Libs]Disguises] %entity%'s disguise");
 				Skript.registerEffect(EffDisguiseToAll.class, "[skellett] [[Libs]Disguises] [set] Disguise [of] %entities% (as|to) %string% [with block [id] %-integer%] [(and|with) data [id] %-integer%] [with [user[ ]]name %-string%] [(and|with) baby [state] %-boolean%]");
 				Skript.registerEffect(EffUnDisguiseToAll.class, "[skellett] [[Libs]Disguises] Un[( |-)]Disguise %entities%");
+				Skript.registerEffect(EffDisguiseNextEntity.class, "[skellett] [[Libs]Disguises] [set] Disguise [of] next [spawned] (as|to) %string% [with block [id] %-integer%] [(and|with) data [id] %-integer%] [with [user[ ]]name %-string%] [(and|with) baby [state] %-boolean%]");
 				Skript.registerCondition(CondIsDisguised.class, "[skellett] [[Libs]Disguises] [(entity|player)] %entities% [(is|are)] disguised");
+				Skript.registerExpression(ExprSelfViewDisguise.class, Boolean.class, ExpressionType.SIMPLE, "[skellett] [[Libs]Disguises] self view[ing] disguise [state] of %entities%[[']s]", "[skellett] [[Libs]Disguises] %entities%'s self view[ing] disguise [state]");
+				//Skript.registerEvent("[on] [[Libs]Disguises] disguise:", SimpleEvent.class, EvtDisguise.class, "[on] [[Libs]Disguises] disguise");
 				if (config.getBoolean("debug")) {
 					Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered disguises"));
 				}
+			}
+		}
+		if (config.getBoolean("Scoreboards")) {
+			Classes.registerClass(new ClassInfo<Objective>(Objective.class, "objective")
+				.name("scoreboard objective")
+				.description("A getter for scoreboard objectives.")
+				.parser(new Parser<Objective>() {
+					@Override
+					@Nullable
+					public Objective parse(String obj, ParseContext context) {
+						return null;
+					}
+					@Override
+					public String toString(Objective o, int flags) {
+						return o.toString();
+					}
+					@Override
+					public String toVariableNameString(Objective o) {
+						return o.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
+			Classes.registerClass(new ClassInfo<Score>(Score.class, "score")
+				.name("scoreboard score")
+				.description("A getter for scoreboard scores.")
+				.parser(new Parser<Score>() {
+					@Override
+					@Nullable
+					public Score parse(String score, ParseContext context) {
+						return null;
+					}
+					@Override
+					public String toString(Score s, int flags) {
+						return s.toString();
+					}
+					@Override
+					public String toVariableNameString(Score s) {
+						return s.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
+			Classes.registerClass(new ClassInfo<Team>(Team.class, "team")
+				.name("scoreboard team")
+				.description("A getter for scoreboard teams.")
+				.parser(new Parser<Team>() {
+					@Override
+					@Nullable
+					public Team parse(String team, ParseContext context) {
+						return null;
+					}
+					@Override
+					public String toString(Team t, int flags) {
+						return t.toString();
+					}
+					@Override
+					public String toVariableNameString(Team t) {
+						return t.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
+			Classes.registerClass(new ClassInfo<Team.OptionStatus>(Team.OptionStatus.class, "optionstatus")
+				.name("scoreboard team optionstatus")
+				.description("A getter for scoreboard team optionstatus.")
+				.parser(new Parser<Team.OptionStatus>() {
+					@Override
+					@Nullable
+					public Team.OptionStatus parse(String option, ParseContext context) {
+						return null;
+					}
+					@Override
+					public String toString(Team.OptionStatus option, int flags) {
+						return option.toString();
+					}
+					@Override
+					public String toVariableNameString(Team.OptionStatus option) {
+						return option.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
+			Classes.registerClass(new ClassInfo<Team.Option>(Team.Option.class, "teamoption")
+				.name("scoreboard team option")
+				.description("A getter for scoreboard team option.")
+				.parser(new Parser<Team.Option>() {
+					@Override
+					@Nullable
+					public Team.Option parse(String option, ParseContext context) {
+						return null;
+					}
+					@Override
+					public String toString(Team.Option option, int flags) {
+						return option.toString();
+					}
+					@Override
+					public String toVariableNameString(Team.Option option) {
+						return option.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
+			Skript.registerExpression(ExprGetObjective.class, Objective.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) objective [(for|from|of)] %string%", "[skellett] (score[ ][board]|board) %string%'s objective");
+			Skript.registerExpression(ExprObjectiveCriteria.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) objective criteria [(for|from|of)] %objective%", "[skellett] (score[ ][board]|board) %objective%'s objective criteria");
+			Skript.registerEffect(EffRegisterObjective.class, "[skellett] register [new] (score[ ][board]|board) objective %string% with [criteria] %string%");
+			Skript.registerCondition(CondObjectiveExists.class, "[skellett] (score[ ][board]|board) objective %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))");
+			Skript.registerExpression(ExprObjectives.class, Objective.class, ExpressionType.SIMPLE, "[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] objectives");
+			Skript.registerExpression(ExprObjectivesByCriteria.class, Objective.class, ExpressionType.SIMPLE, "[the] [skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] objectives (by|with) [criteria] %string%");
+			Skript.registerEffect(EffUnregisterObjective.class, "[skellett] unregister (score[ ][board]|board) objective %objective%");
+			Skript.registerExpression(ExprObjectiveDisplayName.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) objective display name [(for|from|of)] %objective%", "[the] [skellett] (score[ ][board]|board) %objective%['s] objective['s] display name", "[the] [skellett] (score[ ][board]|board) objective %objective%['s] display name");
+			Skript.registerExpression(ExprObjectiveName.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) objective name [(for|from|of)] %objective%", "[the] [skellett] (score[ ][board]|board) %objective%['s] objective['s] name", "[the] [skellett] (score[ ][board]|board) objective %objective%['s] name");
+			Skript.registerExpression(ExprObjectiveDisplaySlot.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) objective [display] slot [(for|from|of)] %objective%", "[the] [skellett] (score[ ][board]|board) %objective%['s] objective['s] [display] slot", "[the] [skellett] (score[ ][board]|board) objective %objective%['s] [display] slot");
+			Skript.registerCondition(CondObjectiveIsModifiable.class, "[the] [skellett] (score[ ][board]|board) objective %objective% (1¦is modifiable|2¦is(n't| not) modifiable)");
+			Skript.registerExpression(ExprObjectiveGetScore.class, Score.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) [objective] %objective% score [(for|from|of)] [entry] %string%", "[the] [skellett] (score[ ][board]|board) %objective%['s] [objective['s]] score [(for|from|of)] [entry] %string%", "[the] [skellett] (score[ ][board]|board) [objective] %objective%['s] score [(for|from|of)] [entry] %string%");
+			Skript.registerEffect(EffScoreboardClearSlot.class, "[skellett] clear (score[ ][board]|board) [display] slot %string%");
+			Skript.registerExpression(ExprEntries.class, String.class, ExpressionType.SIMPLE, "[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] entr(ies|y[[']s])");
+			Skript.registerExpression(ExprGetEntryTeam.class, Team.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) team [(from|of)] [entry] %string%", "[skellett] (score[ ][board]|board) [entry] %string%'s team");
+			Skript.registerExpression(ExprGetEntryScores.class, Score.class, ExpressionType.SIMPLE, "[skellett] [(the|all)] [of] [the] (score[ ][board]|board) scores [(from|of)] [entry] %string%", "[the] [skellett] [(the|all)] [of] [the] (score[ ][board]|board) [entry] %string%'s scores");
+			Skript.registerEffect(EffResetEntryScores.class, "[skellett] reset [(the|all)] [of] [the] (score[ ][board]|board) scores of [entry] %string%", "[skellett] reset [(the|all)] [of] [the] (score[ ][board]|board) [entry] %string%'s scores", "[skellett] (score[ ][board]|board) reset [(the|all)] [of] [the] scores of [entry] %string%");
+			Skript.registerEffect(EffRegisterTeam.class, "[skellett] register [a] [new] (score[ ][board]|board) team %string%");
+			Skript.registerExpression(ExprTeams.class, Team.class, ExpressionType.SIMPLE, "[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] teams");
+			Skript.registerExpression(ExprGetTeam.class, Team.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) %string% team", "[skellett] (score[ ][board]|board) [get] team [(for|from|of)] %string%");
+			Skript.registerExpression(ExprScoreEntry.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) [get] entry [(for|from|of)] score %score%", "[skellett] (score[ ][board]|board) %score%'s score entry");
+			Skript.registerExpression(ExprScoreObjective.class, Objective.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) objective [(for|from|of)] score %score%", "[the] [skellett] (score[ ][board]|board) %score%'s scores objective");
+			Skript.registerExpression(ExprScore.class, Number.class, ExpressionType.SIMPLE, "[the] [skellett] (score[ ][board]|board) (score|number|slot) [(for|from|of)] %score%", "[skellett] (score[ ][board]|board) %score%'s (score|number|slot)");
+			Skript.registerEffect(EffTeamAddEntry.class, "[skellett] (score[ ][board]|board) add [the] entry [(from|of)] %string% to [the] [team] %team%");
+			Skript.registerExpression(ExprTeamFriendlyFire.class, Boolean.class, ExpressionType.SIMPLE, "[the] [skellett] [(score[ ][board]|board)] friendly [fire] state [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamFriendlyInvisibles.class, Boolean.class, ExpressionType.SIMPLE, "[the] [skellett] [(score[ ][board]|board)] [friendly] invisible[s] [state] [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamDisplayName.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] [(score[ ][board]|board)] team display name [(for|from|of)] %team%");
+			Skript.registerExpression(ExprTeamEntries.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] entr(ies|y[[']s]) (in|within) [the] [team] %team%");
+			Skript.registerExpression(ExprTeamName.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] [(score[ ][board]|board)] [team] name [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamOptions.class, Team.OptionStatus.class, ExpressionType.SIMPLE, "[the] [skellett] [(score[ ][board]|board)] [team] option[s] [status] %teamoption% [(for|of)] [the] [team] %team%");
+			Skript.registerExpression(ExprTeamPrefix.class, String.class, ExpressionType.SIMPLE, "[skellett] [(score[ ][board]|board)] [team] prefix [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamSuffix.class, String.class, ExpressionType.SIMPLE, "[skellett] [(score[ ][board]|board)] [team] suffix [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamSize.class, Number.class, ExpressionType.SIMPLE, "[skellett] [(score[ ][board]|board)] [team] size [(for|of)] [team] %team%");
+			Skript.registerCondition(CondTeamHasEntry.class, "[skellett] (score[ ][board]|board) (1¦(ha(s|ve)|contain[s])|2¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %team%");
+			Skript.registerEffect(EffTeamRemoveEntry.class, "[skellett] (score[ ][board]|board) remove [the] entry [(from|of)] %string% from [the] [team] %team%");
+			Skript.registerEffect(EffUnregisterTeam.class, "[skellett] unregister [the] (score[ ][board]|board) team %team%");
+		}
+		if (config.getBoolean("Feudal")) {
+			String feudalprefix = config.getString("FeudalSyntaxPrefix");
+			if (feudalprefix == null) {
+				feudalprefix = "feudal [kingdom]";
+			}
+			Classes.registerClass(new ClassInfo<Kingdom>(Kingdom.class, "kingdom")
+				.name("feudal kingdom")
+				.description("A getter for Feudal kingdoms.")
+				.parser(new Parser<Kingdom>() {
+					@Override
+					@Nullable
+					public Kingdom parse(String kingdom, ParseContext context) {
+						try {
+							for(Kingdom k : Feudal.getKingdoms()){
+								if(k.getName().equals(kingdom)) {
+									return k;
+								}
+							}
+						} catch (Exception e) {}
+						return null;
+					}
+					@Override
+					public String toString(Kingdom k, int flags) {
+						return k.toString();
+					}
+					@Override
+					public String toVariableNameString(Kingdom k) {
+						return k.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
+			Skript.registerExpression(ExprFeudalPlayerKingdomName.class, String.class, ExpressionType.SIMPLE, feudalprefix + " name of %player%", "%player%'s feudal [kingdom] name");
+			Skript.registerExpression(ExprFeudalLocationKingdomName.class, String.class, ExpressionType.SIMPLE, feudalprefix + " name at [location] %location%");
+			Skript.registerExpression(ExprFeudalPlayerKingdom.class, Kingdom.class, ExpressionType.SIMPLE, feudalprefix + " of %player%", "%player%'s feudal [kingdom]");
+			Skript.registerExpression(ExprFeudalLocationKingdom.class, Kingdom.class, ExpressionType.SIMPLE, feudalprefix + " at [location] %location%");
+			Skript.registerExpression(ExprFeudalMessage.class, String.class, ExpressionType.SIMPLE, feudalprefix + " (config|files|messages) [message] %string%");
+			Skript.registerExpression(ExprFeudalKingdomDescription.class, String.class, ExpressionType.SIMPLE, feudalprefix + " description of %kingdom%", "%kingdom%'s feudal [kingdom] description");
+			Skript.registerExpression(ExprFeudalKingdomHome.class, Location.class, ExpressionType.SIMPLE, feudalprefix + " home of %kingdom%", "%kingdom%'s feudal [kingdom] home");
+			Skript.registerExpression(ExprFeudalKingdomFighters.class, String.class, ExpressionType.SIMPLE, "(the|all)] [of] [the]" + feudalprefix + "fighter[[']s] of %kingdom%", "[(the|all)] [of] [the] %kingdom%'s" + feudalprefix + "fighter[[']s]", "[(the|all)] [of] [the] fighter[[']s] of " + feudalprefix + "%kingdom%");
+			if (config.getBoolean("debug")) {
+				Bukkit.getConsoleSender().sendMessage(cc(prefix + "Registered feudal syntax"));
 			}
 		}
 		//BETA
@@ -972,6 +1358,20 @@ public class Skellett extends JavaPlugin {
 			Skript.registerEffect(EffDeleteNpc.class, "[skellett] (delete|remove) npc with (tag|id) %string%");
 			Skript.registerEffect(EffSpawnParticle.class, "[skellett] (create|place|spawn|play|make|summon) particle [effect] %string% at %location% [[with] [offset] %number%[(,| and)] %number%[(,| and)] %number%] at speed %number% and amount %integer%");
 		}
+		if (getCustomEvents().getBoolean("CustomEvents")) {
+			for(int i = 1; i <= getCustomEvents().getInt("CustomEventSetup.NumberOfEvents"); i++) {
+				Bukkit.getConsoleSender().sendMessage(cc("&aRegistered custom event: &5" + getCustomEvents().getString("CustomEventSetup." + i + ".Syntax")));
+				try {
+					@SuppressWarnings("unchecked")
+					Class<? extends Event> classType = ((Class<? extends Event>) Class.forName(getCustomEvents().getString("CustomEventSetup." + i + ".Event")));
+					Skript.registerEvent(getCustomEvents().getString("CustomEventSetup." + i + ".Syntax"), SimpleEvent.class, classType, getCustomEvents().getString("CustomEventSetup." + i + ".Syntax"));
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		Skript.registerEffect(EffFirework.class, "[skellett] (launch|deploy) [%-strings%] firework[s] at %locations% [with] (duration|timed|time) %number% [colo[u]r[ed] (%-strings%|%-color%)]");
+		//Skript.registerEffect(EffSkellettCordTest.class, "skellettcord test");
 		Skript.registerEvent("[on] entity sho[o]t:", SimpleEvent.class, EntityShootBowEvent.class, "[on] entity sho[o]t");
 		//register more event values
 		EventValues.registerEventValue(PlayerTeleportEvent.class, PlayerTeleportEvent.TeleportCause.class, new Getter<PlayerTeleportEvent.TeleportCause, PlayerTeleportEvent>() {
@@ -995,6 +1395,9 @@ public class Skellett extends JavaPlugin {
 			}
 		}
 	}
+	public FileConfiguration getCustomEvents() {
+		return this.ceData;
+	}
 	public static String cc(String colour) {
 		return ChatColor.translateAlternateColorCodes('&', colour);
 	}
@@ -1017,7 +1420,112 @@ New Stuff:
 #added particle testing (The effect is very experimental. Not really released or designed to work properly yet)
 [skellett] (create|place|spawn|play|make|summon) particle [effect] %string% at %location% [[with] [offset] %number%[(,| and)] %number%[(,| and)] %number%] at speed %number% and amount %integer%
 
-*/
+[skellett] (score[ ][board]|board) objective [(for|from|of)] %string%
+[skellett] (score[ ][board]|board) %string%'s objective
+
+[skellett] (score[ ][board]|board) objective criteria [(for|from|of)] %objective%
+[skellett] (score[ ][board]|board) %objective%'s objective criteria
+
+[skellett] register [new] (score[ ][board]|board) objective %string% with [criteria] %string%
+
+[skellett] (score[ ][board]|board) objective %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))
+
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] objectives
+
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] objectives (by|with) [criteria] %string%
+
+[skellett] unregister (score[ ][board]|board) objective %objective%
+
+Changers: set
+[skellett] (score[ ][board]|board) objective display name [(for|from|of)] %objective%
+[skellett] (score[ ][board]|board) %objective%['s] objective['s] display name
+[skellett] (score[ ][board]|board) objective %objective%['s] display name
+
+[skellett] (score[ ][board]|board) objective name [(for|from|of)] %objective%
+[skellett] (score[ ][board]|board) %objective%['s] objective['s] name
+[skellett] (score[ ][board]|board) objective %objective%['s] name
+
+[skellett] (score[ ][board]|board) objective [display] slot [(for|from|of)] %objective%
+[skellett] (score[ ][board]|board) %objective%['s] objective['s] [display] slot
+[skellett] (score[ ][board]|board) objective %objective%['s] [display] slot
+
+[skellett] (score[ ][board]|board) objective %objective% is modifiable
+[skellett] (score[ ][board]|board) objective %objective% is(n't| not) modifiable
+
+[skellett] (score[ ][board]|board) [objective] %objective% score [(for|from|of)] [entry] %string%
+[skellett] (score[ ][board]|board) %objective%['s] [objective['s]] score [(for|from|of)] [entry] %string%
+[skellett] (score[ ][board]|board) [objective] %objective%['s] score [(for|from|of)] [entry] %string%
+
+[skellett] clear (score[ ][board]|board) [display] slot %string%
+
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] entr(ies|y[[']s])
+
+[skellett] (score[ ][board]|board) team of [entry] %string%
+[skellett] (score[ ][board]|board) [entry] %string%'s team
+
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board) scores of [entry] %string%
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board) [entry] %string%'s scores
+
+[skellett] reset [(the|all)] [of] [the] (score[ ][board]|board) scores [(from|of)] [entry] %string%
+[skellett] reset [(the|all)] [of] [the] (score[ ][board]|board) [entry] %string%'s scores
+[skellett] (score[ ][board]|board) reset [(the|all)] [of] [the] scores [(from|of)] [entry] %string%
+
+[skellett] register [new] (score[ ][board]|board) team %string%
+
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] teams
+
+[skellett] (score[ ][board]|board) %string% team
+[skellett] (score[ ][board]|board) [get] team [(for|from|of)] %string%
+
+[skellett] (score[ ][board]|board) [get] entry [(for|from|of)] score %score%
+[skellett] (score[ ][board]|board) %score%'s score entry
+
+[skellett] (score[ ][board]|board) objective [(for|from|of)] score %score%
+[skellett] (score[ ][board]|board) %score%'s scores objective
+
+#Changers: set, add and subtract/remove
+[skellett] (score[ ][board]|board) (score|number|slot) [(for|from|of)] %score%
+[skellett] (score[ ][board]|board) %score%'s (score|number|slot)
+
+[skellett] (score[ ][board]|board) add entry [(from|of)] %string% to %team%
+
+Changers: set
+[skellett] [(score[ ][board]|board)] friendly fire state [(for|of)] [team] %team%
+
+Changers: set
+[skellett] [(score[ ][board]|board)] [friendly] invisible[s] [state] [(for|of)] [team] %team%
+
+Changers: set
+[skellett] [(score[ ][board]|board)] team display name [(for|from|of)] %team%
+
+[skellett] [(the|all)] [of] [the] (score[ ][board]|board)[[']s] entr(ies|y[[']s]) (in|within) [the] [team] %team%
+
+[skellett] [(score[ ][board]|board)] [team] name [(for|of)] [team] %team%
+
+Changers: set
+[skellett] [(score[ ][board]|board)] [team] option[s] [status] %teamoption% [(for|of)] [the] [team] %team%
+
+Changers: set
+[skellett] [(score[ ][board]|board)] [team] prefix [(for|of)] [team] %team%
+
+Changers: set
+[skellett] [(score[ ][board]|board)] [team] suffix [(for|of)] [team] %team%
+
+[skellett] [(score[ ][board]|board)] [team] size [(for|of)] [team] %team%
+
+[skellett] (score[ ][board]|board) (ha(s|ve)|contain[s]) [the] [entry] %string% [(in|within)] the [team] %team%
+[skellett] (score[ ][board]|board) (do[es](n't| not) have| do[es](n't| not) contain) [the] [entry] %string% [(in|within)] the [team] %team%
+
+[skellett] (score[ ][board]|board) remove [the] entry [(from|of)] %string% from [the] [team] %team%
+
+[skellett] unregister [the] (score[ ][board]|board) team %team%
+
+Types:
+teamoption
+team
+objective
+optionstatus
+
 /*
 Todo:
 - Fix redstone current and Fishing XP not being settable? Stupid skript.
@@ -1028,7 +1536,6 @@ Todo:
 - LibsDisguises hook because I'm too tired to make a huge disguise class :3
 - attack speed of %item%
 - Set which direction the Shulker is attached to the wall.
-- Skeleton horse trap support.
 - Better boat support, + passenger of boat, and row speed of boat.
 - https://forums.skunity.com/t/guardian-beam/5464/2
 - Auto updater (Need a location to put this)
@@ -1036,6 +1543,9 @@ Todo:
 - Arrow potions (Like set/get potions on an arrow + allow multiple potions per arrow maybe?)
 - Statistics support
 - Client side blocks and signs
-- Vault prefix/suffix/permissions hook Skellett
+- Uppercase and lowercase string
+- Loop string letters
+- Starting and ending of string contains (If "roihjerioh hi" ends with "hi")
+- Vault prefix/suffix/permissions hook
 - If player spectral view is show (Condition)
 */
