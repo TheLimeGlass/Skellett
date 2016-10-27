@@ -1,7 +1,7 @@
 # Skellett the addon with the beast name
 # By the one and only LimeBae
 
-version: "1.5.4"
+version: "1.6.3"
 debug: false
 
 # Enable Bungee to get bungee hooks and stuff (Needs Bungee Bridge API https://www.spigotmc.org/resources/bungeebridge.5820/)
@@ -18,6 +18,17 @@ beta: false
 
 # Use LibsDisguises?
 Disguises: false
+
+# Use Fedual? https://www.spigotmc.org/resources/feudal-completely-configurable.22873/
+Feudal: false
+#You can customize the syntax of all feudal syntax here
+#So like [(the|all)] [of] [the] Feudal [kingdom] fighter[[']s] of %kingdom%
+#The Feudal [kingdom] portion could be anything.
+FeudalSyntaxPrefix: "Feudal [kingdom]"
+
+
+#This allows for full management of the spigot main scoreboard
+Scoreboards: true
 
 # Custom Syntax register toggles
 # Here you can enable or disable every single syntax in Skellett.
@@ -40,13 +51,12 @@ Syntax:
     Whitelist: true
     Files: true
     OITB: false
-    CustomName: true
     TabName: true
     CenterMessage: true
     BlockConstructor: true
     SetStack: true
     ClearSlot: true
-    WindowProperty: true
+    OpenInventory: true
 
   Expressions: true
 # Enable or disable different expression syntax here, if the above boolean is true
@@ -98,6 +108,17 @@ Syntax:
     TeleportCause: true
     TargetReason: true
     InvulnerableState: true
+    GravityState: true
+    SilentState: true
+    NearbyEntities: true
+    NoNBT: true
+    CropState: true
+    CustomName: true
+    InventoryType: true
+    EnchantmentLevel: true
+    TNTFuseTime: true
+    FallDistance: true
+    EntityID: true
 
   Conditions: true
 # Enable or disable different expression syntax here, if the above boolean is true
@@ -131,3 +152,7 @@ Syntax:
 #	Breeding is only 1.10+
     Breeding: true
     WorldChange: true
+#	Disable CropGrow if you have Umbaska installed, or Umbaska will generate errors.
+    CropGrow: true
+#	This event is called when a block mined drops experience
+    BlockExperienceDrop: true
