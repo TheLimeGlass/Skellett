@@ -12,7 +12,7 @@ import ch.njol.util.Kleenean;
 
 public class EffClearSlot extends Effect {
 	
-	//(clear|empty|reset) [slot %-integer% [(of|in)]] %inventory%
+	//(clear|empty|reset) (inventory|menu|gui) [slot %-integer%] [(of|in)] %inventory%
 	
 	private Expression<Integer> slot;
 	private Expression<Inventory> inventory;
@@ -25,14 +25,14 @@ public class EffClearSlot extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "clear [slot %-integer% [(of|in)]] %inventory%";
+		return "(clear|empty|reset) (inventory|menu|gui) [slot %-integer%] [(of|in)] %inventory%";
 	}
 	@Override
 	protected void execute(Event e) {
 		if (slot != null) {
-			inventory.getSingle(e).clear();
-		} else {
 			inventory.getSingle(e).clear(slot.getSingle(e));
+		} else {
+			inventory.getSingle(e).clear();
 		}
 	}
 }

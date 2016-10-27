@@ -14,7 +14,7 @@ import ch.njol.util.Kleenean;
 
 public class EffMessageCenter extends Effect {
 	
-	//(message|send [message]) center[ed] %string% to %players% [[with[ text]] %-string%]
+	//(message|send [message]) center[ed] %strings% to %players% [[with[ text]] %-string%]
 	
 	private Expression<String> string;
 	private Expression<Player> player;
@@ -29,7 +29,7 @@ public class EffMessageCenter extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "(message|send [message]) center[ed] %string% to %players% [[with[ text]] %-string%]";
+		return "(message|send [message]) center[ed] %strings% to %players% [[with[ text]] %-string%]";
 	}
 	@Override
 	protected void execute(Event e) {
