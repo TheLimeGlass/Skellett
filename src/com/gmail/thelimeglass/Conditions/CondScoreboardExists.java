@@ -14,24 +14,34 @@ import ch.njol.util.Kleenean;
 
 public class CondScoreboardExists extends Condition {
 	
-	//score[ ][board] %string% (is set|exists)
+	//score[ ][board] %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))
 	
 	private Expression<String> scoreboard;
+	Boolean boo = true;
 	@SuppressWarnings("unchecked")
-	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
+	public boolean init(Expression<?>[] e, int matchedPattern, Kleenean isDelayed, ParseResult parser) {
 		scoreboard = (Expression<String>) e[0];
+		if (parser.mark == 2) {boo = false;}
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "score[ ][board] %string% (is set|exists)";
+		return "score[ ][board] %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))";
 	}
 	public boolean check(Event e) {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		Team team = board.getTeam(scoreboard.getSingle(e));
 		if (team != null) {
-			return true;
+			if (boo == true) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
-			return false;
+			if (boo == false) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 }
