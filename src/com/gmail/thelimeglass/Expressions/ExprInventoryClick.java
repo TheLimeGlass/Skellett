@@ -24,8 +24,8 @@ public class ExprInventoryClick extends SimpleExpression<ClickType> {
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean init(Expression<?>[] args, int arg1, Kleenean arg2, SkriptParser.ParseResult arg3) {
-		if (!ScriptLoader.isCurrentEvent((Class)InventoryClickEvent.class)) {
-			Skript.error((String)"You can not use ClickType expression in any event but inventory click!");
+		if (!ScriptLoader.isCurrentEvent(InventoryClickEvent.class)) {
+			Skript.error("You can not use ClickType expression in any event but inventory click!");
 			return false;
 		}
 		return true;
