@@ -3,6 +3,7 @@ package com.gmail.thelimeglass;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.ResultSet;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
@@ -238,6 +239,14 @@ import com.gmail.thelimeglass.Feudal.ExprFeudalPlayerKingdom;
 import com.gmail.thelimeglass.Feudal.ExprFeudalPlayerKingdomName;
 import com.gmail.thelimeglass.Holograms.EffDeleteHologram;
 import com.gmail.thelimeglass.Holograms.EffNewHologram;
+import com.gmail.thelimeglass.MySQL.EffMySQLConnect;
+import com.gmail.thelimeglass.MySQL.EffMySQLDisconnect;
+import com.gmail.thelimeglass.MySQL.EffMySQLUpdate;
+import com.gmail.thelimeglass.MySQL.ExprMySQLDatabase;
+import com.gmail.thelimeglass.MySQL.ExprMySQLHost;
+import com.gmail.thelimeglass.MySQL.ExprMySQLPassword;
+import com.gmail.thelimeglass.MySQL.ExprMySQLQuery;
+import com.gmail.thelimeglass.MySQL.ExprMySQLUsername;
 import com.gmail.thelimeglass.Nametags.EffAddPlayerNametag;
 import com.gmail.thelimeglass.Nametags.EffCreateNametag;
 import com.gmail.thelimeglass.Nametags.EffDeleteNametag;
@@ -368,6 +377,8 @@ public class Skellett extends JavaPlugin {
 	private FileConfiguration ceData;
 	private File spFile;
 	private FileConfiguration spData;
+	private File mysqlFile;
+	public static FileConfiguration mysqlData;
 	
 	public void onEnable(){
 		instance = this;
@@ -402,6 +413,17 @@ public class Skellett extends JavaPlugin {
 			spData = new YamlConfiguration();
 			try {
 				spData.load(spFile);
+		 	} catch (IOException e) {
+		 		e.printStackTrace();
+		 	}
+			if (!mysqlFile.exists()) {
+				mysqlFile.getParentFile().mkdirs();
+				Bukkit.getConsoleSender().sendMessage(cc(prefix + "&cMySQL.yml not found, generating a new file!"));
+				saveResource("MySQL.yml", false);
+			}
+			mysqlData = new YamlConfiguration();
+			try {
+				mysqlData.load(mysqlFile);
 		 	} catch (IOException e) {
 		 		e.printStackTrace();
 		 	}
@@ -1718,6 +1740,16 @@ public class Skellett extends JavaPlugin {
 			Skript.registerEffect(EffNewHologram.class, "(create|spawn|summon|place) [a] holo[gram] [(named|with)] [text] %string% at %location% [[with] id] %string%");
 			Skript.registerEffect(EffDeleteHologram.class, "(delete|remove|despawn|clear|kill) holo[gram] [with] id %string%");
 		}
+		if (mysqlData.getBoolean("MySQL")) {
+			Skript.registerEffect(EffMySQLConnect.class, "[skellett] connect [to] mysql");
+			Skript.registerEffect(EffMySQLDisconnect.class, "[skellett] disconnect [to] mysql");
+			Skript.registerEffect(EffMySQLUpdate.class, "[skellett] mysql update %string%");
+			Skript.registerExpression(ExprMySQLHost.class, String.class, ExpressionType.SIMPLE, "[skellett] mysql['s] host");
+			Skript.registerExpression(ExprMySQLUsername.class, String.class, ExpressionType.SIMPLE, "[skellett] mysql['s] username");
+			Skript.registerExpression(ExprMySQLPassword.class, String.class, ExpressionType.SIMPLE, "[skellett] mysql['s] password");
+			Skript.registerExpression(ExprMySQLDatabase.class, String.class, ExpressionType.SIMPLE, "[skellett] mysql['s] database");
+			Skript.registerExpression(ExprMySQLQuery.class, ResultSet.class, ExpressionType.SIMPLE, "[skellett] mysql result of query %string%");
+		}
 		if (ceData.getBoolean("CustomEvents")) {
 			for(int i = 1; i <= ceData.getInt("CustomEventSetup.NumberOfEvents"); i++) {
 				Bukkit.getConsoleSender().sendMessage(cc("&aRegistered custom event: &5" + ceData.getString("CustomEventSetup." + i + ".Syntax")));
@@ -1787,5 +1819,21 @@ New Stuff:
 [(the|all)] [of] [the] [skellett[cord]] [bungee[ ][cord]] players
 
 [(the|all)] [of] [the] [skellett[cord]] [bungee[ ][cord]] servers
+
+[skellett] connect [to] mysql
+
+[skellett] disconnect [to] mysql
+
+[skellett] mysql update %string%
+
+[skellett] mysql['s] host
+
+[skellett] mysql['s] username
+
+[skellett] mysql['s] password
+
+[skellett] mysql['s] database
+
+[skellett] mysql result of query %string%
 
 */
