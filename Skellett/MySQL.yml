@@ -1,0 +1,10 @@
+# Skellett the addon with the beast name!
+# By LimeGlass
+
+#if you want to use Skellett mysql syntax, enable it here
+MySQL: false
+MySQLSetup:
+  Host: ""
+  Username: ""
+  Password: ""
+  Database: ""
