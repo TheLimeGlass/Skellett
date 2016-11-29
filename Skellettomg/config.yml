@@ -1,0 +1,203 @@
+# Skellett the addon with the beast name!
+# By the one and only LimeGlass
+
+version: "1.6.9.7"
+debug: false
+
+# Enable Bungee to get bungee hooks and stuff (Needs Bungee Bridge API https://www.spigotmc.org/resources/bungeebridge.5820/)
+bungee: false
+
+# This is a prefix you can adjust for the bungee syntax. It goes before the registered syntax.
+# SkellettCord will still be registered this is just an alt method.
+BungeeSyntaxPrefix: "[Skellett[ ][proxy]]"
+
+# I mainly use this feature to beta test new syntax, but you can view source code and
+# play around with these beta features. Keep in mind they are in beta for a reason
+# Any damage done to the server is not reliable under Skellett.
+# Current beta syntax:
+#
+# [skellett] (create|place|spawn|play|make|summon) particle [effect] %string% at %location% [[with] [offset] %number%[(,| and)] %number%[(,| and)] %number%] at speed %number% and amount %integer%
+# Below syntax need HologramAPI by inventivetalents (Currently there is an issue that makes it so the Holograms don't work in 1.10)
+# (create|spawn|summon|place) [a] holo[gram] [(named|with)] [text] %string% at %location% [[with] id] %string%
+# (delete|remove|despawn|clear|kill) holo[gram] [with] id %string%
+#
+beta: false
+
+#You can customize the syntax of all feudal syntax here
+#So like [(the|all)] [of] [the] Feudal [kingdom] fighter[[']s] of %kingdom%
+#The Feudal [kingdom] portion could be anything.
+FeudalSyntaxPrefix: "Feudal [kingdom]"
+
+#The main category consists of full detailed management systems.
+#Meaning these nodes toggle alot of syntax desgined around a system.
+Main:
+# Bossbars are only 1.9+
+  Bossbars: true
+  Scoreboards: true
+  Books: true
+  Yaml: true
+
+PluginHooks:
+
+# This allows for custom tablist players using plugin https://www.spigotmc.org/resources/api-tablistapi-1-7-1-8-1-9.9667/
+  TabListAPI: false
+# The TabClearPlayer tells skellett if it should clear just Tab Items or clear players and Tab Items when using the clear tablist expression.
+  TabClearPlayer: false
+
+  LibsDisguises: false
+
+# Fedual: https://www.spigotmc.org/resources/feudal-completely-configurable.22873/
+  Feudal: false
+
+# OITB: https://www.spigotmc.org/resources/%E2%99%9B-one-in-the-battle-advanced-%E2%99%9B-unlimited-fun-%E2%99%A5-for-all-kinds-of-players-%E2%99%A5.24702/
+  OITB: false
+  
+  ProtocolSupport: false
+
+# Custom Syntax register toggles
+# Here you can enable or disable every single syntax in Skellett.
+
+# If a syntax is enabled, Skellett will register that syntax class.
+
+Syntax:
+
+# This will enable or disable all effects
+  Effects: true
+# Enable or disable different effect syntax here, if the above boolean is true
+  EffectsSyntax:
+    Sound: true
+    ForceRespawn: true
+    CollidableState: true
+    ClientWeather: true
+    Nametags: true
+    Download: true
+    Whitelist: true
+    Files: true
+    TabName: true
+    CenterMessage: true
+    BlockConstructor: true
+    SetStack: true
+    ClearSlot: true
+    OpenInventory: true
+    PlayerWindowProperty: true
+    Actionbar: true
+    TitleAndSubtitle: true
+    TeleportPlayerWorldSpawn: true
+#	If you don't use Bensku's edit dev-22 and higher The title and subtitle syntax can be slow to parse due to the size of the syntax.
+#	You can remove some optional [] stuff to reduce the time of the script on reloading of it.
+#	The (1¦subtitle|2¦title) and every type (%-string%, %timespan% are needed in order per each syntax.
+#	
+#	Use these disabled syntax instead if you want a fast script reload:
+#
+#	TitleAndSubtitleSyntax1: "skellett send (1¦subtitle|2¦title) from %string% [with subtitle %-string%] to %players% for %timespan% with %timespan% and %timespan%"
+#	TitleAndSubtitleSyntax2: "skellett send %players% (1¦subtitle|2¦title) with %string% [and subtitle %-string%] for %timespan% with) %timespan% fade in and %timespan% fade out"
+    TitleAndSubtitleSyntax1: "[skellett] (send|show) [a] (1¦subtitle|2¦title) [from] %string% [(with|and) [subtitle] %-string%] (to|for) %players% for %timespan%(,| and| with) %timespan% [fade[ ]in](,| and| with) %timespan% [fade[ ]out]"
+    TitleAndSubtitleSyntax2: "[skellett] (send|show) %players% [a] (1¦subtitle|2¦title) [(with|from)] %string% [(with|and) [subtitle] %-string%] for %timespan%(,| and| with) %timespan% [fade[ ]in](,| and| with) %timespan% [fade[ ]out])"
+    LeashBlock: true
+
+  Expressions: true
+# Enable or disable different expression syntax here, if the above boolean is true
+  ExpressionsSyntax:
+    SleepIgnored: true
+    SneakingState: true
+    SprintingState: true
+    CollidableState: true
+    RoundDecimal: true
+    ClientWeather: true
+    Nametags: true
+    OfflinePlayers: true
+    Operators: true
+    Files: true
+#	This loop contain. Particle types and Armour Stands (1.9+)
+    Loops: true
+    SizeOfInventory: true
+    AmountOfItem: true
+#	Grabs the type of inventory clicked from
+    ClickedInventory: true
+    ClickedAction: true
+    ClickedSlot: true
+    ClickedItem: true
+    ClickedRawSlot: true
+    ClickedType: true
+    ClickedTypeNumber: true
+    ClickedCursor: true
+    ClickedSlotType: true
+    AmountOfVariables: true
+    BlockStates: true
+#	Final damage will return the final damage including all effects such as criticals, enchantments, etc
+    FinalDamage: true
+#	Fix missing event values in the "on shoot:" event, Such as:
+#	Grab the speed an arrow was shot at using the "on shoot:" event (event-float)
+#	Also grab the entity data of the arrow. (event-item)
+    FixShoot: true
+    FixFishing: true
+    InstaBreak: true
+    RedstoneCurrent: true
+    SpreadSource: true
+    Spectate: true
+    Exhaustion: true
+    NextEmptySlot: true
+    MathExpressions: true
+    ItemsWithin: true
+    SpectralArrow: true
+    SlimeSize: true
+    GroundState: true
+    Metadata: true
+    MaxDamageTicks: true
+    SpawnReason: true
+    TeleportCause: true
+    TargetReason: true
+    InvulnerableState: true
+    GravityState: true
+    SilentState: true
+    NearbyEntities: true
+    NoNBT: true
+    CropState: true
+    CustomName: true
+    InventoryType: true
+    EnchantmentLevel: true
+    TNTFuseTime: true
+    FallDistance: true
+    EntityID: true
+    PlayerInventoryCursor: true
+    LlamaInventory: true
+    LlamaInventoryDecor: true
+    LlamaColour: true
+
+  Conditions: true
+# Enable or disable different expression syntax here, if the above boolean is true
+  ConditionsSyntax:
+    LineOfSight: true
+    ClientTime: true
+    ScoreboardExists: true
+    Whitelist: true
+    SquidHQ: false
+    FileExistance: true
+    EventCancelled: true
+
+  Events: true
+# Enable or disable different expression syntax here, if the above boolean is true
+  EventsSyntax:
+    FireworkExplode: true
+    ItemDespawn: true
+    ItemMerge: true
+    MultiBlockPlace: true
+#	1.9 offhand switch only
+    OffhandSwitch: true
+    CreativeInventoryClick: true
+    EntityTeleport: true
+    VehicleMove: true
+#	You can use EntityBlockChange to get crop tramples.
+    EntityBlockChange: true
+    HotbarSwitch: true
+#	SmashHit is a plugin that handles damage asynchronous and not on the load of the server
+#	Find the plugin here https://aquifermc.org/resources/smashhit-async-hit-detection.15/
+    SmashHit: false
+#	Breeding is only 1.10+
+    Breeding: true
+    WorldChange: true
+#	Disable CropGrow if you have Umbaska installed, or Umbaska will generate errors.
+    CropGrow: true
+#	This event is called when a block mined drops experience
+    BlockExperienceDrop: true
+    EntityUnleash: true
