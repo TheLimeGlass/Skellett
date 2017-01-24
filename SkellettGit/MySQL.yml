@@ -1,0 +1,12 @@
+# Skellett the addon with the beast name!
+# By LimeGlass
+
+#if you want to use Skellett mysql syntax, enable it here
+MySQL: false
+AutoReconnect: false
+MySQLSetup:
+  Host: "localhost"
+  Port: 3306
+  Username: "admin"
+  Password: "skellett_password"
+  Database: "_table"

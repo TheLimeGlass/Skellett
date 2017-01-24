@@ -1,0 +1,10 @@
+# Skellett the addon with the beast name!
+# By LimeGlass
+
+# The Host must be the main IP of the BungeeCord that is hosting SkellettProxy.
+# If the bungeecord and this server are on the same machine, you can leave it as localhost.
+
+# The port must match the same port that is in the SkellettProxy config.
+SkellettProxy: false
+Host: localhost
+Port: 7332
