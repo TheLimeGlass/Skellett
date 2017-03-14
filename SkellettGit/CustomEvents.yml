@@ -1,0 +1,37 @@
+# Skellett the addon with the beast name!
+# By LimeGlass
+
+#Custom events! I'm proud to release CustomEvents in Skellett. It's not like functions from Skript or custom events from MundoSk.
+#This is Skellett Custom Events! Here you can make ANY event you possiblly want!
+#You can grab and make ANY event that Spigot or any of your plugins contain.
+#Before I get into explaining it, I just want to say watch your syntax. If any syntax matches or overrides another syntax. Skript will throw an error.
+#Either that other addon's event will break or skript will break the event of both Skellett and that other addon.
+
+#Ok now getting into the tutorial section. Which isn't too complex.
+#The number of events must be set to anything higher than 0. It can't be 0 itself.
+#The event location has to be the EXACT location of your event, or else Skellett won't find the event.
+#The syntax is where the portion you use in your script. The first example below would be:
+#
+#On hanging entity:
+#    Broadcast "%event-entity%"
+#
+#Keep in mind that skript will only automatically pickup event types such as: cancel the event, event-entity, event-string, event-player or event-location etc. If available.
+#I might make custom expressions later but for right now, you can enjoy events.
+#
+#Again I can't stress this enough. If an event is already registered or your syntax matches another. The chances of it breaking are very high. So just be careful when doing so.
+#
+#You can enable or disable your custom events here
+CustomEvents: false
+# Unleash the power, and stride onwards!
+CustomEventSetup:
+  NumberOfEvents: 2
+  1:
+    Event: "org.bukkit.event.hanging.HangingBreakEvent"
+    Syntax: "[on] (hang[ing] [entity]|painting|item[ ]frame) (break|destroy)"
+  2:
+    Event: "org.bukkit.event.player.PlayerEditBookEvent"
+    Syntax: "[on] skellett player edit book"
+#If you have LibsDisguises installed, feel free to enable this event. It's disabled because some people won't have LibsDisguises installed.
+#  3:
+#    Event: "me.libraryaddict.disguise.events.DisguiseEvent"
+#    Syntax: "[on] [[Libs]Disguises] [player] disguise"

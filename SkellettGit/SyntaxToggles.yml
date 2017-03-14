@@ -1,0 +1,230 @@
+# Skellett the addon with the beast name!
+# By the one and only LimeGlass
+
+# Custom Syntax register toggles
+# Here you can enable or disable every single syntax in Skellett.
+
+# If a syntax is enabled, Skellett will register that syntax class.
+
+# The main category consists of full detailed management systems.
+# Meaning these nodes toggle alot of syntax desgined around a system.
+Main:
+  Scoreboards: true
+  Books: true
+  Yaml: true
+  Nametags: true
+  Files: true
+# Bossbars are only 1.9+
+  Bossbars: true
+  Fishing: true
+  ArmorStands: true
+  Maps: true
+# Custom expression return types. You can litterally get any return value in Spigot with this.
+# Tag me or PM me (LimeGlass) on http://forums.skunity.com if you would like to know more info about this feature.
+  ReturnType: true
+  PrepareEnchant: true
+  Brewing: true
+# StylishBoards are simple to use scoreboards mainly used for cosmetic looks and displays.
+  StylishBoards: true
+  Shooting: true
+# Regenerators are a simple way to save and rebuild a large portion of blocks in a cuboid instantly.
+  Regenerator: true
+  Spawners: true
+# Enables a bunch of world border stuff used for clientside management.
+  ClientWorldBorders: true
+  Packets: true
+  Jukebox: true
+
+# Enable or disable different effect syntax here.
+Syntax:
+
+  Effects:
+    Sound: true
+    ForceRespawn: true
+    CollidableState: true
+    Download: true
+    Whitelist: true
+    TabName: true
+    CenterMessage: true
+    BlockConstructor: true
+    SetStack: true
+    ClearSlot: true
+    OpenInventory: true
+    PlayerWindowProperty: true
+    Actionbar: true
+    TitleAndSubtitle: true
+    TeleportPlayerWorldSpawn: true
+    BreakBlockNaturally: true
+    Serialize: true
+    EntityEffect: true
+    Particles: false
+    # Allows to change adult or baby state
+    BabyAdult: true
+    # Allows for changing the particle state and colour
+    BetterPotion: true
+    HideShowPlayers: true
+    UpdateInventory: true
+    ClientChest: true
+    Chunks: true
+
+# THIS BELOW IS DISABLED DUE TO THE AUTOMATIC REGISTRY SYSTEM
+
+#	If you don't use Bensku's edit dev-22 and higher The title and subtitle syntax can be slow to parse due to the size of the syntax.
+#	You can remove some optional [] stuff to reduce the time of the script on reloading of it.
+#	The (1礎subtitle|2礎title) and every type (%-string%, %timespan% are needed in order per each syntax.
+#	
+#	Use these disabled syntax instead if you want a fast script reload:
+#
+#	TitleAndSubtitleSyntax1: "skellett send (1存ubtitle|2宇itle) from %string% [with subtitle %-string%] to %players% for %timespan% with %timespan% and %timespan%"
+#	TitleAndSubtitleSyntax2: "skellett send %players% (1存ubtitle|2宇itle) with %string% [and subtitle %-string%] for %timespan% with) %timespan% fade in and %timespan% fade out"
+#    TitleAndSubtitleSyntax1: "[skellett] (send|show) [a] (1存ubtitle|2宇itle) [from] %string% [(with|and) [subtitle] %-string%] (to|for) %players% for %timespan%(,| and| with) %timespan% [fade[ ]in](,| and| with) %timespan% [fade[ ]out]"
+#    TitleAndSubtitleSyntax2: "[skellett] (send|show) %players% [a] (1存ubtitle|2宇itle) [(with|from)] %string% [(with|and) [subtitle] %-string%] for %timespan%(,| and| with) %timespan% [fade[ ]in](,| and| with) %timespan% [fade[ ]out])"
+    LeashBlock: true
+
+  Expressions:
+    SleepIgnored: true
+    SneakingState: true
+    SprintingState: true
+    CollidableState: true
+    RoundDecimal: true
+    OfflinePlayers: true
+    Operators: true
+    ActivePotionEffects: true
+    InventoryViewers: true
+    GetParticles: true
+    AmountOfItem: true
+#	Grabs the type of inventory clicked from
+    ClickedInventory: true
+    ClickedAction: true
+    ClickedSlot: true
+    ClickedItem: true
+    ClickedRawSlot: true
+    ClickedType: true
+    ClickedTypeNumber: true
+    ClickedCursor: true
+    ClickedSlotType: true
+    AmountOfVariables: true
+    BlockStates: true
+#	Final damage will return the final damage including all effects such as criticals, enchantments, etc
+    FinalDamage: true
+#	Fix missing event values in the "on shoot:" event, Such as:
+#	Grab the speed an arrow was shot at using the "on shoot:" event (event-float)
+#	Also grab the entity data of the arrow. (event-item)
+    FixShoot: true
+    InstaBreak: true
+    RedstoneCurrent: true
+    SpreadSource: true
+    Spectate: true
+    Exhaustion: true
+    NextEmptySlot: true
+    MathExpressions: true
+    ItemsWithin: true
+    SpectralArrow: true
+    SlimeSize: true
+    GroundState: true
+    Metadata: true
+    MaxDamageTicks: true
+    SpawnReason: true
+    TeleportCause: true
+    TargetReason: true
+    InvulnerableState: true
+    GravityState: true
+    SilentState: true
+    NearbyEntities: true
+    NoNBT: true
+    CropState: true
+    CustomName: true
+    InventoryType: true
+    EnchantmentLevel: true
+    TNTFuseTime: true
+    FallDistance: true
+    EntityID: true
+    PlayerInventoryCursor: true
+    LlamaInventory: true
+    LlamaInventoryDecor: true
+    LlamaColour: true
+    EnderCrystalBeam: true
+    EnderCrystalBase: true
+    EntityRemoveWhenFarAway: true
+    GlideState: true
+    ProjectileBounce: true
+    AbsorptionHearts: true
+    EntityScoreboardTag: true
+    EnchantmentOffers: true
+    Unbreakable: true
+    Age: true
+    AgeLock: true
+    BreedState: true
+    NumbersInString: true
+    # Gets the world of a location
+    LocationWorld: true
+    EntityUUID: true
+    # Will return what would happen if a piston was to extend this block
+    PistonReaction: true
+    PistonPower: true
+    RepeaterDelay: true
+    # Dyed armour stuff
+    Dyed: true
+    PlayerPing: true
+    Cuboids: true
+    ClientWeather: true
+    EnchantsOnItem: true
+    ItemInSlots: true
+    HitboxSize: true
+    SizeOfInventory: true
+    InventoryRows: true
+    BlockHardness: true
+    ItemframeItem: true
+    ItemframeRotation: true
+    Statistics: true
+    ChunkOutlineBlocks: true
+    # This is not TPS this is the amount of ticks the server has which is used to calculate tps
+    ServerTick: true
+
+  Conditions:
+    LineOfSight: true
+    ClientTime: true
+    ScoreboardExists: true
+    Whitelist: true
+    EventCancelled: true
+    # Test if an entity is an adult
+    Adult: true
+    Breed: true
+    # Tests if a block has redstone power or not
+    RedstonePower: true
+    PistonSticky: true
+    ViewingCredits: true
+    InWater: true
+    PlayerCanSee: true
+
+  Events:
+    FireworkExplode: true
+    ItemDespawn: true
+    ItemMerge: true
+    MultiBlockPlace: true
+#	1.9 offhand switch only
+    OffhandSwitch: true
+    CreativeInventoryClick: true
+    EntityTeleport: true
+    VehicleMove: true
+#	You can use EntityBlockChange to get crop tramples.
+    EntityBlockChange: true
+    HotbarSwitch: true
+#	Breeding is only 1.10+
+    Breeding: true
+    WorldChange: true
+#	Disable CropGrow if you have Umbaska installed, or Umbaska will generate errors.
+    CropGrow: true
+#	This event is called when a block mined drops experience
+    BlockExperienceDrop: true
+    EntityUnleash: true
+    Elytra: true
+    SlimeSplit: true
+# This event is called when an entity dies and may have the opportunity to be resurrected. (Usally from totem)
+    Resurrect: true
+# This event is called when fuel is added to a brewing stand
+    BrewingFuel: true
+    AnvilPrepare: true
+# This event is called when a spawner spawns an entity
+    SpawnerSpawn: true
+    Hanging: true

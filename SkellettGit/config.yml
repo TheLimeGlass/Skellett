@@ -1,0 +1,82 @@
+# Skellett the addon with the beast name!
+# By the one and only LimeGlass
+
+version: "1.8.5"
+
+# The syntax debug will change the colour of the found syntax option. That way it's easier to tell if that syntax was registered out of all the debug messages.
+syntaxDebug: "Sound"
+debug: false
+
+# Checks for the latest Skellett version from Spigot.
+VersionChecker: true
+
+# Save input so you can get the last known client border data of a player in an expression.
+ClientWorldBordersSave: true
+# This makes the client border syntax modify the border of the world a player is in and not make them client side.
+NormalBorders: false
+
+# Broadcast all the syntax that didn't register to the console.
+NotRegisteredSyntax: false
+
+# Disables the warning message saying a syntax can't be registered due to current spigot version.
+DisableCompatableWarning: false
+
+# Disables the message saying the total number of syntax registered and the final registered message.
+DisableRegisteredInfo: false
+
+# In the center message effect. This changes the length of the centered character.
+CenterMessageSize: 62
+
+# Runs Regenerators Asynchronously. Requires FAWE https://www.spigotmc.org/resources/free-fast-async-worldedit.13932/
+Async: false
+# Should FAWE start regenerating the Regenerator before all the blocks are calculated? (This speeds up the regenerators)
+RegeneratorAutoQueue: false
+
+#You can customize the syntax of all feudal syntax here.
+#So like [(the|all)] [of] [the] Feudal [kingdom] fighter[[']s] of %kingdom%
+#The Feudal [kingdom] portion could be anything.
+FeudalSyntaxPrefix: "Feudal [kingdom]"
+
+PluginHooks:
+
+# This allows for custom tablist players using plugin https://www.spigotmc.org/resources/api-tablistapi-1-7-1-8-1-9.9667/
+  TabListAPI: false
+# The TabClearPlayer tells skellett if it should clear just Tab Items or clear players and Tab Items when using the clear tablist expression.
+  TabClearPlayer: false
+
+  LibsDisguises: false
+
+# Fedual: https://www.spigotmc.org/resources/feudal-completely-configurable.22873/
+  Feudal: false
+
+# OITB: https://www.spigotmc.org/resources/%E2%99%9B-one-in-the-battle-advanced-%E2%99%9B-unlimited-fun-%E2%99%A5-for-all-kinds-of-players-%E2%99%A5.24702/
+  OITB: false
+  
+  ProtocolSupport: false
+  
+# http://squidhq.com/
+  SquidHQ: false
+
+# If you use Citizens https://www.spigotmc.org/resources/citizens.13811/
+  Npc: false
+
+# If you use zPermissions https://dev.bukkit.org/projects/zpermissions
+  zPermissions: false
+
+# If you use Holograms https://www.spigotmc.org/resources/holograms.4924/
+  Holograms: false
+  
+# If you use RPG Leveling https://www.spigotmc.org/resources/rpg-player-leveling.11096/
+  RpgLeveling: false
+
+# If you use CorpseReborn https://www.spigotmc.org/resources/corpsereborn.29875/
+  CorpseReborn: false
+  
+# If you use PlayerPoints https://dev.bukkit.org/projects/playerpoints
+  PlayerPoints: false
+
+# If you use Eggwars https://www.spigotmc.org/resources/eggwars-villagers-multiarena-bungee-generators-configurable.14476/
+  Eggwars: false
+  
+# If you use PlaceholderAPI https://www.spigotmc.org/resources/placeholderapi.6245/
+  PlaceholderAPI: false

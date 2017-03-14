@@ -1,0 +1,30 @@
+# Skellett the addon with the beast name!
+# By LimeGlass
+
+# The Host must be the main IP of the BungeeCord that is hosting SkellettProxy.
+# If the bungeecord and this server are on the same machine, you can leave it as localhost.
+
+# The port must match the same port that is in the SkellettProxy config.
+SkellettProxy: false
+Host: localhost
+Port: 7332
+
+# Heartbeat is a running task that SkellettProxy uses to check that servers are still connected.
+# This is in milliseconds.
+Heartbeat: 50
+
+# Disconnect if the Bungeecord is offline.
+# If this is set to false. Skellett will keep making attempts at connecting.
+Disconnect: true
+
+# Enable Bungeecord events.
+# This will run a repeating task to handle the listener.
+# Don't be afraid to enable it. It's only disabled by default.
+Events: false
+# The event port is what SkellettProxy looks for when a bungee event has been triggered.
+# This can match the port defined in the SkellettProxy settings above. It doesn't really matter.
+# The port above is the port from the bungeecord side SkellettProxy config, where as this port is for this server.
+EventPort: 7331
+
+# A message that is displayed to the console to notify that a GlobalScript has been reloaded.
+GlobalScriptReloadMessage: true
