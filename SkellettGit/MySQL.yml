@@ -1,0 +1,22 @@
+# Skellett the addon with the beast name!
+# By LimeGlass
+
+# If you want to use Skellett mysql syntax, enable it here
+MySQL: false
+# Use SQLite
+SQLite: false
+# Adjust your JDBC driver class path
+# If you're using SQLite it would be "jdbc:sqlite://" 
+ClassPath: "jdbc:mysql://"
+# Allow multiple queries
+allowMultiQueries: true
+# Enable the password syntax to get and set the password of the mysql
+# [skellett] mysql['s] password
+# This is disabled for security, but it's up to you if you want to enable it.
+PasswordSyntax: false
+MySQLSetup:
+  Host: "localhost"
+  Port: 3306
+  Username: "admin"
+  Password: "skellett_password"
+  Database: "_table"

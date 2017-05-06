@@ -1,0 +1,22 @@
+name: Skellett
+author: LimeGlass
+description: The addon with the beast name
+version: 1.9.0e
+website: https://forums.skunity.com/resources/skellett-the-addon-with-a-beast-name.24/
+main: com.gmail.thelimeglass.Skellett
+depend: [Skript]
+softdepend: [OneInTheBattle, LibsDisguises, SquidHQ, Feudal, TabAPI, Citizens, zPermissions, Holograms, Eggwars, PlaceholderAPI]
+loadbefore: [Umbaska, TuSKe]
+commands:
+  skellett:
+    description: Skellett main command
+    usage: /skellett
+    permission: skellett.use
+permissions:
+  skellett.*:
+    description: Gives access to all Skellett commands
+    children:
+      skellett.use: true
+  skellett.use:
+    description: Allows you to use Skellett GUI
+    default: op
