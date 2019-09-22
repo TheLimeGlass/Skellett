@@ -1,0 +1,27 @@
+1.9.7:
+Removed:
+	- Removed RPGPlayerLeveling syntax (Was a bad plugin API from the start)
+	- Removed SkellettProxy (Use Skungee now)
+	- Removed regenerators
+	- Removed the DataTypeWatcher packet (Can't be asked to do research and update it's reflection)
+	- Removed ProtocolSupport (Their API has drastically changed)
+	- Removed One In The Battle Support
+	- Removed MySQL syntax, use SkQuery or that other MySQL addon
+	- Removed Feudal support (Plugin was abandoned)
+	- Removed Eggwars support
+	- Removed Book support (It's in vanilla Skript now)
+	- Removed SquidHQ (They moved on to managing a minecraft server list site)
+	- Removed fireworks (I added them in vanilla Skript)
+	- Removed Async World load effect (FAWE has been abandoned at the moment)
+	- Removed Packets
+	- Removed Dyed Armour (It's in vanilla Skript now)
+	- Removed Crop State (The Spigot API for crops has changed completely)
+	- Removed the Spigot checker (Skellett's token for the Spigot API has expired)
+Changed:
+	- In the latest CorpseReborn, you can't set/get the player instance of the corpse, so now new syntax `name of corpse %corpse%` will just return the name of the corpse.
+Fixed:
+	- Fixed version checking on events not working.
+	- Fixed opening books to players for 1.14.4 servers.
+		- Also made the syntax multiple players `open book %itemstack% to %players%`
+
+Skellett should be ready for 1.16, and will break in 1.17 I will see you in another 2 years.

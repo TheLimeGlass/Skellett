@@ -1,0 +1,10 @@
+name: Skellett
+author: LimeGlass
+description: The addon with the beast name
+version: @version@
+website: https://forums.skunity.com/resources/skellett.24/
+main: com.gmail.thelimeglass.Skellett
+depend: [Skript]
+api-version: 1.13
+softdepend: [LibsDisguises, Citizens, Holograms]
+loadbefore: [Umbaska, TuSKe]
