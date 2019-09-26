@@ -159,7 +159,6 @@ Syntax:
     InventoryRows: true
     BlockHardness: true
     ItemframeItem: true
-    ItemframeItem: true
     ItemframeRotation: true
     Statistics: true
     ChunkOutlineBlocks: true
