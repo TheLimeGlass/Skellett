@@ -2,4 +2,4 @@
 
 The most popular Skript addon
 
-Skunity thread: https://forums.skunity.com/resources/skellett-the-addon-with-a-beast-name.24/
+Skunity thread: https://forums.skunity.com/resources/skellett.24/
