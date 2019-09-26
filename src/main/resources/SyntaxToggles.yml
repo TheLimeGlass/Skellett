@@ -39,7 +39,6 @@ Main:
 Syntax:
 
   Effects:
-    Sound: true
     ForceRespawn: true
     CollidableState: true
     Download: true
@@ -54,15 +53,12 @@ Syntax:
     Actionbar: true
     TitleAndSubtitle: true
     TeleportPlayerWorldSpawn: true
-    BreakBlockNaturally: true
     Serialize: true
     EntityEffect: true
-    Particles: false
     # Allows to change adult or baby state
     BabyAdult: true
     # Allows for changing the particle state and colour
     BetterPotion: true
-    HideShowPlayers: true
     UpdateInventory: true
     ClientChest: true
     Chunks: true
@@ -89,11 +85,8 @@ Syntax:
     SprintingState: true
     CollidableState: true
     RoundDecimal: true
-    OfflinePlayers: true
     Operators: true
     ActivePotionEffects: true
-    InventoryViewers: true
-    GetParticles: true
     AmountOfItem: true
 #	Grabs the type of inventory clicked from
     ClickedInventory: true
@@ -124,16 +117,11 @@ Syntax:
     ItemsWithin: true
     SpectralArrow: true
     SlimeSize: true
-    GroundState: true
     Metadata: true
     MaxDamageTicks: true
-    SpawnReason: true
-    TeleportCause: true
     TargetReason: true
     InvulnerableState: true
-    GravityState: true
     SilentState: true
-    NearbyEntities: true
     NoNBT: true
     CropState: true
     CustomName: true
@@ -149,18 +137,13 @@ Syntax:
     EnderCrystalBeam: true
     EnderCrystalBase: true
     EntityRemoveWhenFarAway: true
-    GlideState: true
     ProjectileBounce: true
     AbsorptionHearts: true
-    EntityScoreboardTag: true
     EnchantmentOffers: true
-    Unbreakable: true
     Age: true
     AgeLock: true
     BreedState: true
     NumbersInString: true
-    # Gets the world of a location
-    LocationWorld: true
     EntityUUID: true
     # Will return what would happen if a piston was to extend this block
     PistonReaction: true
@@ -168,15 +151,14 @@ Syntax:
     RepeaterDelay: true
     # Dyed armour stuff
     Dyed: true
-    PlayerPing: true
     Cuboids: true
     ClientWeather: true
     EnchantsOnItem: true
-    ItemInSlots: true
     HitboxSize: true
     SizeOfInventory: true
     InventoryRows: true
     BlockHardness: true
+    ItemframeItem: true
     ItemframeItem: true
     ItemframeRotation: true
     Statistics: true
@@ -193,8 +175,6 @@ Syntax:
     MaterialName: true
     # Get a list of NMS variables from an entity
     DataWatcher: true
-    # Grabs all the index of a list variable.
-    Indexes: true
 
   Conditions:
     LineOfSight: true

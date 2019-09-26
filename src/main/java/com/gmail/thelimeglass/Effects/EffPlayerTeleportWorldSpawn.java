@@ -8,6 +8,7 @@ import ch.njol.util.Kleenean;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -20,6 +21,7 @@ public class EffPlayerTeleportWorldSpawn extends Effect {
 
 	private Expression<Player> players;
 	private Expression<String> world;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
@@ -27,14 +29,20 @@ public class EffPlayerTeleportWorldSpawn extends Effect {
 		world = (Expression<String>) e[1];
 		return true;
 	}
+
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
 		return "teleport %players% to [world] spawn of [world] %string%";
 	}
+
 	@Override
 	protected void execute(Event e) {
-		for (Player p : players.getAll(e)) {
-			p.teleport(Bukkit.getWorld(world.getSingle(e)).getSpawnLocation());
+		World w = Bukkit.getWorld(world.getSingle(e));
+		if (w == null)
+			return;
+		for (Player player : players.getArray(e)) {
+			player.teleport(w.getSpawnLocation());
 		}
 	}
+
 }

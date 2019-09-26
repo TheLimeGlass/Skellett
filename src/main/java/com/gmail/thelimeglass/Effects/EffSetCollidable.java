@@ -12,9 +12,11 @@ import org.bukkit.event.Event;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
+import com.gmail.thelimeglass.Utils.Annotations.Version;
 
-@Syntax("[set] collid(e|able) [state] [of] %entity% to %boolean%")
+@Syntax("[set] collid(e|able) [state] [of] %livingentity% to %boolean%")
 @Config("CollidableState")
+@Version("1.9")
 public class EffSetCollidable extends Effect {
 	
 	private Expression<LivingEntity> entity;
@@ -28,7 +30,7 @@ public class EffSetCollidable extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "[set] collid(e|able) [state] [of] %entity% to %boolean%";
+		return "[set] collid(e|able) [state] [of] %livingentity% to %boolean%";
 	}
 	@Override
 	protected void execute(Event e) {

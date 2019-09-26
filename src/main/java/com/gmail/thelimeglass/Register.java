@@ -525,13 +525,15 @@ public class Register {
 			}, 0);
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.SpawnerSpawn")) {
-			registerEvent(SpawnerSpawnEvent.class, "spawner spawn");
-			EventValues.registerEventValue(SpawnerSpawnEvent.class, Block.class, new Getter<Block, SpawnerSpawnEvent>() {
-				@Override
-				public Block get(SpawnerSpawnEvent e) {
-					return e.getSpawner().getBlock();
-				}
-			}, 0);
+			if (!Bukkit.getServer().getVersion().contains("MC: 1.8")) {
+				registerEvent(SpawnerSpawnEvent.class, "spawner spawn");
+				EventValues.registerEventValue(SpawnerSpawnEvent.class, Block.class, new Getter<Block, SpawnerSpawnEvent>() {
+					@Override
+					public Block get(SpawnerSpawnEvent e) {
+						return e.getSpawner().getBlock();
+					}
+				}, 0);
+			}
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.Hanging")) {
 			registerEvent(HangingBreakEvent.class, "(unhang|[entity] unhung)");

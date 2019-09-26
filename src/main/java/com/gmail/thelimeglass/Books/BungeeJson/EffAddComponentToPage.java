@@ -42,7 +42,10 @@ public class EffAddComponentToPage extends Effect {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void execute(Event e) {
-		BookMeta bookMeta = (BookMeta) book.getSingle(e).getItemMeta();
+		ItemStack item = book.getSingle(e);
+		if (item == null)
+			return;
+		BookMeta bookMeta = (BookMeta) item.getItemMeta();
 		try {
 			List<Object> pages = (List<Object>) ReflectionUtil.getOBCClass("inventory.CraftMetaBook").getDeclaredField("pages").get(bookMeta);
 			Class<?> chatSerializer = ReflectionUtil.getNMSClass("IChatBaseComponent$ChatSerializer");
