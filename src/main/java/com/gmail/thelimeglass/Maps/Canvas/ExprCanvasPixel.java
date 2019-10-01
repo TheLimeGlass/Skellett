@@ -20,7 +20,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-@Syntax("[skellett] map pixle [colo[u]r] at [coordinate[s]] [x] %number%(,| and) [y] %number% (on|in) [skellett] map %map%")
+@Syntax("[skellett] map pixel [colo[u]r] at [coordinate[s]] [x] %number%(,| and) [y] %number% (on|in) [skellett] map %map%")
 @Config("Main.Maps")
 @FullConfig
 @PropertyType(ExpressionType.COMBINED)
@@ -42,7 +42,7 @@ public class ExprCanvasPixel extends SimpleExpression<Number> {
 		return true;
 	}
 	public String toString(@Nullable Event arg0, boolean arg1) {
-		return "[skellett] map pixle [colo[u]r] at [coordinate[s]] [x] %number%(,| and) [y] %number% (on|in) [skellett] map %map%";
+		return "[skellett] map pixel [colo[u]r] at [coordinate[s]] [x] %number%(,| and) [y] %number% (on|in) [skellett] map %map%";
 	}
 	@Nullable
 	protected Number[] get(Event e) {
