@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
@@ -110,8 +109,6 @@ import com.gmail.thelimeglass.Utils.Annotations.RegisterEnum;
 import com.gmail.thelimeglass.Utils.Annotations.RegisterSimpleEnum;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
 import com.gmail.thelimeglass.Utils.Annotations.Version;
-import com.sainttx.holograms.api.HologramManager;
-import com.sainttx.holograms.api.HologramPlugin;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
@@ -133,8 +130,6 @@ public class Skellett extends JavaPlugin {
 	private static FileConfiguration syntaxData;
 	public static File syntaxToggleFile;
 	public static FileConfiguration syntaxToggleData;
-	public static HologramManager hologramManager;
-	public static PlayerPoints playerPoints;
 
 	public void onEnable() {
 		instance = this;
@@ -208,13 +203,6 @@ public class Skellett extends JavaPlugin {
 		}
 		if (syntaxToggleData.getBoolean("Syntax.Conditions.Whitelist")) {
 			Skript.registerCondition(CondIsWhitelisted.class, "[server] whitelist[ed] [state]");
-		}
-		if (config.getBoolean("PluginHooks.PlayerPoints")) {
-			Plugin plugin = getServer().getPluginManager().getPlugin("PlayerPoints");
-			playerPoints = PlayerPoints.class.cast(plugin);
-		}
-		if (config.getBoolean("PluginHooks.Holograms")) {
-			hologramManager = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();
 		}
 		if (syntaxToggleData.getBoolean("Main.Bossbars")) {
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {

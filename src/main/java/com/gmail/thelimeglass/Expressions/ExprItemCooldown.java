@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import com.gmail.thelimeglass.Utils.Utils;
@@ -13,7 +14,6 @@ import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.PropertyType;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
 import com.gmail.thelimeglass.Utils.Annotations.Version;
-import com.sk89q.worldedit.entity.Player;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.classes.Changer.ChangeMode;
@@ -58,7 +58,7 @@ public class ExprItemCooldown extends SimpleExpression<Number>{
 			Material m = (Material) Utils.getEnum(Material.class, material.getSingle(e));
 			ArrayList<Number> ticks = new ArrayList<Number>();
 			for (Player p : players.getAll(e)) {
-				if (((HumanEntity)p).hasCooldown(m)) {
+				if (p.hasCooldown(m)) {
 					ticks.add(((HumanEntity)p).getCooldown(m));
 				}
 			}

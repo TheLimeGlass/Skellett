@@ -52,6 +52,8 @@ public class ExprMaxDamageTicks extends SimpleExpression<Timespan>{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void change(Event e, Object[] delta, Changer.ChangeMode mode){
+		if (entity == null || entity.getSingle(e) == null)
+			return;
 		Timespan before = Timespan.fromTicks((int)(entity.getSingle(e)).getMaximumNoDamageTicks());
 		if (mode == ChangeMode.SET) {
 			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks(((Timespan)delta[0]).getTicks());

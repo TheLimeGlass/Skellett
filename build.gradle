@@ -23,19 +23,14 @@ repositories {
 		url 'http://repo.dmulloy2.net/nexus/repository/public/'
 	}
 
+	// Citizens
+	maven {
+		url "http://repo.citizensnpcs.co/"
+	}
+
 	// Bungeecord
 	maven {
 		url "https://oss.sonatype.org/content/repositories/snapshots/"
-	}
-
-	// FAWE
-	maven {
-		url 'http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/'
-	}
-
-	// Songoda
-	maven {
-		url "http://repo.songoda.com/artifactory/private/"
 	}
 
 	maven {
@@ -47,14 +42,10 @@ repositories {
 dependencies {
 
 	// Spigot
-	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.14.4-R0.1-SNAPSHOT')
-	implementation (group: 'org.bukkit', name: 'bukkit', version: '1.14.4-R0.1-SNAPSHOT')
+	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.16.1-R0.1-SNAPSHOT')
 
 	// Citizens
-	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.25')
-
-	// Holograms
-	implementation (group: 'com.github.sainttx', name: 'Holograms', version: 'master-SNAPSHOT')
+	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.24-SNAPSHOT')
 
 	// ProtocolSupport
 	implementation (group: 'com.github.ProtocolSupport', name: 'ProtocolSupport', version: 'master-SNAPSHOT')
@@ -69,15 +60,6 @@ dependencies {
 
 	// LibsDisguises
 	implementation (group: 'com.github.libraryaddict', name: 'LibsDisguises', version: 'master-SNAPSHOT')
-
-	// PlayerPoints
-	implementation (group: 'org.black_ixx', name: 'playerpoints', version: '2.1.4')
-
-	// WorldGuard
-	implementation (group: 'com.sk89q', name: 'worldguard', version: '7.0.0')
-
-	// WorldEdit
-	implementation (group: 'com.sk89q', name: 'worldedit', version: '7.0.0')
 
 	implementation (group: 'io.netty', name: 'netty-all', version: '4.1.41.Final')
 

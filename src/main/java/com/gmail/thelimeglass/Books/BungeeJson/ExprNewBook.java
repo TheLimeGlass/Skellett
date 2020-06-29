@@ -1,18 +1,15 @@
-package com.gmail.thelimeglass.Holograms;
-
-import java.util.Map;
+package com.gmail.thelimeglass.Books.BungeeJson;
 
 import javax.annotation.Nullable;
 
+import org.bukkit.Material;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
-import com.gmail.thelimeglass.Skellett;
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;
-import com.gmail.thelimeglass.Utils.Annotations.MainConfig;
 import com.gmail.thelimeglass.Utils.Annotations.PropertyType;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
-import com.sainttx.holograms.api.Hologram;
 
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
@@ -20,20 +17,19 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 
-@Syntax("[(the|all)] [of] [the] [skellett] holo[gram][s] ids")
-@Config("PluginHooks.Holograms")
+@Syntax("[a] new [written] book")
+@Config("Main.Books")
 @FullConfig
-@MainConfig
 @PropertyType(ExpressionType.SIMPLE)
-public class ExprHolograms extends SimpleExpression<String>{
+public class ExprNewBook extends SimpleExpression<ItemStack>{
 	
 	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
+	public Class<? extends ItemStack> getReturnType() {
+		return ItemStack.class;
 	}
 	@Override
 	public boolean isSingle() {
-		return false;
+		return true;
 	}
 	@Override
 	public boolean init(Expression<?>[] e, int matchedPattern, Kleenean isDelayed, ParseResult parser) {
@@ -41,12 +37,11 @@ public class ExprHolograms extends SimpleExpression<String>{
 	}
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[(the|all)] [of] [the] [skellett] holo[gram][s] ids";
+		return "[a] new [written] book";
 	}
 	@Override
 	@Nullable
-	protected String[] get(Event e) {
-		Map<String, Hologram> holos = Skellett.hologramManager.getActiveHolograms();
-		return holos.keySet().toArray(new String[holos.keySet().size()]);
+	protected ItemStack[] get(Event e) {
+		return new ItemStack[]{new ItemStack(Material.WRITTEN_BOOK, 1)};
 	}
 }

@@ -34,10 +34,5 @@ PluginHooks:
     LibsDisguises: false
     # If you use Citizens https://www.spigotmc.org/resources/citizens.13811/
     Npc: false
-    # If you use Holograms https://www.spigotmc.org/resources/holograms.4924/
-    Holograms: false
     # If you use CorpseReborn https://www.spigotmc.org/resources/corpsereborn.29875/
     CorpseReborn: false
- 
-    # If you use PlayerPoints https://dev.bukkit.org/projects/playerpoints
-    PlayerPoints: false
