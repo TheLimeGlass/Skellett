@@ -1,4 +1,4 @@
-# Skellett v1.9.7
+# Skellett v1.9.10
 
 The most popular Skript addon
 
