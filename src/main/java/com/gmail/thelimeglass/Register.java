@@ -566,13 +566,19 @@ public class Register {
 			EventValues.registerEventValue(HangingBreakByEntityEvent.class, Entity.class, new Getter<Entity, HangingBreakByEntityEvent>() {
 				@Override
 				public Entity get(HangingBreakByEntityEvent e) {
-					return ((HangingEvent)e).getEntity();
+					return e.getRemover();
 				}
 			}, 0);
+			EventValues.registerEventValue(HangingBreakByEntityEvent.class, Entity.class, new Getter<Entity, HangingBreakByEntityEvent>() {
+				@Override
+				public Entity get(HangingBreakByEntityEvent e) {
+					return e.getEntity();
+				}
+			}, 1);
 		}
 		//TODO: registerEvent(PlayerInteractEntityEvent.class, "item[ ]frame rotate");
 	}
-	public static void types(){
+	public static void types() {
 		if (Skellett.syntaxToggleData.getBoolean("Main.ChatComponent")) {
 			EnumClassInfo.create(ClickEvent.Action.class, "clickeventaction").register();
 			EnumClassInfo.create(HoverEvent.Action.class, "hovereventaction").register();
@@ -687,26 +693,28 @@ public class Register {
 					public String getVariableNamePattern() {
 						return ".+";
 				}}));
-			Classes.registerClass(new ClassInfo<Team>(Team.class, "team")
-				.name("scoreboard team")
-				.description("A getter for scoreboard teams.")
-				.parser(new Parser<Team>() {
-					@Override
-					@Nullable
-					public Team parse(String team, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(Team t, int flags) {
-						return t.toString();
-					}
-					@Override
-					public String toVariableNameString(Team t) {
-						return t.toString();
-					}
-					public String getVariableNamePattern() {
-						return ".+";
-				}}));
+			if (Classes.getClassInfo("team") == null) {
+				Classes.registerClass(new ClassInfo<Team>(Team.class, "team")
+					.name("scoreboard team")
+					.description("A getter for scoreboard teams.")
+					.parser(new Parser<Team>() {
+						@Override
+						@Nullable
+						public Team parse(String team, ParseContext context) {
+							return null;
+						}
+						@Override
+						public String toString(Team t, int flags) {
+							return t.toString();
+						}
+						@Override
+						public String toVariableNameString(Team t) {
+							return t.toString();
+						}
+						public String getVariableNamePattern() {
+							return ".+";
+					}}));
+			}
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
 				EnumClassInfo.create(Team.Option.class, "teamoption").register();
 				if (Bukkit.getPluginManager().getPlugin("skRayFall") == null) {
