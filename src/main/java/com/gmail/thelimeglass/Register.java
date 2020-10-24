@@ -693,28 +693,26 @@ public class Register {
 					public String getVariableNamePattern() {
 						return ".+";
 				}}));
-			if (Classes.getClassInfo("team") == null) {
-				Classes.registerClass(new ClassInfo<Team>(Team.class, "team")
-					.name("scoreboard team")
-					.description("A getter for scoreboard teams.")
-					.parser(new Parser<Team>() {
-						@Override
-						@Nullable
-						public Team parse(String team, ParseContext context) {
-							return null;
-						}
-						@Override
-						public String toString(Team t, int flags) {
-							return t.toString();
-						}
-						@Override
-						public String toVariableNameString(Team t) {
-							return t.toString();
-						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
-			}
+			Classes.registerClass(new ClassInfo<Team>(Team.class, "skellettteam")
+				.name("scoreboard team")
+				.description("A getter for scoreboard teams.")
+				.parser(new Parser<Team>() {
+					@Override
+					@Nullable
+					public Team parse(String team, ParseContext context) {
+						return null;
+					}
+					@Override
+					public String toString(Team t, int flags) {
+						return t.toString();
+					}
+					@Override
+					public String toVariableNameString(Team t) {
+						return t.toString();
+					}
+					public String getVariableNamePattern() {
+						return ".+";
+				}}));
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
 				EnumClassInfo.create(Team.Option.class, "teamoption").register();
 				if (Bukkit.getPluginManager().getPlugin("skRayFall") == null) {
