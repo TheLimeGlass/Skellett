@@ -1,8 +1,7 @@
 package com.gmail.thelimeglass.Corpse;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 import org.golde.bukkit.corpsereborn.nms.Corpses.CorpseData;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;

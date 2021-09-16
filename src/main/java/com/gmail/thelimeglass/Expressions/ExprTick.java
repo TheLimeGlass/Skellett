@@ -1,11 +1,11 @@
 package com.gmail.thelimeglass.Expressions;
 
 import java.lang.reflect.Field;
-import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.PropertyType;

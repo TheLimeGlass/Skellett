@@ -1,18 +1,17 @@
 package com.gmail.thelimeglass.Corpse;
 
-import ch.njol.skript.lang.Effect;
-
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.util.Kleenean;
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;
 import com.gmail.thelimeglass.Utils.Annotations.MainConfig;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
+
+import ch.njol.skript.lang.Effect;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.util.Kleenean;
 
 @Syntax("(delete|unregister|remove) (the|all) [of] [the] corpse[s]")
 @Config("PluginHooks.CorpseReborn")

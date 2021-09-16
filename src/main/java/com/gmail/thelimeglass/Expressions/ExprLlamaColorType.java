@@ -1,10 +1,9 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Llama;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.PropertyType;
@@ -48,7 +47,6 @@ public class ExprLlamaColorType extends SimpleExpression<Llama.Color>{
 		return "Llama colo[u]r of %entity%";
 	}
 	@Override
-	@Nullable
 	protected Llama.Color[] get(Event e) {
 		if (llama.getSingle(e) instanceof Llama) {
 			return new Llama.Color[]{((Llama) llama.getSingle(e)).getColor()};

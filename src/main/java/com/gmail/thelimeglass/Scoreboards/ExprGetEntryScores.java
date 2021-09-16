@@ -2,12 +2,12 @@ package com.gmail.thelimeglass.Scoreboards;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.eclipse.jdt.annotation.Nullable;
+
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;

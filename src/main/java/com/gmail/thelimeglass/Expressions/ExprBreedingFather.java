@@ -1,10 +1,10 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.eclipse.jdt.annotation.Nullable;
+
 import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;

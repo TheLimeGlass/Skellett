@@ -1,19 +1,18 @@
 package com.gmail.thelimeglass.Effects;
 
-import ch.njol.skript.lang.Effect;
-
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.util.Kleenean;
-import javax.annotation.Nullable;
-
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.RegisterEnum;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
+
+import ch.njol.skript.lang.Effect;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.util.Kleenean;
 
 @Syntax("[skellett] (make|force) %entity% [to] [(perform|do)] [entity] effect %entityeffect%")
 @Config("EntityEffect")

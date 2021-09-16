@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Maps.Canvas;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.map.MapView;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Maps.SkellettMapRenderer;
 import com.gmail.thelimeglass.Utils.Annotations.Config;

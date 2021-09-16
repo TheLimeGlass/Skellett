@@ -1,10 +1,9 @@
 package com.gmail.thelimeglass.Nametags;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.scoreboard.Scoreboard;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;

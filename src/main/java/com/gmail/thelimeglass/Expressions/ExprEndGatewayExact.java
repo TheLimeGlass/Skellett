@@ -1,10 +1,9 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.EndGateway;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.Disabled;

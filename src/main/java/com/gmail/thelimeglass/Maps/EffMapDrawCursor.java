@@ -1,13 +1,12 @@
 package com.gmail.thelimeglass.Maps;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapCursor;
 import org.bukkit.map.MapView;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Skellett;
 import com.gmail.thelimeglass.Utils.Annotations.Config;

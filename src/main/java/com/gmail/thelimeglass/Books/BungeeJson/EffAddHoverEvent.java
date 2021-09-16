@@ -1,8 +1,7 @@
 package com.gmail.thelimeglass.Books.BungeeJson;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;
@@ -15,6 +14,7 @@ import ch.njol.util.Kleenean;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 
 @Syntax("add hover event with action %hovereventaction% (and|with) [(value|text)] %string% to [text component] %textcomponent%")
 @Config("Main.ChatComponent")
@@ -38,7 +38,8 @@ public class EffAddHoverEvent extends Effect {
 	}
 	@Override
 	protected void execute(Event e) {
-		if (textcomponent == null || action == null || data == null) return;
-		textcomponent.getSingle(e).setHoverEvent(new HoverEvent(action.getSingle(e), new ComponentBuilder(data.getSingle(e)).create()));
+		if (textcomponent == null || action == null || data == null)
+			return;
+		textcomponent.getSingle(e).setHoverEvent(new HoverEvent(action.getSingle(e), new Text(new ComponentBuilder(data.getSingle(e)).create())));
 	}
 }

@@ -1,10 +1,9 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;

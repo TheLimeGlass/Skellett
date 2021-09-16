@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Scoreboards;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.scoreboard.Team;
+import org.eclipse.jdt.annotation.Nullable;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.classes.Changer.ChangeMode;
@@ -39,7 +38,7 @@ public class ExprTeamOptions extends SimpleExpression<Team.OptionStatus>{
 		return "[(score[ ][board]|[skellett[ ]]board)] [team] option[s] [status] %teamoption% [(for|of)] [the] [team] %team%";
 	}
 	@Override
-	@Nullable
+
 	protected Team.OptionStatus[] get(Event e) {
 		return new Team.OptionStatus[]{team.getSingle(e).getOption(option.getSingle(e))};
 	}

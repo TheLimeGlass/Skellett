@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityUnleashEvent;
+import org.eclipse.jdt.annotation.Nullable;
 
 import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
@@ -32,7 +31,7 @@ public class ExprUnleashReason extends SimpleExpression<EntityUnleashEvent.Unlea
 	public String toString(@Nullable Event arg0, boolean arg1) {
 		return "Unleash reason";
 	}
-	@Nullable
+
 	protected EntityUnleashEvent.UnleashReason[] get(Event e) {
 		return new EntityUnleashEvent.UnleashReason[]{((EntityUnleashEvent)e).getReason()};
 	}

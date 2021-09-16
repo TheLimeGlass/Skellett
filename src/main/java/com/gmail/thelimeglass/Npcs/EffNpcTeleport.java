@@ -1,23 +1,21 @@
 package com.gmail.thelimeglass.Npcs;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.lang.Effect;
-
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.util.Kleenean;
-import net.citizensnpcs.api.npc.NPC;
-
-import javax.annotation.Nullable;
-
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;
 import com.gmail.thelimeglass.Utils.Annotations.MainConfig;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
+
+import ch.njol.skript.Skript;
+import ch.njol.skript.lang.Effect;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.util.Kleenean;
+import net.citizensnpcs.api.npc.NPC;
 
 @Syntax("teleport (npc|citizen) %citizen% to %location% [with (1¦%-teleportcause%|2¦%-string%)]")
 @Config("PluginHooks.Npc")

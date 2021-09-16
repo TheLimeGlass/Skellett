@@ -1,19 +1,18 @@
 package com.gmail.thelimeglass.Effects;
 
-import ch.njol.skript.lang.Effect;
-
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.util.Kleenean;
-import javax.annotation.Nullable;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;
 import com.gmail.thelimeglass.Utils.Annotations.Syntax;
+
+import ch.njol.skript.lang.Effect;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.util.Kleenean;
 
 @Syntax("(make|force) spawner [at] %block% to spawn [[a[n]] entit(y|ies)]")
 @Config("Main.Spawners")

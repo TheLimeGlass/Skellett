@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Effects;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Skellett;
 import com.gmail.thelimeglass.Utils.Annotations.Config;

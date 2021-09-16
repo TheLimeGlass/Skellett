@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.PropertyType;
@@ -37,7 +36,7 @@ public class ExprInventorySize extends SimpleExpression<Number>{
 	}
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[skellett] (gui|menu|inventory|chest|window) (size|number|slots) (of|from) %inventory%";
+		return "inventory size";
 	}
 	@Override
 	@Nullable

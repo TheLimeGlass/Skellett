@@ -26,7 +26,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -49,9 +48,6 @@ import com.gmail.thelimeglass.BossBars.ExprBarTitle;
 import com.gmail.thelimeglass.BossBars.ExprBarVisible;
 import com.gmail.thelimeglass.BossBars.ExprNewBossBar;
 import com.gmail.thelimeglass.Conditions.CondClientTimeRelative;
-import com.gmail.thelimeglass.Conditions.CondFileExists;
-import com.gmail.thelimeglass.Conditions.CondIsWhitelisted;
-import com.gmail.thelimeglass.Expressions.ExprYaml;
 import com.gmail.thelimeglass.Maps.SkellettMapRenderer;
 import com.gmail.thelimeglass.Scoreboards.CondObjectiveExists;
 import com.gmail.thelimeglass.Scoreboards.CondObjectiveIsModifiable;
@@ -195,14 +191,15 @@ public class Skellett extends JavaPlugin {
 			error.printStackTrace();
 		}
 		if (config.getBoolean("Enable1_8pvp")) getServer().getPluginManager().registerEvents(new PvpListener(), this);
-		Skript.registerAddon(this);
+		try {
+			Skript.registerAddon(this).loadClasses("me.limeglass.skellett", "elements");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Register.events();
 		Register.types();
 		if (syntaxToggleData.getBoolean("Syntax.Conditions.ClientTime")) {
 			Skript.registerCondition(CondClientTimeRelative.class, "[skellett] [client] relative time of %player% [is] [%-boolean%] [relative] [to] [server]");
-		}
-		if (syntaxToggleData.getBoolean("Syntax.Conditions.Whitelist")) {
-			Skript.registerCondition(CondIsWhitelisted.class, "[server] whitelist[ed] [state]");
 		}
 		if (syntaxToggleData.getBoolean("Main.Bossbars")) {
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
@@ -280,12 +277,6 @@ public class Skellett extends JavaPlugin {
 				}
 			}
 		}
-		if (getServer().getPluginManager().getPlugin("SkQuery") == null) {
-			if (syntaxToggleData.getBoolean("Main.Yaml")) {
-				Skript.registerExpression(ExprYaml.class, Object.class, ExpressionType.SIMPLE, "[skellett] (file|y[a]ml) [file] (1¦value|2¦node[s]|3¦node[s with] keys|4¦list) %string% (in|at|from) [file] %string%");
-			}
-		}
-		Skript.registerCondition(CondFileExists.class, "[skellett] [file] exist(s|ence) [(at|of)] %string% [is %-boolean%]");
 		Skript.registerEvent("[on] entity sho[o]t:", SimpleEvent.class, EntityShootBowEvent.class, "[on] entity sho[o]t");
 		Register.metrics(new Metrics(this));
 		if (config.getBoolean("debug")) {
@@ -370,7 +361,7 @@ public class Skellett extends JavaPlugin {
 						}
 					}
 					if (a instanceof Version) {
-						String[] versions = {"1.8", "1.8R3", "1.9", "1.9R1", "1.10" , "1.11", "1.11.2", "1.12", "1.13", "1.14", "1.14.4", "1.15", "1.16"};
+						String[] versions = {"1.8", "1.8R3", "1.9", "1.9R1", "1.10" , "1.11", "1.11.2", "1.12", "1.13", "1.14", "1.14.4", "1.15", "1.16", "1.17"};
 						Integer server = null;
 						Integer serverTag = null;
 						for (int i = 0; i < versions.length; i++) {
@@ -430,8 +421,8 @@ public class Skellett extends JavaPlugin {
 							Class clazz = ((RegisterEnum) c.getAnnotation(RegisterEnum.class)).ExprClass();
 							String type = ((RegisterEnum) c.getAnnotation(RegisterEnum.class)).value();
 							if (clazz.equals(String.class)) {
-								if (Classes.getExactClassInfo(((Expression) c.newInstance()).getReturnType()) == null) {
-									EnumClassInfo.create(((Expression) c.newInstance()).getReturnType(), type).register();
+								if (Classes.getExactClassInfo(((Expression) c.getDeclaredConstructor().newInstance()).getReturnType()) == null) {
+									EnumClassInfo.create(((Expression) c.getDeclaredConstructor().newInstance()).getReturnType(), type).register();
 								}
 							} else {
 								EnumClassInfo.create(clazz, type).register();
@@ -534,7 +525,7 @@ public class Skellett extends JavaPlugin {
 							if (node != null) {
 								if (data.getBoolean(node)) {
 									try {
-										Skript.registerExpression(c, ((Expression) c.newInstance()).getReturnType(), ((PropertyType) c.getAnnotation(PropertyType.class)).value(), syntax);
+										Skript.registerExpression(c, ((Expression) c.getDeclaredConstructor().newInstance()).getReturnType(), ((PropertyType) c.getAnnotation(PropertyType.class)).value(), syntax);
 										exprN++;
 									} catch (IllegalAccessException e) {
 										Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cFailed to register expression " + c.getCanonicalName()));
@@ -546,7 +537,7 @@ public class Skellett extends JavaPlugin {
 								}
 							} else {
 								try {
-									Skript.registerExpression(c, ((Expression) c.newInstance()).getReturnType(), ((PropertyType) c.getAnnotation(PropertyType.class)).value(), syntax);
+									Skript.registerExpression(c, ((Expression) c.getDeclaredConstructor().newInstance()).getReturnType(), ((PropertyType) c.getAnnotation(PropertyType.class)).value(), syntax);
 									exprN++;
 								} catch (IllegalAccessException e) {
 									Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "&cFailed to register expression " + c.getCanonicalName()));

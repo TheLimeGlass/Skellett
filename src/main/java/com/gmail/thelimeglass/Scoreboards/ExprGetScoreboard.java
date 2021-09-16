@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Scoreboards;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.scoreboard.Scoreboard;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Skellett;
 

@@ -1,10 +1,9 @@
 package com.gmail.thelimeglass.Expressions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.PropertyType;
@@ -41,8 +40,7 @@ public class ExprClickedSlotType extends SimpleExpression<InventoryType.SlotType
 	public String toString(@Nullable Event arg0, boolean arg1) {
 		return "Inventory clicked slot type";
 	}
-	@Nullable
-	protected InventoryType.SlotType[] get(Event e) {
+	protected InventoryType.SlotType @Nullable [] get(Event e) {
 		return new InventoryType.SlotType[]{((InventoryClickEvent)e).getSlotType()};
 	}
 }

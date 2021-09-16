@@ -1,11 +1,10 @@
 package com.gmail.thelimeglass.Conditions;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Utils;
 import com.gmail.thelimeglass.Utils.Annotations.Config;

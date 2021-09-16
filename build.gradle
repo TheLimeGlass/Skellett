@@ -1,31 +1,23 @@
 import org.apache.tools.ant.filters.ReplaceTokens
-apply plugin: 'java-library'
-apply plugin: 'eclipse'
 
-jar.archiveName = project.name + '.jar'
-
-configurations {
-    shade
-    compile.extendsFrom shade
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'maven-publish'
+	id 'eclipse'
+	id 'java'
 }
 
 repositories {
 	mavenCentral()
-	jcenter()
 
 	// Spigot
 	maven {
 		url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 	}
 
-	// ProtocolLib
-	maven {
-		url 'http://repo.dmulloy2.net/nexus/repository/public/'
-	}
-
 	// Citizens
 	maven {
-		url "http://repo.citizensnpcs.co/"
+		url "https://repo.citizensnpcs.co/"
 	}
 
 	// Bungeecord
@@ -41,57 +33,47 @@ repositories {
 
 dependencies {
 
+	//Nullable annotation
+	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.2.600')
+
 	// Spigot
-	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.16.1-R0.1-SNAPSHOT')
+	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.17-R0.1-SNAPSHOT')
 
 	// Citizens
-	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.24-SNAPSHOT')
+	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.27-SNAPSHOT')
 
 	// ProtocolSupport
-	implementation (group: 'com.github.ProtocolSupport', name: 'ProtocolSupport', version: 'master-SNAPSHOT')
+	//implementation (group: 'com.github.ProtocolSupport', name: 'ProtocolSupport', version: 'master-SNAPSHOT')
 
-	//Nullable annotation
-	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '1.1.0')
-
-	//Skript
-	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.4-alpha1') {
+	implementation (group: 'com.github.SkriptLang.Skript', name: 'Skript', version: '2.6-alpha1') {
 		transitive = false
 	}
 
-	// LibsDisguises
-	implementation (group: 'com.github.libraryaddict', name: 'LibsDisguises', version: 'master-SNAPSHOT')
+	//implementation (group: 'io.netty', name: 'netty-all', version: '4.1.41.Final')
 
-	implementation (group: 'io.netty', name: 'netty-all', version: '4.1.41.Final')
+	//shadow (group: 'commons-io', name: 'commons-io', version: '2.6')
 
-	shade (group: 'commons-io', name: 'commons-io', version: '2.6')
-
-	implementation (group: 'com.google.code.findbugs', name: 'findbugs', version: '3.0.1')
+	//implementation (group: 'com.google.code.findbugs', name: 'findbugs', version: '3.0.1')
 
 	// JSON.org
-	shade (group: 'org.json', name: 'json', version: '20190722')
+	shadow (group: 'org.json', name: 'json', version: '20190722')
 
 	implementation fileTree(dir: 'libraries', include: '*.jar')
 
 }
 
-configurations {
-	runtime.exclude group: 'org.bstats', module: 'bstats-bukkit-lite'
-}
-
 processResources {
-	from (sourceSets.main.resources.srcDirs) {
-		filter ReplaceTokens, tokens: ["version": project.property("version")]
-		include '**/*.yml'
+	filter ReplaceTokens, tokens: ["version": project.property("version")]
+	from ("lang/") {
+		include '*.lang'
+		into 'lang/'
 	}
 }
 
-jar {
-	from 'kingdoms-worldguard6/java/main'
-	configurations.shade.each { dep ->
-		from (project.zipTree(dep)) {
-			exclude '**/*.php'
-			exclude '**/*.yml'
-			exclude 'META-INF', 'META-INF/**'
-		}
-	}
+shadowJar {
+	configurations = [project.configurations.shadow]
+	archiveVersion = version
+	baseName = project.name
+	classifier = ''
+	minimize()
 }

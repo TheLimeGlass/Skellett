@@ -1,9 +1,8 @@
 package com.gmail.thelimeglass.Maps;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.map.MapView;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Annotations.Config;
 import com.gmail.thelimeglass.Utils.Annotations.FullConfig;
@@ -42,7 +41,7 @@ public class ExprMapScale extends SimpleExpression<MapView.Scale> {
 	public String toString(@Nullable Event arg0, boolean arg1) {
 		return "map (scale|size) of %map%";
 	}
-	@Nullable
+
 	protected MapView.Scale[] get(Event e) {
 		if (map.getSingle(e) == null) {
 			return null;

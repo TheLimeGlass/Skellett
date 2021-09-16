@@ -4,14 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -22,31 +16,23 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockExpEvent;
-import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.EntityUnleashEvent;
-import org.bukkit.event.entity.FireworkExplodeEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
-import org.bukkit.event.hanging.HangingEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.server.MapInitializeEvent;
@@ -57,8 +43,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.eclipse.jdt.annotation.Nullable;
 
-import com.gmail.thelimeglass.Expressions.ExprBlockXP;
 import com.gmail.thelimeglass.Expressions.ExprBreedingBreeder;
 import com.gmail.thelimeglass.Expressions.ExprBreedingEntity;
 import com.gmail.thelimeglass.Expressions.ExprBreedingFather;
@@ -67,9 +53,7 @@ import com.gmail.thelimeglass.Expressions.ExprBreedingMother;
 import com.gmail.thelimeglass.Expressions.ExprBreedingXP;
 import com.gmail.thelimeglass.Expressions.ExprUnleashHitch;
 import com.gmail.thelimeglass.Expressions.ExprUnleashReason;
-import com.gmail.thelimeglass.Expressions.ExprWorldChangeFrom;
 import com.gmail.thelimeglass.Utils.EnumClassInfo;
-import com.gmail.thelimeglass.Utils.ExprNewMaterial;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
@@ -111,33 +95,7 @@ public class Register {
 	@SuppressWarnings("rawtypes")
 	private static List<Class> classes = new ArrayList<>();
 	
-	public static void events(){
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.FireworkExplode")) {
-			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
-				registerEvent(FireworkExplodeEvent.class, "firework explo(de|sion)");
-				EventValues.registerEventValue(FireworkExplodeEvent.class, Entity.class, new Getter<Entity, FireworkExplodeEvent>() {
-					@Override
-					public Entity get(FireworkExplodeEvent e) {
-						return e.getEntity();
-					}
-				}, 0);
-			}
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.ItemDespawn")) {
-			registerEvent(ItemDespawnEvent.class, "item[ ][stack] (despawn|remove|delete)");
-			EventValues.registerEventValue(ItemDespawnEvent.class, Entity.class, new Getter<Entity, ItemDespawnEvent>() {
-				@Override
-				public Entity get(ItemDespawnEvent e) {
-					return e.getEntity();
-				}
-			}, 0);
-			EventValues.registerEventValue(ItemDespawnEvent.class, Location.class, new Getter<Location, ItemDespawnEvent>() {
-				@Override
-				public Location get(ItemDespawnEvent e) {
-					return e.getLocation();
-				}
-			}, 0);
-		}
+	public static void events() {
 		if (Skellett.syntaxToggleData.getBoolean("Main.PrepareEnchant")) {
 			Skript.registerEvent("[on] ([item] enchant prepare|prepare [item] enchant):", SimpleEvent.class, PrepareItemEnchantEvent.class, "[on] ([item] enchant prepare|prepare [item] enchant)");
 			EventValues.registerEventValue(PrepareItemEnchantEvent.class, Block.class, new Getter<Block, PrepareItemEnchantEvent>() {
@@ -241,15 +199,12 @@ public class Register {
 					return e.getTo();
 				}
 			}, 0);
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.EntityTeleport")) {
-			registerEvent(EntityTeleportEvent.class, "entity teleport");
 			EventValues.registerEventValue(EntityTeleportEvent.class, Location.class, new Getter<Location, EntityTeleportEvent>() {
 				@Override
 				public Location get(EntityTeleportEvent e) {
-					return e.getTo();
+					return e.getFrom();
 				}
-			}, 1);
+			}, -1);
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.VehicleMove")) {
 			registerEvent(VehicleMoveEvent.class, "(vehicle|minecart|boat) move");
@@ -268,16 +223,12 @@ public class Register {
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.EntityBlockChange")) {
 			registerEvent(EntityChangeBlockEvent.class, "entity block (change|modify)");
-			Skript.registerExpression(ExprNewMaterial.class, Material.class, ExpressionType.SIMPLE, "[skellett] new [changed] material");
 			EventValues.registerEventValue(EntityChangeBlockEvent.class, Block.class, new Getter<Block, EntityChangeBlockEvent>() {
 				@Override
 				public Block get(EntityChangeBlockEvent e) {
 					return e.getBlock();
 				}
 			}, 0);
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.HotbarSwitch")) {
-			registerEvent(PlayerItemHeldEvent.class, "(hotbar|held [(item|slot)]|inventory slot) (switch|change)");
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.Breeding")) {
 			if (Bukkit.getVersion().contains("1.6") || Bukkit.getVersion().contains("1.7") || Bukkit.getVersion().contains("1.8") || Bukkit.getVersion().contains("1.9") || Bukkit.getVersion().contains("1.10")) {
@@ -291,17 +242,6 @@ public class Register {
 				Skript.registerExpression(ExprBreedingFather.class, LivingEntity.class, ExpressionType.SIMPLE, "bre[e]d[ing] father");
 				Skript.registerExpression(ExprBreedingMother.class, LivingEntity.class, ExpressionType.SIMPLE, "bre[e]d[ing] mother");
 			}
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.WorldChange")) {
-			registerEvent(PlayerChangedWorldEvent.class, "[player] world change");
-			Skript.registerExpression(ExprWorldChangeFrom.class, World.class, ExpressionType.SIMPLE, "(previous|past) [changed] world");
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.CropGrow")) {
-			registerEvent(BlockGrowEvent.class, "(block|crop) grow[ing]");
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.BlockExperienceDrop")) {
-			registerEvent(BlockExpEvent.class, "block [break] (xp|exp|experience) [drop]");
-			Skript.registerExpression(ExprBlockXP.class, Number.class,ExpressionType.SIMPLE, "[dropped] block[[']s] (xp|experience)");
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.EntityUnleash")) {
 			registerEvent(EntityUnleashEvent.class, "[entity] (un(leash|lead)|(leash|lead) break)");
@@ -381,11 +321,6 @@ public class Register {
 						return e.getInventory().getRenameText();
 					}
 				}, 0);
-			}
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.Resurrect")) {
-			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8") && !Bukkit.getServer().getVersion().contains("MC: 1.9") && !Bukkit.getServer().getVersion().contains("MC: 1.10")) {
-				registerEvent(EntityResurrectEvent.class, "[entity] (resurrect|revive)");
 			}
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.SlimeSplit")) {
@@ -767,16 +702,6 @@ public class Register {
 				public String getVariableNamePattern() {
 					return ".+";
 			}}));
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Effects.Particles")) {
-			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
-				if (Classes.getExactClassInfo(Particle.class) == null) {
-					EnumClassInfo.create(Particle.class, "particle").register();
-				}
-			}
-		}
-		if (Bukkit.getPluginManager().getPlugin("SkQuery") == null) {
-			EnumClassInfo.create(Sound.class, "sound").register();
-		}
 	}
 	
 	@SuppressWarnings("rawtypes")

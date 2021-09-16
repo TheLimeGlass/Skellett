@@ -2,13 +2,12 @@ package com.gmail.thelimeglass.Expressions;
 
 import java.util.Arrays;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.gmail.thelimeglass.Utils.Utils;
 import com.gmail.thelimeglass.Utils.Annotations.Config;

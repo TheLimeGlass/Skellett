@@ -1,9 +1,9 @@
 package com.gmail.thelimeglass.Scoreboards;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.scoreboard.Objective;
+import org.eclipse.jdt.annotation.Nullable;
+
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
