@@ -9,7 +9,7 @@ public class CondCollidable extends PropertyCondition<LivingEntity> {
 
 	static {
 		if (Skript.methodExists(LivingEntity.class, "isCollidable"))
-			register(CondCollidable.class, "in collidable", "livingentities");
+			register(CondCollidable.class, "collidable", "livingentities");
 	}
 
 	@Override
