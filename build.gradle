@@ -7,6 +7,9 @@ plugins {
 	id 'java'
 }
 
+compileJava.options.encoding = 'Cp1252'
+compileTestJava.options.encoding = 'Cp1252'
+
 repositories {
 	mavenCentral()
 
