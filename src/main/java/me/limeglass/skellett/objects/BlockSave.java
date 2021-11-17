@@ -1,4 +1,4 @@
-package com.gmail.thelimeglass.objects;
+package me.limeglass.skellett.objects;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
