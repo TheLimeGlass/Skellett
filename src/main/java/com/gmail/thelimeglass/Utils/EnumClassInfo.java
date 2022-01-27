@@ -69,11 +69,6 @@ public class EnumClassInfo<E extends Enum<E>> {
 				public String toVariableNameString(E e) {
 					return codeName + ':' + e.toString();
 				}
-	
-				@Override
-				public String getVariableNamePattern() {
-					return codeName + ":.+";
-				}
 			}).serializer(new EnumSerializer<>(enumType)));
 		}
 	}

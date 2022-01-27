@@ -36,12 +36,6 @@ public class TypeClassInfo<T> {
 	public void register(){
 		if (Classes.getExactClassInfo(clazz) == null) {
 			Classes.registerClass(classInfo.user(codeName + "s?").parser(new Parser<T>(){
-	
-				@Override
-				public String getVariableNamePattern() {
-					return codeName + ":.+";
-				}
-	
 				@Override
 				public T parse(String s, ParseContext parseContext) {
 					return null;

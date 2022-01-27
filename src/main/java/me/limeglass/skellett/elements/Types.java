@@ -42,12 +42,6 @@ public class Types {
 					public String toVariableNameString(BlockSave save) {
 						return toString(save, 0);
 					}
-	
-					@Override
-					public String getVariableNamePattern() {
-						return ".+";
-					}
-
 		}).serializer(new Serializer<BlockSave>() {
 
 			@Override

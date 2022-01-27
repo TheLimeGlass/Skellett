@@ -28,8 +28,9 @@ repositories {
 		url "https://oss.sonatype.org/content/repositories/snapshots/"
 	}
 
+	// Skript
 	maven {
-		url 'https://jitpack.io'
+		url 'https://repo.skriptlang.org/releases'
 	}
 
 }
