@@ -60,7 +60,7 @@ dependencies {
 	//implementation (group: 'com.google.code.findbugs', name: 'findbugs', version: '3.0.1')
 
 	// JSON.org
-	shadow (group: 'org.json', name: 'json', version: '20211205')
+	shadow (group: 'org.json', name: 'json', version: '20220320')
 
 	implementation fileTree(dir: 'libraries', include: '*.jar')
 
