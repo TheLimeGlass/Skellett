@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.AbstractArrow;
@@ -563,86 +562,90 @@ public class Register {
 			}
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Main.Scoreboards")) {
-			Classes.registerClass(new ClassInfo<Objective>(Objective.class, "objective")
-				.name("scoreboard objective")
-				.description("A getter for scoreboard objectives.")
-				.parser(new Parser<Objective>() {
-					@Override
-					@Nullable
-					public Objective parse(String obj, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(Objective o, int flags) {
-						return o.toString();
-					}
-					@Override
-					public String toVariableNameString(Objective o) {
-						return o.toString();
-					}
-					public String getVariableNamePattern() {
-						return ".+";
-				}}));
-			Classes.registerClass(new ClassInfo<Scoreboard>(Scoreboard.class, "scoreboard")
-				.name("scoreboard")
-				.description("A getter for skellett scoreboards.")
-				.parser(new Parser<Scoreboard>() {
-					@Override
-					@Nullable
-					public Scoreboard parse(String obj, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(Scoreboard s, int flags) {
-						return s.toString();
-					}
-					@Override
-					public String toVariableNameString(Scoreboard s) {
-						return s.toString();
-					}
-					public String getVariableNamePattern() {
-						return ".+";
-				}}));
-			Classes.registerClass(new ClassInfo<Score>(Score.class, "score")
-				.name("scoreboard score")
-				.description("A getter for scoreboard scores.")
-				.parser(new Parser<Score>() {
-					@Override
-					@Nullable
-					public Score parse(String score, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(Score s, int flags) {
-						return s.toString();
-					}
-					@Override
-					public String toVariableNameString(Score s) {
-						return s.toString();
-					}
-					public String getVariableNamePattern() {
-						return ".+";
-				}}));
-			Classes.registerClass(new ClassInfo<Team>(Team.class, "skellettteam")
-				.name("scoreboard team")
-				.description("A getter for scoreboard teams.")
-				.parser(new Parser<Team>() {
-					@Override
-					@Nullable
-					public Team parse(String team, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(Team t, int flags) {
-						return t.toString();
-					}
-					@Override
-					public String toVariableNameString(Team t) {
-						return t.toString();
-					}
-					public String getVariableNamePattern() {
-						return ".+";
-				}}));
+			if (Classes.getExactClassInfo(Objective.class) == null)
+				Classes.registerClass(new ClassInfo<Objective>(Objective.class, "objective")
+					.name("scoreboard objective")
+					.description("A getter for scoreboard objectives.")
+					.parser(new Parser<Objective>() {
+						@Override
+						@Nullable
+						public Objective parse(String obj, ParseContext context) {
+							return null;
+						}
+						@Override
+						public String toString(Objective o, int flags) {
+							return o.toString();
+						}
+						@Override
+						public String toVariableNameString(Objective o) {
+							return o.toString();
+						}
+						public String getVariableNamePattern() {
+							return ".+";
+					}}));
+			if (Classes.getExactClassInfo(Scoreboard.class) == null)
+				Classes.registerClass(new ClassInfo<Scoreboard>(Scoreboard.class, "scoreboard")
+					.name("scoreboard")
+					.description("A getter for skellett scoreboards.")
+					.parser(new Parser<Scoreboard>() {
+						@Override
+						@Nullable
+						public Scoreboard parse(String obj, ParseContext context) {
+							return null;
+						}
+						@Override
+						public String toString(Scoreboard s, int flags) {
+							return s.toString();
+						}
+						@Override
+						public String toVariableNameString(Scoreboard s) {
+							return s.toString();
+						}
+						public String getVariableNamePattern() {
+							return ".+";
+					}}));
+			if (Classes.getExactClassInfo(Score.class) == null)
+				Classes.registerClass(new ClassInfo<Score>(Score.class, "score")
+					.name("scoreboard score")
+					.description("A getter for scoreboard scores.")
+					.parser(new Parser<Score>() {
+						@Override
+						@Nullable
+						public Score parse(String score, ParseContext context) {
+							return null;
+						}
+						@Override
+						public String toString(Score s, int flags) {
+							return s.toString();
+						}
+						@Override
+						public String toVariableNameString(Score s) {
+							return s.toString();
+						}
+						public String getVariableNamePattern() {
+							return ".+";
+					}}));
+			if (Classes.getExactClassInfo(Team.class) == null)
+				Classes.registerClass(new ClassInfo<Team>(Team.class, "skellettteam")
+					.name("scoreboard team")
+					.description("A getter for scoreboard teams.")
+					.parser(new Parser<Team>() {
+						@Override
+						@Nullable
+						public Team parse(String team, ParseContext context) {
+							return null;
+						}
+						@Override
+						public String toString(Team t, int flags) {
+							return t.toString();
+						}
+						@Override
+						public String toVariableNameString(Team t) {
+							return t.toString();
+						}
+						public String getVariableNamePattern() {
+							return ".+";
+					}}));
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
 				EnumClassInfo.create(Team.Option.class, "teamoption").register();
 				if (Bukkit.getPluginManager().getPlugin("skRayFall") == null) {
