@@ -534,15 +534,12 @@ public class Register {
 					public String toVariableNameString(TextComponent t) {
 						return t.toLegacyText();
 					}
-					public String getVariableNamePattern() {
-						return ".+";
-				}}));
+			}));
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Main.Bossbars")) {
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
 				EnumClassInfo.create(BarColor.class, "barcolour").register();
 				EnumClassInfo.create(BarStyle.class, "barstyle").register();
-				EnumClassInfo.create(BarFlag.class, "barflag").register();
 				if (Classes.getExactClassInfo(BossBar.class) == null) {
 					Classes.registerClass(new ClassInfo<BossBar>(BossBar.class, "bossbar")
 						.name("bossbar")
@@ -561,9 +558,7 @@ public class Register {
 							public String toVariableNameString(BossBar b) {
 								return b.toString();
 							}
-							public String getVariableNamePattern() {
-								return ".+";
-						}}));
+					}));
 				}
 			}
 		}
@@ -659,7 +654,8 @@ public class Register {
 			//EnumClassInfo.create(EntityType.class, "skellettentitytype").register();
 			if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
 				Classes.registerClass(new ClassInfo<NPC>(NPC.class, "citizen")
-					.name("npc")
+					.name("citizens")
+					.user("(npc|citizen)s?")
 					.description("A getter for npc")
 					.defaultExpression(new EventValueExpression<NPC>(NPC.class))
 					.parser(new Parser<NPC>() {
@@ -676,9 +672,7 @@ public class Register {
 						public String toVariableNameString(NPC e) {
 							return e.toString();
 						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
+				}));
 			}
 		}
 		Classes.registerClass(new ClassInfo<UUID>(UUID.class, "uuid")
@@ -699,9 +693,7 @@ public class Register {
 				public String toVariableNameString(UUID e) {
 					return e.toString();
 				}
-				public String getVariableNamePattern() {
-					return ".+";
-			}}));
+		}));
 	}
 	
 	@SuppressWarnings("rawtypes")

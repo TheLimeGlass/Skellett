@@ -18,12 +18,10 @@ import java.util.jar.JarFile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,21 +30,13 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.gmail.thelimeglass.BossBars.CondBarHasFlag;
-import com.gmail.thelimeglass.BossBars.EffBarAddFlag;
-import com.gmail.thelimeglass.BossBars.EffBarAddPlayer;
 import com.gmail.thelimeglass.BossBars.EffBarHideAndShow;
 import com.gmail.thelimeglass.BossBars.EffBarRemoveAllPlayers;
-import com.gmail.thelimeglass.BossBars.EffBarRemoveFlag;
-import com.gmail.thelimeglass.BossBars.EffBarRemovePlayer;
 import com.gmail.thelimeglass.BossBars.ExprBarColour;
-import com.gmail.thelimeglass.BossBars.ExprBarFlags;
-import com.gmail.thelimeglass.BossBars.ExprBarPlayers;
 import com.gmail.thelimeglass.BossBars.ExprBarProgress;
 import com.gmail.thelimeglass.BossBars.ExprBarStyle;
 import com.gmail.thelimeglass.BossBars.ExprBarTitle;
 import com.gmail.thelimeglass.BossBars.ExprBarVisible;
-import com.gmail.thelimeglass.BossBars.ExprNewBossBar;
 import com.gmail.thelimeglass.Conditions.CondClientTimeRelative;
 import com.gmail.thelimeglass.Maps.SkellettMapRenderer;
 import com.gmail.thelimeglass.Scoreboards.CondObjectiveExists;
@@ -113,6 +103,8 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Timespan;
+import me.limeglass.skellett.elements.bossbars.CondBossBarFlag;
+import me.limeglass.skellett.elements.bossbars.ExprNewBossBar;
 
 public class Skellett extends JavaPlugin {
 
@@ -192,7 +184,9 @@ public class Skellett extends JavaPlugin {
 		}
 		if (config.getBoolean("Enable1_8pvp")) getServer().getPluginManager().registerEvents(new PvpListener(), this);
 		try {
-			Skript.registerAddon(this).loadClasses("me.limeglass.skellett", "elements");
+			Skript.registerAddon(this)
+				.setLanguageFileDirectory("lang")
+				.loadClasses("me.limeglass.skellett", "elements");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -203,21 +197,13 @@ public class Skellett extends JavaPlugin {
 		}
 		if (syntaxToggleData.getBoolean("Main.Bossbars")) {
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
-				Skript.registerExpression(ExprNewBossBar.class, BossBar.class, ExpressionType.SIMPLE, "[skellett] [create] [a] new [boss[ ]]bar [with flag %-barflag%]");
-				Skript.registerEffect(EffBarAddPlayer.class, "[skellett] add %player% to [the] [boss[ ]]bar %bossbar%");
 				Skript.registerExpression(ExprBarVisible.class, Boolean.class, ExpressionType.SIMPLE, "[the] [skellett] visib(le|ility) [(for|of)] [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] visib(le|ility)");
-				Skript.registerEffect(EffBarRemovePlayer.class, "[skellett] remove %player% from [the] [boss[ ]]bar %bossbar%");
 				Skript.registerExpression(ExprBarColour.class, BarColor.class, ExpressionType.SIMPLE, "[the] [skellett] colo[u]r of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] colo[u]r");
 				Skript.registerExpression(ExprBarStyle.class, BarStyle.class, ExpressionType.SIMPLE, "[the] [skellett] style of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] style");
-				Skript.registerExpression(ExprBarPlayers.class, Player.class, ExpressionType.SIMPLE, "[skellett] [(the|all)] [of] [the] player[[']s] [(in|of)] [the] [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s player[[']s]");
 				Skript.registerExpression(ExprBarProgress.class, Number.class, ExpressionType.SIMPLE, "[the] [skellett] progress of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] progress");
 				Skript.registerExpression(ExprBarTitle.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (title|name|header|string) of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [boss[ ]]bar (title|name|header|string)");
-				Skript.registerCondition(CondBarHasFlag.class, "[skellett] [boss[ ]][bar] %bossbar% (1¦(ha(s|ve)|contain[s])|2¦(do[es](n't| not) have| do[es](n't| not) contain)) [(the|a)] [boss[ ]][bar] [flag] %barflag%");
 				Skript.registerEffect(EffBarRemoveAllPlayers.class, "[skellett] remove [(the|all)] [of] [the] player[[']s] [(in|of|from)] [the] [boss[ ]]bar %bossbar%");
-				Skript.registerEffect(EffBarRemoveFlag.class, "[skellett] remove [boss[ ]][bar] [flag] %barflag% from [the] [boss[ ]][bar] %bossbar%");
-				Skript.registerEffect(EffBarAddFlag.class, "[skellett] add [boss[ ]][bar] [flag] %barflag% to [the] [boss[ ]][bar] %bossbar%");
 				Skript.registerEffect(EffBarHideAndShow.class, "[skellett] (1¦hide|2¦show) [boss[ ]]bar %bossbar%");
-				Skript.registerExpression(ExprBarFlags.class, BarFlag.class, ExpressionType.SIMPLE, "[skellett] [(the|all)] [of] [the] flag[[']s] [(in|of)] [the] [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s flag[[']s]");
 			}
 		}
 		if (syntaxToggleData.getBoolean("Main.Scoreboards")) {

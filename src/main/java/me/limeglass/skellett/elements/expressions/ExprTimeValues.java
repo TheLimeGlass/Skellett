@@ -18,7 +18,7 @@ import ch.njol.util.Kleenean;
 public class ExprTimeValues extends SimpleExpression<Long> {
 
 	static {
-		Skript.registerExpression(ExprTimeValues.class, Long.class, ExpressionType.COMBINED, "(0Â¦ticks|1Â¦milli[( |-)]seconds|2Â¦seconds|3Â¦minutes|4Â¦hours|5Â¦days|6Â¦weeks|7Â¦months|8Â¦years) (of|from|[with]in) %timespans%");
+		Skript.registerExpression(ExprTimeValues.class, Long.class, ExpressionType.COMBINED, "(0¦ticks|1¦milli[( |-)]seconds|2¦seconds|3¦minutes|4¦hours|5¦days|6¦weeks|7¦months|8¦years) (of|from|[with]in) %timespans%");
 	}
 
 	private Expression<Timespan> timespans;

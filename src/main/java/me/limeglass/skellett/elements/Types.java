@@ -6,13 +6,17 @@ import java.io.StreamCorruptedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.event.player.PlayerFishEvent;
 
 import ch.njol.skript.classes.ClassInfo;
+import ch.njol.skript.classes.EnumSerializer;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.util.EnumUtils;
 import ch.njol.yggdrasil.Fields;
 import me.limeglass.skellett.objects.BlockSave;
 
@@ -75,6 +79,52 @@ public class Types {
 			}
 
 		}));
+		EnumUtils<PlayerFishEvent.State> fishStateUtils = new EnumUtils<>(PlayerFishEvent.State.class, "fishing states");
+		Classes.registerClass(new ClassInfo<>(PlayerFishEvent.State.class, "fishingstate")
+				.user("fish(ing)? ?states?")
+				.name("Fishing State")
+				.description("Represents the fishing state in a fishing event.")
+				.usage(fishStateUtils.getAllNames())
+				.parser(new Parser<PlayerFishEvent.State>() {
+					@Override
+					public PlayerFishEvent.State parse(String s, ParseContext context) {
+						return fishStateUtils.parse(s);
+					}
+
+					@Override
+					public String toString(PlayerFishEvent.State o, int flags) {
+						return fishStateUtils.toString(o, flags);
+					}
+
+					@Override
+					public String toVariableNameString(PlayerFishEvent.State o) {
+						return o.name();
+					}
+				})
+				.serializer(new EnumSerializer<>(PlayerFishEvent.State.class)));
+		EnumUtils<BarFlag> flags = new EnumUtils<>(BarFlag.class, "bossbarflag");
+		Classes.registerClass(new ClassInfo<>(BarFlag.class, "bossbarflag")
+				.user("(boss ?)?bar ?flags?")
+				.name("BossBar Flags")
+				.description("The flags of a bossbar.")
+				.usage(flags.getAllNames())
+				.parser(new Parser<BarFlag>() {
+					@Override
+					public BarFlag parse(String s, ParseContext context) {
+						return flags.parse(s);
+					}
+
+					@Override
+					public String toString(BarFlag o, int f) {
+						return flags.toString(o, f);
+					}
+
+					@Override
+					public String toVariableNameString(BarFlag o) {
+						return o.name();
+					}
+				})
+				.serializer(new EnumSerializer<>(BarFlag.class)));
 	}
 
 }
