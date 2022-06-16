@@ -90,10 +90,10 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Register {
-	
+
 	@SuppressWarnings("rawtypes")
 	private static List<Class> classes = new ArrayList<>();
-	
+
 	public static void events() {
 		if (Skellett.syntaxToggleData.getBoolean("Main.PrepareEnchant")) {
 			Skript.registerEvent("[on] ([item] enchant prepare|prepare [item] enchant):", SimpleEvent.class, PrepareItemEnchantEvent.class, "[on] ([item] enchant prepare|prepare [item] enchant)");
@@ -133,24 +133,6 @@ public class Register {
 					return e.getFuelLevel();
 				}
 			}, 0);
-		}
-		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.ItemMerge")) {
-			if (Bukkit.getVersion().contains("1.7") || Bukkit.getVersion().contains("1.8")) {
-				Bukkit.getConsoleSender().sendMessage(Skellett.cc(Skellett.prefix + "The item merge event is only for 1.9+ versions!"));
-			} else {
-				registerEvent(ItemMergeEvent.class, "item[ ][stack] (merge|combine[d])");
-				EventValues.registerEventValue(ItemMergeEvent.class, Entity.class, new Getter<Entity, ItemMergeEvent>() {
-					public Entity get(ItemMergeEvent e) {
-						return e.getEntity();
-					}
-				}, 0);
-				EventValues.registerEventValue(ItemMergeEvent.class, Item.class, new Getter<Item, ItemMergeEvent>() {
-					@Override
-					public Item get(ItemMergeEvent e) {
-						return e.getTarget();
-					}
-				}, 0);
-			}
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.MultiBlockPlace")) {
 			registerEvent(BlockMultiPlaceEvent.class, "(multi[ple]|double)[ ][block][ ]place");
@@ -299,9 +281,7 @@ public class Register {
 						public String toVariableNameString(AnvilInventory b) {
 							return b.toString();
 						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
+				}));
 				EventValues.registerEventValue(PrepareAnvilEvent.class, ItemStack.class, new Getter<ItemStack, PrepareAnvilEvent>() {
 					@Override
 					public ItemStack get(PrepareAnvilEvent e) {
@@ -580,9 +560,7 @@ public class Register {
 						public String toVariableNameString(Objective o) {
 							return o.toString();
 						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
+				}));
 			if (Classes.getExactClassInfo(Scoreboard.class) == null)
 				Classes.registerClass(new ClassInfo<Scoreboard>(Scoreboard.class, "scoreboard")
 					.name("scoreboard")
@@ -601,9 +579,7 @@ public class Register {
 						public String toVariableNameString(Scoreboard s) {
 							return s.toString();
 						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
+				}));
 			if (Classes.getExactClassInfo(Score.class) == null)
 				Classes.registerClass(new ClassInfo<Score>(Score.class, "score")
 					.name("scoreboard score")
@@ -622,12 +598,11 @@ public class Register {
 						public String toVariableNameString(Score s) {
 							return s.toString();
 						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
+				}));
 			if (Classes.getExactClassInfo(Team.class) == null)
-				Classes.registerClass(new ClassInfo<Team>(Team.class, "skellettteam")
+				Classes.registerClass(new ClassInfo<Team>(Team.class, "scoreboardteam")
 					.name("scoreboard team")
+					.user("(skellettteam|scoreboard ?team)s?")
 					.description("A getter for scoreboard teams.")
 					.parser(new Parser<Team>() {
 						@Override
@@ -643,9 +618,7 @@ public class Register {
 						public String toVariableNameString(Team t) {
 							return t.toString();
 						}
-						public String getVariableNamePattern() {
-							return ".+";
-					}}));
+				}));
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
 				EnumClassInfo.create(Team.Option.class, "teamoption").register();
 				if (Bukkit.getPluginManager().getPlugin("skRayFall") == null) {

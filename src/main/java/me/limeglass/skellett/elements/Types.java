@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.BarFlag;
+import org.bukkit.entity.FishHook;
 import org.bukkit.event.player.PlayerFishEvent;
 
 import ch.njol.skript.classes.ClassInfo;
@@ -23,6 +24,28 @@ import me.limeglass.skellett.objects.BlockSave;
 public class Types {
 
 	static {
+		Classes.registerClass(new ClassInfo<>(FishHook.class, "fishinghook")
+				.user("fish(ing)? ?hooks")
+				.name("Fishing Hook")
+				.description("Represents the fishing hook in a <a href='events.html#fishing'>fishing</a> event.")
+				.defaultExpression(new EventValueExpression<>(FishHook.class))
+				.since("INSERT VERSION")
+				.parser(new Parser<FishHook>() {
+					@Override
+					public boolean canParse(ParseContext context) {
+						return false;
+					}
+
+					@Override
+					public String toString(FishHook o, int flags) {
+						return "Fish hook " + o.toString();
+					}
+
+					@Override
+					public String toVariableNameString(FishHook o) {
+						return "Fish hook " + o.toString();
+					}
+				}));
 		@SuppressWarnings("unchecked")
 		Parser<Location> locationParser = (Parser<Location>) Classes.getExactClassInfo(Location.class).getParser();
 		Classes.registerClass(new ClassInfo<BlockSave>(BlockSave.class, "blocksave")
@@ -80,7 +103,7 @@ public class Types {
 
 		}));
 		if (Classes.getExactClassInfo(PlayerFishEvent.State.class) == null) {
-			EnumUtils<PlayerFishEvent.State> fishStateUtils = new EnumUtils<>(PlayerFishEvent.State.class, "fishing states");
+			EnumUtils<PlayerFishEvent.State> fishStateUtils = new EnumUtils<>(PlayerFishEvent.State.class, "fishingstate");
 			Classes.registerClass(new ClassInfo<>(PlayerFishEvent.State.class, "fishingstate")
 					.user("fish(ing)? ?states?")
 					.name("Fishing State")

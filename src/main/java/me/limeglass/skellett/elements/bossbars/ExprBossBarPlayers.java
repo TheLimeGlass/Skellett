@@ -17,7 +17,7 @@ import ch.njol.util.coll.CollectionUtils;
 public class ExprBossBarPlayers extends SimpleExpression<Player> {
 
 	static {
-		Skript.registerExpression(ExprBossBarPlayers.class, Player.class, ExpressionType.PROPERTY, "[all [of]] [the] players (from|of) %bossbars%", "[all [of]] [the] %bossbars%'[s] players");
+		Skript.registerExpression(ExprBossBarPlayers.class, Player.class, ExpressionType.PROPERTY, "[all [of]] [the] players (from|of) [[boss][ ]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [[boss][ ]bar] players");
 	}
 
 	private Expression<BossBar> bossbars;

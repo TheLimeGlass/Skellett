@@ -3,8 +3,8 @@ version: @version@
 # @an makes the pattern allow for `an`.
 
 types:
-	fishingstate: fishingstate, fishing state
-	bossbarflags: bossbarflags, boss bar flags. bossbar flags, bar flags
+	fishingstate: fishingstates, fishing state¦s
+	bossbarflag: bossbarflags, boss bar flag¦s. bossbar flag¦s, bar flag¦s
 
 fishingstate:
 	bite: bite
@@ -15,7 +15,7 @@ fishingstate:
 	in_ground: in ground, ground
 	reel_in: reel in, reel
 
-bossbarflags:
+bossbarflag:
 	darken_sky: darken sky, dark sky
 	play_boss_music: play boss music, boss music
 	create_fog: create fog, fog

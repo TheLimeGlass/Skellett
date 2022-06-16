@@ -20,7 +20,7 @@ import ch.njol.util.Kleenean;
 public class ExprNewBossBar extends SimpleExpression<BossBar> {
 
 	static {
-		Skript.registerExpression(ExprNewBossBar.class, BossBar.class, ExpressionType.SIMPLE, "[skellett] [create] [a] new [boss[ ]]bar [with flag %-bossbarflags%]");
+		Skript.registerExpression(ExprNewBossBar.class, BossBar.class, ExpressionType.SIMPLE, "[skellett] [create] [a] new [boss[ ]]bar [with flag[s] %-bossbarflags%]");
 	}
 
 	private Expression<BarFlag> flags;
