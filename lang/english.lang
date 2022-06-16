@@ -10,7 +10,7 @@ fishingstate:
 	bite: bite
 	caught_entity: caught entity
 	caught_fish: caught fish
-	failed_attempt: failed attempt, failed
+	failed_attempt: fail, failed attempt, failed
 	fishing: fishing
 	in_ground: in ground, ground
 	reel_in: reel in, reel
