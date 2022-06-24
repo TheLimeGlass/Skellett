@@ -14,8 +14,6 @@ Main:
   Yaml: true
   Nametags: true
   Files: true
-# Bossbars are only 1.9+
-  Bossbars: true
   Fishing: true
   ArmorStands: true
   Maps: true

@@ -66,7 +66,8 @@ public class Metrics {
      *
      * @param plugin The plugin which stats should be submitted.
      */
-    public Metrics(Plugin plugin) {
+    @SuppressWarnings("deprecation")
+	public Metrics(Plugin plugin) {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");
         }

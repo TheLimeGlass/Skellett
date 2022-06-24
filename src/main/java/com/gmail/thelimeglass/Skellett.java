@@ -17,8 +17,6 @@ import java.util.jar.JarFile;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
@@ -29,13 +27,6 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.gmail.thelimeglass.BossBars.EffBarHideAndShow;
-import com.gmail.thelimeglass.BossBars.EffBarRemoveAllPlayers;
-import com.gmail.thelimeglass.BossBars.ExprBarColour;
-import com.gmail.thelimeglass.BossBars.ExprBarProgress;
-import com.gmail.thelimeglass.BossBars.ExprBarStyle;
-import com.gmail.thelimeglass.BossBars.ExprBarTitle;
-import com.gmail.thelimeglass.BossBars.ExprBarVisible;
 import com.gmail.thelimeglass.Conditions.CondClientTimeRelative;
 import com.gmail.thelimeglass.Maps.SkellettMapRenderer;
 import com.gmail.thelimeglass.Scoreboards.CondObjectiveExists;
@@ -106,7 +97,7 @@ import ch.njol.skript.util.Timespan;
 public class Skellett extends JavaPlugin {
 
 	public static final HashMap<String, Scoreboard> skellettBoards = new HashMap<>();
-	public static Skellett instance;
+	private static Skellett instance;
 	public static String prefix = "&8[&aSkellett&8] &e";
 	public FileConfiguration config = getConfig();
 	private File ceFile;
@@ -192,17 +183,6 @@ public class Skellett extends JavaPlugin {
 		if (syntaxToggleData.getBoolean("Syntax.Conditions.ClientTime")) {
 			Skript.registerCondition(CondClientTimeRelative.class, "[skellett] [client] relative time of %player% [is] [%-boolean%] [relative] [to] [server]");
 		}
-		if (syntaxToggleData.getBoolean("Main.Bossbars")) {
-			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
-				Skript.registerExpression(ExprBarVisible.class, Boolean.class, ExpressionType.SIMPLE, "[the] [skellett] visib(le|ility) [(for|of)] [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] visib(le|ility)");
-				Skript.registerExpression(ExprBarColour.class, BarColor.class, ExpressionType.SIMPLE, "[the] [skellett] colo[u]r of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] colo[u]r");
-				Skript.registerExpression(ExprBarStyle.class, BarStyle.class, ExpressionType.SIMPLE, "[the] [skellett] style of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] style");
-				Skript.registerExpression(ExprBarProgress.class, Number.class, ExpressionType.SIMPLE, "[the] [skellett] progress of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [[boss][ ]bar] progress");
-				Skript.registerExpression(ExprBarTitle.class, String.class, ExpressionType.SIMPLE, "[the] [skellett] (title|name|header|string) of [boss[ ]]bar %bossbar%", "[skellett] %bossbar%'s [boss[ ]]bar (title|name|header|string)");
-				Skript.registerEffect(EffBarRemoveAllPlayers.class, "[skellett] remove [(the|all)] [of] [the] player[[']s] [(in|of|from)] [the] [boss[ ]]bar %bossbar%");
-				Skript.registerEffect(EffBarHideAndShow.class, "[skellett] (1¦hide|2¦show) [boss[ ]]bar %bossbar%");
-			}
-		}
 		if (syntaxToggleData.getBoolean("Main.Scoreboards")) {
 			Skript.registerExpression(ExprGetScoreboard.class, Scoreboard.class, ExpressionType.SIMPLE, "[get] (score[ ][board]|[skellett[ ]]board)) [(with|named)] [(name|id)] %string%");
 			Skript.registerExpression(ExprNewScoreboard.class, Scoreboard.class, ExpressionType.SIMPLE, "[create] [a] new (score[ ][board]|[skellett[ ]]board) [(with|named)] [(name|id)] %string%");
@@ -231,21 +211,21 @@ public class Skellett extends JavaPlugin {
 			Skript.registerExpression(ExprScoreEntry.class, String.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) [get] entry [(for|from|of)] score %score%", "(score[ ][board]|[skellett[ ]]board) %score%'s score entry");
 			Skript.registerExpression(ExprScoreObjective.class, Objective.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) objective [(for|from|of)] score %score%", "[the] (score[ ][board]|[skellett[ ]]board) %score%'s scores objective");
 			Skript.registerExpression(ExprScore.class, Number.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) (score|number|slot) [(for|from|of)] %score%", "(score[ ][board]|[skellett[ ]]board) %score%'s (score|number|slot)");
-			Skript.registerEffect(EffTeamAddEntry.class, "(score[ ][board]|[skellett[ ]]board) add [the] entry [(from|of)] %string% to [the] [team] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamFriendlyFire.class, Boolean.class, ExpressionType.SIMPLE, "[the] [(score[ ][board]|[skellett[ ]]board)] friendly [fire] state [(for|of)] [team] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamFriendlyInvisibles.class, Boolean.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) [friendly] invisible[s] [state] [(for|of)] [team] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamDisplayName.class, String.class, ExpressionType.SIMPLE, "[the] [(score[ ][board]|[skellett[ ]]board)] team display name [(for|from|of)] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamEntries.class, String.class, ExpressionType.SIMPLE, "[(the|all)] [of] [the] (score[ ][board]|[skellett[ ]]board)[[']s] entr(ies|y[[']s]) (in|within) [the] [team] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamName.class, String.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board)) [team] name [(for|of)] [team] %scoreboardteam%");
+			Skript.registerEffect(EffTeamAddEntry.class, "(score[ ][board]|[skellett[ ]]board) add [the] entry [(from|of)] %string% to [the] [team] %team%");
+			Skript.registerExpression(ExprTeamFriendlyFire.class, Boolean.class, ExpressionType.SIMPLE, "[the] [(score[ ][board]|[skellett[ ]]board)] friendly [fire] state [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamFriendlyInvisibles.class, Boolean.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) [friendly] invisible[s] [state] [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamDisplayName.class, String.class, ExpressionType.SIMPLE, "[the] [(score[ ][board]|[skellett[ ]]board)] team display name [(for|from|of)] %team%");
+			Skript.registerExpression(ExprTeamEntries.class, String.class, ExpressionType.SIMPLE, "[(the|all)] [of] [the] (score[ ][board]|[skellett[ ]]board)[[']s] entr(ies|y[[']s]) (in|within) [the] [team] %team%");
+			Skript.registerExpression(ExprTeamName.class, String.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board)) [team] name [(for|of)] [team] %team%");
 			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
-				Skript.registerExpression(ExprTeamOptions.class, Team.OptionStatus.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) [team] option[s] [status] %teamoption% [(for|of)] [the] [team] %scoreboardteam%");
+				Skript.registerExpression(ExprTeamOptions.class, Team.OptionStatus.class, ExpressionType.SIMPLE, "[the] (score[ ][board]|[skellett[ ]]board) [team] option[s] [status] %teamoption% [(for|of)] [the] [team] %team%");
 			}
-			Skript.registerExpression(ExprTeamPrefix.class, String.class, ExpressionType.SIMPLE, "[(score[ ][board]|[skellett[ ]]board)] [team] prefix [(for|of)] [team] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamSuffix.class, String.class, ExpressionType.SIMPLE, "[(score[ ][board]|[skellett[ ]]board)] [team] suffix [(for|of)] [team] %scoreboardteam%");
-			Skript.registerExpression(ExprTeamSize.class, Number.class, ExpressionType.SIMPLE, "[(score[ ][board]|[skellett[ ]]board)] team size [(for|of)] [team] %scoreboardteam%");
-			Skript.registerCondition(CondTeamHasEntry.class, "[the] (score[ ][board]|[skellett[ ]]board) (1¦(ha(s|ve)|contain[s])|2¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %scoreboardteam%");
-			Skript.registerEffect(EffTeamRemoveEntry.class, "[(score[ ][board]|[skellett[ ]]board)] remove [the] entry [(from|of)] %string% from [the] [team] %scoreboardteam%");
-			Skript.registerEffect(EffUnregisterTeam.class, "unregister [the] (score[ ][board]|[skellett[ ]]board) team %scoreboardteam%");
+			Skript.registerExpression(ExprTeamPrefix.class, String.class, ExpressionType.SIMPLE, "[(score[ ][board]|[skellett[ ]]board)] [team] prefix [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamSuffix.class, String.class, ExpressionType.SIMPLE, "[(score[ ][board]|[skellett[ ]]board)] [team] suffix [(for|of)] [team] %team%");
+			Skript.registerExpression(ExprTeamSize.class, Number.class, ExpressionType.SIMPLE, "[(score[ ][board]|[skellett[ ]]board)] team size [(for|of)] [team] %team%");
+			Skript.registerCondition(CondTeamHasEntry.class, "[the] (score[ ][board]|[skellett[ ]]board) (1¦(ha(s|ve)|contain[s])|2¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %team%");
+			Skript.registerEffect(EffTeamRemoveEntry.class, "[(score[ ][board]|[skellett[ ]]board)] remove [the] entry [(from|of)] %string% from [the] [team] %team%");
+			Skript.registerEffect(EffUnregisterTeam.class, "unregister [the] (score[ ][board]|[skellett[ ]]board) team %team%");
 		}
 		if (ceData.getBoolean("CustomEvents")) {
 			for(int i = 1; i <= ceData.getInt("CustomEventSetup.NumberOfEvents"); i++) {
@@ -271,9 +251,15 @@ public class Skellett extends JavaPlugin {
 			e2.printStackTrace();
 		}
 	}
+
+	public static Skellett getInstance() {
+		return instance;
+	}
+
 	public static String cc(String text) {
 		return ChatColor.translateAlternateColorCodes('&', text);
 	}
+
 	@SuppressWarnings("deprecation")
 	public static int getTicks(Timespan time) {
 		if (Skript.methodExists(Timespan.class, "getTicks_i")) {

@@ -1,9 +1,7 @@
 package me.limeglass.skellett.elements.bossbars;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
-import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BossBar;
 import org.bukkit.event.Event;
 import org.eclipse.jdt.annotation.Nullable;
@@ -18,16 +16,16 @@ import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-public class ExprBossBarFlags extends PropertyExpression<BossBar, BarFlag> {
+public class ExprBossBarProgress extends PropertyExpression<BossBar, Double> {
 
 	static {
 		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
-			Skript.registerExpression(ExprBossBarFlags.class, BarFlag.class, ExpressionType.PROPERTY, "[all [of]] [the] flags (from|of) [[boss[ ]]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [[boss[ ]]bar] flags");
+			Skript.registerExpression(ExprBossBarProgress.class, Double.class, ExpressionType.PROPERTY, "[all [of]] [the] progress (from|of) [[boss[ ]]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [boss[ ]]bar progress");
 	}
 
 	@Override
-	public Class<? extends BarFlag> getReturnType() {
-		return BarFlag.class;
+	public Class<? extends Double> getReturnType() {
+		return Double.class;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -38,64 +36,57 @@ public class ExprBossBarFlags extends PropertyExpression<BossBar, BarFlag> {
 	}
 
 	@Override
-	protected BarFlag[] get(Event event, BossBar[] source) {
-		return Arrays.stream(source).flatMap(bossbar -> getFlags(bossbar)).toArray(BarFlag[]::new);
+	protected Double[] get(Event event, BossBar[] source) {
+		return Arrays.stream(source).map(bossbar -> bossbar.getProgress()).toArray(Double[]::new);
 	}
 
 	@Override
 	public String toString(@Nullable Event event, boolean debug) {
 		if (event == null || debug)
-			return "flags of bossbars";
-		return "flags of bossbars " + getExpr().toString(event, debug);
+			return "progress of bossbars";
+		return "progress of bossbars " + getExpr().toString(event, debug);
 	}
 
 	@Override
 	public Class<?>[] acceptChange(ChangeMode mode) {
-		return CollectionUtils.array(BarFlag[].class, BarFlag.class);
+		return CollectionUtils.array(Number.class);
 	}
 
 	@Override
 	public void change(Event event, @Nullable Object[] delta, ChangeMode mode) {
-		BarFlag[] flags = delta == null ? null : (BarFlag[]) delta;
+		Double progress = delta == null ? null : ((Number) delta[0]).doubleValue();
 		switch (mode) {
-			case ADD:
-				if (flags == null)
-					return;
-				for (BossBar bossbar : getExpr().getArray(event)) {
-					for (BarFlag flag : flags)
-						bossbar.addFlag(flag);
-				}
-				break;
 			case RESET:
 			case DELETE:
 				for (BossBar bossbar : getExpr().getArray(event))
-					getFlags(bossbar).forEach(flag -> bossbar.removeFlag(flag));
+					bossbar.setProgress(1);
+				break;
+			case SET:
+				if (progress == null)
+					return;
+				for (BossBar bossbar : getExpr().getArray(event))
+					bossbar.setProgress(progress);
+				break;
+			case ADD:
+				if (progress == null)
+					return;
+				for (BossBar bossbar : getExpr().getArray(event)) {
+					double existing = bossbar.getProgress();
+					bossbar.setProgress(existing + progress);
+				}
 				break;
 			case REMOVE:
 			case REMOVE_ALL:
-				if (flags == null)
+				if (progress == null)
 					return;
 				for (BossBar bossbar : getExpr().getArray(event)) {
-					for (BarFlag flag : flags)
-						bossbar.removeFlag(flag);
-				}
-				break;
-			case SET:
-				if (flags == null)
-					return;
-				for (BossBar bossbar : getExpr().getArray(event)) {
-					getFlags(bossbar).forEach(flag -> bossbar.removeFlag(flag));
-					for (BarFlag flag : flags)
-						bossbar.addFlag(flag);
+					double existing = bossbar.getProgress();
+					bossbar.setProgress(existing - progress);
 				}
 				break;
 			default:
 				break;
 		}
-	}
-
-	private Stream<BarFlag> getFlags(BossBar bossbar) {
-		return Arrays.stream(BarFlag.values()).filter(flag -> bossbar.hasFlag(flag));
 	}
 
 }

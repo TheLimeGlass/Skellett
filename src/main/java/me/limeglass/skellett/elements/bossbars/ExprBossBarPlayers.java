@@ -11,13 +11,15 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
 public class ExprBossBarPlayers extends SimpleExpression<Player> {
 
 	static {
-		Skript.registerExpression(ExprBossBarPlayers.class, Player.class, ExpressionType.PROPERTY, "[all [of]] [the] players (from|of) [[boss][ ]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [[boss][ ]bar] players");
+		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+			Skript.registerExpression(ExprBossBarPlayers.class, Player.class, ExpressionType.PROPERTY, "[all [of]] [the] players (from|of) [[boss][ ]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [[boss][ ]bar] players");
 	}
 
 	private Expression<BossBar> bossbars;
@@ -57,10 +59,10 @@ public class ExprBossBarPlayers extends SimpleExpression<Player> {
 	@Override
 	public void change(Event event, @Nullable Object[] delta, ChangeMode mode) {
 		Player[] players = delta == null ? null : (Player[]) delta;
-		if (players == null)
-			return;
 		switch (mode) {
 			case ADD:
+				if (players == null)
+					return;
 				for (BossBar bossbar : bossbars.getArray(event)) {
 					for (Player player : players)
 						bossbar.addPlayer(player);
@@ -73,12 +75,16 @@ public class ExprBossBarPlayers extends SimpleExpression<Player> {
 				break;
 			case REMOVE:
 			case REMOVE_ALL:
+				if (players == null)
+					return;
 				for (BossBar bossbar : bossbars.getArray(event)) {
 					for (Player player : players)
 						bossbar.removePlayer(player);
 				}
 				break;
 			case SET:
+				if (players == null)
+					return;
 				for (BossBar bossbar : bossbars.getArray(event)) {
 					bossbar.removeAll();
 					for (Player player : players)

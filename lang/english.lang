@@ -3,8 +3,10 @@ version: @version@
 # @an makes the pattern allow for `an`.
 
 types:
-	fishingstate: fishingstates, fishing state¦s
-	bossbarflag: bossbarflags, boss bar flag¦s. bossbar flag¦s, bar flag¦s
+	fishingstate: fishingstate¦s, fishing state¦s
+	bossbarflag: bossbarflag¦s, boss bar flag¦s, bossbar flag¦s, bar flag¦s, barflag¦s
+	bossbarcolor: bossbarcolor¦s, bossbarcolour¦s, boss bar colour¦s, bossbar colour¦s, bar colour¦s, boss bar color¦s, bossbar color¦s, bar color¦s, barcolor¦s, barcolour¦s
+	bossbarstyle: bossbarstyle¦s, boss bar style¦s, bossbar style¦s, bar style¦s, barstyle¦s
 
 fishingstate:
 	bite: bite
@@ -19,3 +21,19 @@ bossbarflag:
 	darken_sky: darken sky, dark sky
 	play_boss_music: play boss music, boss music
 	create_fog: create fog, fog
+
+bossbarcolor:
+	pink: pink
+	blue: blue
+	red: red
+	green: green
+	yellow: yellow
+	purple: purple, classic
+	white: white
+
+bossbarstyle:
+	solid: solid
+	segmented_6: segmented 6, 6 segments
+	segmented_10: segmented 10, 10 segments
+	segmented_12: segmented 12, 12 segments
+	segmented_20: segmented 20, 20 segments

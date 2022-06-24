@@ -9,12 +9,14 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 
 public class CondBossBarPlayer extends Condition {
 
 	static {
-		Skript.registerCondition(CondBossBarPlayer.class, "%bossbars% (contains|has|have) player[s] %players%", "%bossbars% (doesn't|does not|do not|don't) (have|contain) player[s] %players%");
+		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+			Skript.registerCondition(CondBossBarPlayer.class, "%bossbars% (contains|has|have) player[s] %players%", "%bossbars% (doesn't|does not|do not|don't) (have|contain) player[s] %players%");
 	}
 
 	private Expression<BossBar> bossbars;
@@ -31,6 +33,8 @@ public class CondBossBarPlayer extends Condition {
 
 	@Override
 	public String toString(@Nullable Event event, boolean debug) {
+		if (event == null || debug)
+			return "bossbar player condition";
 		return "bossbar players " + players.toString(event, debug) + " for bossbars " + bossbars.toString(event, debug);
 	}
 

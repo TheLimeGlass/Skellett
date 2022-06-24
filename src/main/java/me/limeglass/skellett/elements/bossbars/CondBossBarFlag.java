@@ -9,12 +9,14 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 
 public class CondBossBarFlag extends Condition {
 
 	static {
-		Skript.registerCondition(CondBossBarFlag.class, "%bossbars% (has|have) [[boss[ ]]bar] flag[s] %bossbarflags%", "%bossbars% (doesn't|does not|do not|don't) have [[boss[ ]]bar] flag[s] %bossbarflags%");
+		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+			Skript.registerCondition(CondBossBarFlag.class, "%bossbars% (has|have) [[boss[ ]]bar] flag[s] %bossbarflags%", "%bossbars% (doesn't|does not|do not|don't) have [[boss[ ]]bar] flag[s] %bossbarflags%");
 	}
 
 	private Expression<BossBar> bossbars;
@@ -31,6 +33,8 @@ public class CondBossBarFlag extends Condition {
 
 	@Override
 	public String toString(@Nullable Event event, boolean debug) {
+		if (event == null || debug)
+			return "bossbar flags condition";
 		return "bossbar flags " + flags.toString(event, debug) + " for bossbars " + bossbars.toString(event, debug);
 	}
 

@@ -3,13 +3,15 @@ package me.limeglass.skellett.elements.expressions;
 import org.bukkit.block.Block;
 import org.eclipse.jdt.annotation.Nullable;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import me.limeglass.skellett.objects.BlockSave;
 
 public class ExprBlockSave extends SimplePropertyExpression<Block, BlockSave>{
 
 	static {
-		register(ExprBlockSave.class, BlockSave.class, "block save[s]", "blocks");
+		if (Skript.classExists("org.bukkit.block.data.BlockData"))
+			register(ExprBlockSave.class, BlockSave.class, "block save[s]", "blocks");
 	}
 
 	@Override

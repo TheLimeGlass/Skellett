@@ -12,7 +12,7 @@ public class PvpListener implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
-		if (Skellett.instance.config.getBoolean("Enable1_8pvp")) {
+		if (Skellett.getInstance().config.getBoolean("Enable1_8pvp")) {
 			event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(100.0D);
 		} else {
 			event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.0D);
@@ -21,7 +21,7 @@ public class PvpListener implements Listener {
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		if (Skellett.instance.config.getBoolean("Enable1_8pvp")) {
+		if (Skellett.getInstance().config.getBoolean("Enable1_8pvp")) {
 			event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4.0D);
 		}
 	}

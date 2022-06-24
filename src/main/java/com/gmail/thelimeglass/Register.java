@@ -7,12 +7,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockMultiPlaceEvent;
@@ -22,7 +18,6 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.EntityUnleashEvent;
-import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -305,7 +300,7 @@ public class Register {
 		if (Skellett.syntaxToggleData.getBoolean("Syntax.Events.SlimeSplit")) {
 			registerEvent(SlimeSplitEvent.class, "slime split");
 		}
-		if (Skellett.instance.getConfig().getBoolean("PluginHooks.Npc")) {
+		if (Skellett.getInstance().getConfig().getBoolean("PluginHooks.Npc")) {
 			registerEvent(NPCDamageByEntityEvent.class, "(npc|citizen) damage (by|from) [a[n]] entity");
 			EventValues.registerEventValue(NPCDamageByEntityEvent.class, Entity.class, new Getter<Entity, NPCDamageByEntityEvent>() {
 				@Override
@@ -515,32 +510,6 @@ public class Register {
 					}
 			}));
 		}
-		if (Skellett.syntaxToggleData.getBoolean("Main.Bossbars")) {
-			if (!Bukkit.getServer().getVersion().contains("MC: 1.6") && !Bukkit.getServer().getVersion().contains("MC: 1.7") && !Bukkit.getServer().getVersion().contains("MC: 1.8")) {
-				EnumClassInfo.create(BarColor.class, "barcolour").register();
-				EnumClassInfo.create(BarStyle.class, "barstyle").register();
-				if (Classes.getExactClassInfo(BossBar.class) == null) {
-					Classes.registerClass(new ClassInfo<BossBar>(BossBar.class, "bossbar")
-						.name("bossbar")
-						.description("A getter for bossbar.")
-						.parser(new Parser<BossBar>() {
-							@Override
-							@Nullable
-							public BossBar parse(String obj, ParseContext context) {
-								return null;
-							}
-							@Override
-							public String toString(BossBar b, int flags) {
-								return b.toString();
-							}
-							@Override
-							public String toVariableNameString(BossBar b) {
-								return b.toString();
-							}
-					}));
-				}
-			}
-		}
 		if (Skellett.syntaxToggleData.getBoolean("Main.Scoreboards")) {
 			if (Classes.getExactClassInfo(Objective.class) == null)
 				Classes.registerClass(new ClassInfo<Objective>(Objective.class, "objective")
@@ -600,7 +569,7 @@ public class Register {
 						}
 				}));
 			if (Classes.getExactClassInfo(Team.class) == null)
-				Classes.registerClass(new ClassInfo<Team>(Team.class, "scoreboardteam")
+				Classes.registerClass(new ClassInfo<Team>(Team.class, "team")
 					.name("scoreboard team")
 					.user("(skellettteam|scoreboard ?team)s?")
 					.description("A getter for scoreboard teams.")
@@ -626,7 +595,7 @@ public class Register {
 				}
 			}
 		}
-		if (Skellett.instance.getConfig().getBoolean("PluginHooks.Npc")) {
+		if (Skellett.getInstance().getConfig().getBoolean("PluginHooks.Npc")) {
 			//EnumClassInfo.create(EntityType.class, "skellettentitytype").register();
 			if (Bukkit.getPluginManager().getPlugin("Citizens") != null) {
 				Classes.registerClass(new ClassInfo<NPC>(NPC.class, "citizen")
