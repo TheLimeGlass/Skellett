@@ -1,7 +1,5 @@
 package me.limeglass.skellett.elements.bossbars;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
@@ -69,7 +67,9 @@ public class ExprNewBossBar extends SimpleExpression<BossBar> {
 		BarColor colour = this.colour == null ? BarColor.GREEN : this.colour.getSingle(event);
 		BarStyle style = this.style == null ? BarStyle.SOLID : this.style.getSingle(event);
 		BarFlag[] flags = this.flags == null ? new BarFlag[0] : this.flags.getArray(event);
-		String key = this.key == null ? UUID.randomUUID().toString() : this.key.getSingle(event);
+		if (key == null)
+			return new BossBar[] {Bukkit.createBossBar(title, colour, style, flags)};
+		String key = this.key.getSingle(event);
 		NamespacedKey keyed = new NamespacedKey(Skellett.getInstance(), key);
 		return new BossBar[] {Bukkit.createBossBar(keyed, title, colour, style, flags)};
 	}
