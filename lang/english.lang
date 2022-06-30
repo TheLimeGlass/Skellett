@@ -7,6 +7,7 @@ types:
 	bossbarflag: bossbarflag¦s, boss bar flag¦s, bossbar flag¦s, bar flag¦s, barflag¦s
 	bossbarcolor: bossbarcolor¦s, bossbarcolour¦s, boss bar colour¦s, bossbar colour¦s, bar colour¦s, boss bar color¦s, bossbar color¦s, bar color¦s, barcolor¦s, barcolour¦s
 	bossbarstyle: bossbarstyle¦s, boss bar style¦s, bossbar style¦s, bar style¦s, barstyle¦s
+	fluidcollisionmode: fluidcollisionmode¦s, fluid collision mode¦s
 
 fishingstate:
 	bite: bite
@@ -37,3 +38,8 @@ bossbarstyle:
 	segmented_10: segmented 10, 10 segments
 	segmented_12: segmented 12, 12 segments
 	segmented_20: segmented 20, 20 segments
+	
+fluidcollisionmode:
+	never: never, never collide with liquids
+	source_only: source, source blocks only
+	always: always, always collide with liquids

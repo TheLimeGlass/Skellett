@@ -302,6 +302,30 @@ public class Types {
 	
 				}));
 			}
+			if (Classes.getExactClassInfo(FluidCollisionMode.class) == null) {
+				EnumUtils<FluidCollisionMode> flags = new EnumUtils<>(FluidCollisionMode.class, "fluidcollisionmode");
+				Classes.registerClass(new ClassInfo<>(FluidCollisionMode.class, "fluidcollisionmode")
+						.user("fluid ?collision ?modes?")
+						.name("Fluid Collision Mode")
+						.usage(flags.getAllNames())
+						.parser(new Parser<FluidCollisionMode>() {
+							@Override
+							public FluidCollisionMode parse(String s, ParseContext context) {
+								return flags.parse(s);
+							}
+		
+							@Override
+							public String toString(FluidCollisionMode o, int f) {
+								return flags.toString(o, f);
+							}
+		
+							@Override
+							public String toVariableNameString(FluidCollisionMode o) {
+								return o.name();
+							}
+						})
+						.serializer(new EnumSerializer<>(FluidCollisionMode.class)));
+			}
 		}
 	}
 
