@@ -49,7 +49,7 @@ dependencies {
 	// ProtocolSupport
 	//implementation (group: 'com.github.ProtocolSupport', name: 'ProtocolSupport', version: 'master-SNAPSHOT')
 
-	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.1') {
+	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
 		transitive = false
 	}
 
