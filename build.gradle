@@ -38,7 +38,7 @@ repositories {
 dependencies {
 
 	//Nullable annotation
-	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.2.600')
+	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.2.700')
 
 	// Spigot
 	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.19-R0.1-SNAPSHOT')
