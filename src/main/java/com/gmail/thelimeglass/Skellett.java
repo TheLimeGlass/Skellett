@@ -29,6 +29,7 @@ import org.bukkit.scoreboard.Team;
 
 import com.gmail.thelimeglass.Conditions.CondClientTimeRelative;
 import com.gmail.thelimeglass.Effects.EffSetCollidable;
+import com.gmail.thelimeglass.Expressions.ExprCollidable;
 import com.gmail.thelimeglass.Maps.SkellettMapRenderer;
 import com.gmail.thelimeglass.Scoreboards.CondObjectiveExists;
 import com.gmail.thelimeglass.Scoreboards.CondObjectiveIsModifiable;
@@ -185,7 +186,11 @@ public class Skellett extends JavaPlugin {
 			Skript.registerCondition(CondClientTimeRelative.class, "[skellett] [client] relative time of %player% [is] [%-boolean%] [relative] [to] [server]");
 		}
 
-		if (syntaxToggleData.getBoolean("Main.CollidableState")) {
+		if (syntaxToggleData.getBoolean("Syntax.Expressions.CollidableState")) {
+			Skript.registerExpression(ExprCollidable.class, Boolean.class, ExpressionType.SIMPLE, "collid(e|able) [state] [of] %livingentity%");
+		}
+
+		if (syntaxToggleData.getBoolean("Syntax.Effects.CollidableState")) {
 			Skript.registerEffect(EffSetCollidable.class, "[set] collid(e|able) [state] [of] %livingentity% to %boolean%");
 		}
 
