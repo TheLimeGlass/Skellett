@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
@@ -491,24 +492,26 @@ public class Register {
 		if (Skellett.syntaxToggleData.getBoolean("Main.ChatComponent")) {
 			EnumClassInfo.create(ClickEvent.Action.class, "clickeventaction").register();
 			EnumClassInfo.create(HoverEvent.Action.class, "hovereventaction").register();
-			Classes.registerClass(new ClassInfo<TextComponent>(TextComponent.class, "textcomponent")
-				.name("textcomponent")
-				.description("A getter for bungeecord's chat textcomponent.")
-				.parser(new Parser<TextComponent>() {
-					@Override
-					@Nullable
-					public TextComponent parse(String obj, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(TextComponent t, int flags) {
-						return t.toLegacyText();
-					}
-					@Override
-					public String toVariableNameString(TextComponent t) {
-						return t.toLegacyText();
-					}
-			}));
+			if (Classes.getExactClassInfo(TextComponent.class) == null) {
+				Classes.registerClass(new ClassInfo<TextComponent>(TextComponent.class, "textcomponent")
+					.name("textcomponent")
+					.description("A getter for bungeecord's chat textcomponent.")
+					.parser(new Parser<TextComponent>() {
+						@Override
+						@Nullable
+						public TextComponent parse(String obj, ParseContext context) {
+							return null;
+						}
+						@Override
+						public String toString(TextComponent t, int flags) {
+							return t.toLegacyText();
+						}
+						@Override
+						public String toVariableNameString(TextComponent t) {
+							return t.toLegacyText();
+						}
+				}));
+			}
 		}
 		if (Skellett.syntaxToggleData.getBoolean("Main.Scoreboards")) {
 			if (Classes.getExactClassInfo(Objective.class) == null)
