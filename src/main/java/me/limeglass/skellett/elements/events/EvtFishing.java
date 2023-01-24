@@ -66,7 +66,7 @@ public class EvtFishing extends SkriptEvent {
 
 	@Override
 	public String toString(@Nullable Event e, boolean debug) {
-		return states.isEmpty() ? "fishing" : "fishing states of " + Arrays.toString(states.toArray(State[]::new));
+		return states.isEmpty() ? "fishing" : "fishing states of " + Arrays.toString(states.toArray(new State[0]));
 	}
 
 }

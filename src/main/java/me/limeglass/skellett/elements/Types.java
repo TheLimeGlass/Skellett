@@ -4,7 +4,6 @@ import java.io.NotSerializableException;
 import java.io.StreamCorruptedException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -27,7 +26,6 @@ import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.EnumUtils;
-import ch.njol.skript.util.Version;
 import ch.njol.yggdrasil.Fields;
 import me.limeglass.skellett.objects.BlockSave;
 
@@ -141,33 +139,9 @@ public class Types {
 					})
 					.serializer(new EnumSerializer<>(PlayerFishEvent.State.class)));
 		}
-		if (Skript.classExists("org.bukkit.block.data.BlockData")) {
-			EnumUtils<FluidCollisionMode> flags = new EnumUtils<>(FluidCollisionMode.class, "fluidcollisionmode");
-			Classes.registerClass(new ClassInfo<>(FluidCollisionMode.class, "fluidcollisionmode")
-					.user("fluid ?collision ?modes?")
-					.name("Fluid Collision Mode")
-					.usage(flags.getAllNames())
-					.parser(new Parser<FluidCollisionMode>() {
-						@Override
-						public FluidCollisionMode parse(String s, ParseContext context) {
-							return flags.parse(s);
-						}
-	
-						@Override
-						public String toString(FluidCollisionMode o, int f) {
-							return flags.toString(o, f);
-						}
-	
-						@Override
-						public String toVariableNameString(FluidCollisionMode o) {
-							return o.name();
-						}
-					})
-					.serializer(new EnumSerializer<>(FluidCollisionMode.class)));
-		}
 
 		// 1.9+
-		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8))) {
+		if (Skript.classExists("org.bukkit.boss.BossBar")) {
 			if (Classes.getExactClassInfo(BarFlag.class) == null) {
 				EnumUtils<BarFlag> flags = new EnumUtils<>(BarFlag.class, "bossbarflag");
 				Classes.registerClass(new ClassInfo<>(BarFlag.class, "bossbarflag")
@@ -301,30 +275,6 @@ public class Types {
 					}
 	
 				}));
-			}
-			if (Classes.getExactClassInfo(FluidCollisionMode.class) == null) {
-				EnumUtils<FluidCollisionMode> flags = new EnumUtils<>(FluidCollisionMode.class, "fluidcollisionmode");
-				Classes.registerClass(new ClassInfo<>(FluidCollisionMode.class, "fluidcollisionmode")
-						.user("fluid ?collision ?modes?")
-						.name("Fluid Collision Mode")
-						.usage(flags.getAllNames())
-						.parser(new Parser<FluidCollisionMode>() {
-							@Override
-							public FluidCollisionMode parse(String s, ParseContext context) {
-								return flags.parse(s);
-							}
-		
-							@Override
-							public String toString(FluidCollisionMode o, int f) {
-								return flags.toString(o, f);
-							}
-		
-							@Override
-							public String toVariableNameString(FluidCollisionMode o) {
-								return o.name();
-							}
-						})
-						.serializer(new EnumSerializer<>(FluidCollisionMode.class)));
 			}
 		}
 	}

@@ -12,14 +12,13 @@ import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
 public class ExprBossBarProgress extends PropertyExpression<BossBar, Double> {
 
 	static {
-		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+		if (Skript.classExists("org.bukkit.boss.BossBar"))
 			Skript.registerExpression(ExprBossBarProgress.class, Double.class, ExpressionType.PROPERTY, "[all [of]] [the] progress (from|of) [[boss[ ]]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [boss[ ]]bar progress");
 	}
 

@@ -327,7 +327,7 @@ public class Skellett extends JavaPlugin {
 						}
 					}
 					if (a instanceof Version) {
-						String[] versions = {"1.8", "1.8R3", "1.9", "1.9R1", "1.10" , "1.11", "1.11.2", "1.12", "1.13", "1.14", "1.14.4", "1.15", "1.16", "1.17", "1.18"};
+						String[] versions = {"1.8", "1.8R3", "1.9", "1.9R1", "1.10" , "1.11", "1.11.2", "1.12", "1.13", "1.14", "1.14.4", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20"};
 						Integer server = null;
 						Integer serverTag = null;
 						for (int i = 0; i < versions.length; i++) {

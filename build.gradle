@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
@@ -9,6 +10,10 @@ plugins {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
+
+configurations {
+    testImplementation.extendsFrom testShadow
+}
 
 repositories {
 	mavenCentral()
@@ -46,24 +51,33 @@ dependencies {
 	// Citizens
 	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.30-SNAPSHOT')
 
-	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
-		transitive = false
-	}
+//	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
+//		transitive = false
+//	}
 
 	// JSON.org
 	shadow (group: 'org.json', name: 'json', version: '20220320')
+
+	// Due to Skript for the Testing system
+	testShadow (group: 'commons-lang', name: 'commons-lang', version: '2.6')
 
 	implementation fileTree(dir: 'libraries', include: '*.jar')
 
 }
 
+task addonTestJar(type: ShadowJar) {
+	dependsOn(shadowJar)
+	archiveName 'Skellett-TestJar-' + version + '.jar'
+	from sourceSets.test.output, sourceSets.main.output, project.configurations.testShadow
+}
+
 tasks.register('setupAddonTest') {
-	dependsOn shadowJar
+	dependsOn addonTestJar
 	doLast {
 		copy {
-			from 'build/libs/Skellett-' + version + '.jar'
+			from 'build/libs/Skellett-TestJar-' + version + '.jar'
 			into 'src/test/resources/runner_data/'
-			rename('Skellett-' + version + '.jar', 'Skellett.jar')
+			rename('Skellett-TestJar-' + version + '.jar', 'Skellett.jar')
 		}
 	}
 }
@@ -71,7 +85,7 @@ tasks.register('setupAddonTest') {
 // Create a test task with given name, environments dir/file, dev mode and java version.
 void createTestTask(String name, String environments, boolean devMode, int javaVersion) {
 	tasks.register(name, JavaExec) {
-		dependsOn setupAddonTest
+		dependsOn setupAddonTest, shadowJar
 		javaLauncher = javaToolchains.launcherFor {
 			languageVersion = JavaLanguageVersion.of(javaVersion)
 		}
@@ -80,8 +94,8 @@ void createTestTask(String name, String environments, boolean devMode, int javaV
 		}
 		group = 'execution'
 		classpath = files([
-		//	'build' + File.separator + 'libs' + File.separator + 'Skellett-' + version + '.jar',
-		//	project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
+			'src/test/resources/runner_data/Skellett.jar',
+			project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
 			sourceSets.main.runtimeClasspath
 		])
 		main = 'ch.njol.skript.tests.platform.PlatformMain'

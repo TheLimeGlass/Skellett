@@ -9,13 +9,12 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 
 public class CondBossBarFlag extends Condition {
 
 	static {
-		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+		if (Skript.classExists("org.bukkit.boss.BossBar"))
 			Skript.registerCondition(CondBossBarFlag.class, "%bossbars% (has|have) [[boss[ ]]bar] flag[s] %bossbarflags%", "%bossbars% (doesn't|does not|do not|don't) have [[boss[ ]]bar] flag[s] %bossbarflags%");
 	}
 

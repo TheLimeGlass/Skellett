@@ -13,14 +13,13 @@ import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
 public class ExprBossBarColours extends PropertyExpression<BossBar, BarColor> {
 
 	static {
-		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+		if (Skript.classExists("org.bukkit.boss.BossBar"))
 			Skript.registerExpression(ExprBossBarColours.class, BarColor.class, ExpressionType.PROPERTY, "[all [of]] [the] colo[u]r[s] (from|of) [[boss[ ]]bar] %bossbars%", "[all [of]] [the] %bossbars%'[s] [[boss[ ]]bar] colo[u]r[s]");
 	}
 

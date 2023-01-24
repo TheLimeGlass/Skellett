@@ -74,7 +74,7 @@ public class ExprChunkOutlineBlocks extends SimpleExpression<Block> {
 				}
 			}
 		}
-		return blocks.toArray(Block[]::new);
+		return blocks.toArray(new Block[0]);
 	}
 
 }

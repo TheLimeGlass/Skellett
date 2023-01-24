@@ -16,13 +16,12 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.skript.util.Version;
 import ch.njol.util.Kleenean;
 
 public class ExprNewBossBar extends SimpleExpression<BossBar> {
 
 	static {
-		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+		if (Skript.classExists("org.bukkit.boss.BossBar"))
 			Skript.registerExpression(ExprNewBossBar.class, BossBar.class, ExpressionType.SIMPLE, "[skellett] [a] new [boss[ ]]bar [with flag[s] %-bossbarflags%] [(with title|titled) %-string%]" +
 					"[(with colo[u]r|colo[u]red) %-bossbarcolor%] [(with style|styled) %-bossbarstyle%] [keyed %-string%]");
 	}
