@@ -13,7 +13,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("[map] %map% (1¦is|2¦is(n't| not)) being handled [by skellett]")
+@Syntax("[map] %map% (1Â¦is|2Â¦is(n't| not)) being handled [by skellett]")
 @Config("Main.Maps")
 @FullConfig
 public class CondMapBeingHandled extends Condition {
@@ -26,7 +26,7 @@ public class CondMapBeingHandled extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[map] %map% (1¦is|2¦is(n't| not)) virtual";
+		return "[map] %map% (1Â¦is|2Â¦is(n't| not)) virtual";
 	}
 	public boolean check(Event e) {
 		if (map.getSingle(e) == null) {

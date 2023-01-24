@@ -8,6 +8,9 @@ import org.bukkit.event.Event;
 import org.eclipse.jdt.annotation.Nullable;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -15,18 +18,24 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 
-public class ExprTimeValues extends SimpleExpression<Long> {
+@Name("Time Values")
+@Description("Returns the defined time unit of the timespans.")
+@Examples({
+	"if hours of a day is 24 hours:",
+	"if weeks of a day is 0.14285714285714285714285714285714:"
+})
+public class ExprTimeValues extends SimpleExpression<Double> {
 
 	static {
-		Skript.registerExpression(ExprTimeValues.class, Long.class, ExpressionType.COMBINED, "(0¦ticks|1¦milli[( |-)]seconds|2¦seconds|3¦minutes|4¦hours|5¦days|6¦weeks|7¦months|8¦years) (of|from|[with]in) %timespans%");
+		Skript.registerExpression(ExprTimeValues.class, Double.class, ExpressionType.COMBINED, "(0Â¦ticks|1Â¦milli[( |-)]seconds|2Â¦seconds|3Â¦minutes|4Â¦hours|5Â¦days|6Â¦weeks|7Â¦months|8Â¦years) (of|from|[with]in) %timespans%");
 	}
 
 	private Expression<Timespan> timespans;
 	private int setting;
 
 	@Override
-	public Class<? extends Long> getReturnType() {
-		return Long.class;
+	public Class<? extends Double> getReturnType() {
+		return Double.class;
 	}
 
 	@Override
@@ -34,8 +43,8 @@ public class ExprTimeValues extends SimpleExpression<Long> {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
 		timespans = (Expression<Timespan>) expressions[0];
 		setting = parseResult.mark;
@@ -72,33 +81,33 @@ public class ExprTimeValues extends SimpleExpression<Long> {
 
 	@Override
 	@Nullable
-	protected Long[] get(Event event) {
+	protected Double[] get(Event event) {
 		if (timespans == null)
 			return null;
 		return Arrays.stream(timespans.getArray(event)).map(timespan -> {
 			switch (setting) {
 				case 0:
-					return timespan.getTicks_i();
+					return (double) timespan.getTicks_i();
 				case 1:
-					return timespan.getMilliSeconds();
+					return (double) timespan.getMilliSeconds();
 				case 2:
-					return TimeUnit.MILLISECONDS.toSeconds(timespan.getMilliSeconds());
+					return (double) TimeUnit.MILLISECONDS.toSeconds(timespan.getMilliSeconds());
 				case 3:
-					return TimeUnit.MILLISECONDS.toMinutes(timespan.getMilliSeconds());
+					return (double) TimeUnit.MILLISECONDS.toMinutes(timespan.getMilliSeconds());
 				case 4:
-					return TimeUnit.MILLISECONDS.toHours(timespan.getMilliSeconds());
+					return (double) TimeUnit.MILLISECONDS.toHours(timespan.getMilliSeconds());
 				case 5:
-					return TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds());
+					return (double) TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds());
 				case 6:
-					return TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds()) / 7;
+					return (double) TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds()) / 7;
 				case 7:
-					return (TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds()) / 7) / 4.348214;
+					return (double) (TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds()) / 7) / 4.348214;
 				case 8:
-					return ((TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds()) / 7) / 4.348214) / 12;
+					return (double) ((TimeUnit.MILLISECONDS.toDays(timespan.getMilliSeconds()) / 7) / 4.348214) / 12;
 				default:
 					return null;
 			}
-		}).filter(Objects::nonNull).toArray(Long[]::new);
+		}).filter(Objects::nonNull).toArray(Double[]::new);
 	}
 
 }

@@ -13,7 +13,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("[entity] %entity% (1¦can|2¦can([ ]no|')t) [be] breed")
+@Syntax("[entity] %entity% (1Â¦can|2Â¦can([ ]no|')t) [be] breed")
 @Config("Breed")
 public class CondCanBreed extends Condition {
 	
@@ -25,7 +25,7 @@ public class CondCanBreed extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[entity] %entity% (1¦can|2¦(can([ ]no|')t) breed";
+		return "[entity] %entity% (1Â¦can|2Â¦(can([ ]no|')t) breed";
 	}
 	public boolean check(Event e) {
 		if (entity.getSingle(e) instanceof Ageable) {

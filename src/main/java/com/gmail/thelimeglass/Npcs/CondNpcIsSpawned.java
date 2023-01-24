@@ -14,7 +14,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import net.citizensnpcs.api.npc.NPC;
 
-@Syntax("(npc|citizen) %citizen% (1¦is|2¦is(n't| not)) spawned")
+@Syntax("(npc|citizen) %citizen% (1Â¦is|2Â¦is(n't| not)) spawned")
 @Config("PluginHooks.Npc")
 @FullConfig
 @MainConfig
@@ -29,7 +29,7 @@ public class CondNpcIsSpawned extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "(npc|citizen) %npc% (1¦is|2¦is(n't| not)) spawned";
+		return "(npc|citizen) %npc% (1Â¦is|2Â¦is(n't| not)) spawned";
 	}
 	public boolean check(Event e) {
 		if (npc.getSingle(e).isSpawned()) {

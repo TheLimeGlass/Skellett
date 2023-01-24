@@ -16,7 +16,7 @@ import ch.njol.util.Kleenean;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPCRegistry;
 
-@Syntax("[entity] %entity% (1¦is|2¦is(n't| not)) [a[n]] (npc|citizen)")
+@Syntax("[entity] %entity% (1Â¦is|2Â¦is(n't| not)) [a[n]] (npc|citizen)")
 @Config("PluginHooks.Npc")
 @FullConfig
 @MainConfig
@@ -30,7 +30,7 @@ public class CondEntityIsNpc extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "(npc|citizen) %npc% (1¦is|2¦is(n't| not)) spawned";
+		return "(npc|citizen) %npc% (1Â¦is|2Â¦is(n't| not)) spawned";
 	}
 	public boolean check(Event e) {
 		NPCRegistry registry = CitizensAPI.getNPCRegistry();

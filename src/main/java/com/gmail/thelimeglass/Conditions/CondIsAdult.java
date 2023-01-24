@@ -14,7 +14,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("[entity] %entity% (1¦is|2¦is(n't| not)) [a[n]] adult")
+@Syntax("[entity] %entity% (1Â¦is|2Â¦is(n't| not)) [a[n]] adult")
 @Config("Adult")
 public class CondIsAdult extends Condition {
 	
@@ -26,7 +26,7 @@ public class CondIsAdult extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[entity] %entity% (1¦is|2¦is(n't| not)) [a[n] adult";
+		return "[entity] %entity% (1Â¦is|2Â¦is(n't| not)) [a[n] adult";
 	}
 	public boolean check(Event e) {
 		if (entity.getSingle(e) instanceof Ageable) {

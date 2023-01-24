@@ -7,8 +7,8 @@ plugins {
 	id 'java'
 }
 
-compileJava.options.encoding = 'Cp1252'
-compileTestJava.options.encoding = 'Cp1252'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 
 repositories {
 	mavenCentral()
@@ -46,18 +46,9 @@ dependencies {
 	// Citizens
 	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.30-SNAPSHOT')
 
-	// ProtocolSupport
-	//implementation (group: 'com.github.ProtocolSupport', name: 'ProtocolSupport', version: 'master-SNAPSHOT')
-
 	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
 		transitive = false
 	}
-
-	//implementation (group: 'io.netty', name: 'netty-all', version: '4.1.41.Final')
-
-	//shadow (group: 'commons-io', name: 'commons-io', version: '2.6')
-
-	//implementation (group: 'com.google.code.findbugs', name: 'findbugs', version: '3.0.1')
 
 	// JSON.org
 	shadow (group: 'org.json', name: 'json', version: '20220320')
@@ -65,6 +56,62 @@ dependencies {
 	implementation fileTree(dir: 'libraries', include: '*.jar')
 
 }
+
+tasks.register('setupAddonTest') {
+	dependsOn shadowJar
+	doLast {
+		copy {
+			from 'build/libs/Skellett-' + version + '.jar'
+			into 'src/test/resources/runner_data/'
+			rename('Skellett-' + version + '.jar', 'Skellett.jar')
+		}
+	}
+}
+
+// Create a test task with given name, environments dir/file, dev mode and java version.
+void createTestTask(String name, String environments, boolean devMode, int javaVersion) {
+	tasks.register(name, JavaExec) {
+		dependsOn setupAddonTest
+		javaLauncher = javaToolchains.launcherFor {
+			languageVersion = JavaLanguageVersion.of(javaVersion)
+		}
+		if (devMode) {
+			standardInput = System.in
+		}
+		group = 'execution'
+		classpath = files([
+		//	'build' + File.separator + 'libs' + File.separator + 'Skellett-' + version + '.jar',
+		//	project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
+			sourceSets.main.runtimeClasspath
+		])
+		main = 'ch.njol.skript.tests.platform.PlatformMain'
+		args = [
+			'build/test_runners',
+			'src/test/resources/tests',
+			'src/test/resources/runner_data',
+			environments,
+			devMode,
+			false
+		]
+	}
+}
+
+def latestEnv = 'java17/paper-1.19.3.json'
+def latestJava = 17
+def oldestJava = 8
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs += ["-source", "" + oldestJava, "-target", "" + oldestJava]
+}
+
+// Register different Skript testing tasks
+createTestTask('quickTest', 'src/test/resources/environments/' + latestEnv, false, latestJava)
+createTestTask('addonTestJava17', 'src/test/resources/environments/java17', false, latestJava)
+createTestTask('addonTestJava8', 'src/test/resources/environments/java8', false, oldestJava)
+createTestTask('addonTestDev', 'src/test/resources/environments/' + (project.property('testEnv') == null
+	? latestEnv : project.property('testEnv') + '.json'), true, Integer.parseInt(project.property('testEnvJavaVersion') == null
+	? latestJava : project.property('testEnvJavaVersion')))
+tasks.register('addonTest') {dependsOn addonTestJava8, addonTestJava17}
 
 processResources {
 	filter ReplaceTokens, tokens: ["version": project.property("version")]

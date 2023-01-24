@@ -15,7 +15,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("%player% (1¦(has|does)|2¦(has|does)(n't| not)) [(have|got)] [a] cool[ ]down for [(item|material)] %string%")
+@Syntax("%player% (1Â¦(has|does)|2Â¦(has|does)(n't| not)) [(have|got)] [a] cool[ ]down for [(item|material)] %string%")
 @Config("ItemCooldown")
 public class CondHasCooldown extends Condition {
 	
@@ -29,7 +29,7 @@ public class CondHasCooldown extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "%player% (1¦does|2¦does(n't| not)) have [a] cool[ ]down for [(item|material)] %string%";
+		return "%player% (1Â¦does|2Â¦does(n't| not)) have [a] cool[ ]down for [(item|material)] %string%";
 	}
 	public boolean check(Event e) {
 		if (material != null && player != null) {

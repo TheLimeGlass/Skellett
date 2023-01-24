@@ -12,7 +12,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("(stylish|style|simple) [score][ ]board %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))")
+@Syntax("(stylish|style|simple) [score][ ]board %string% (1Â¦(is set|[does] exist[s])|2Â¦(is(n't| not) set|does(n't| not) exist[s]))")
 @Config("Main.StylishBoards")
 @FullConfig
 public class CondStylishExists extends Condition {
@@ -25,7 +25,7 @@ public class CondStylishExists extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "(stylish|style|simple) [score][ ]board %string% (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))";
+		return "(stylish|style|simple) [score][ ]board %string% (1Â¦(is set|[does] exist[s])|2Â¦(is(n't| not) set|does(n't| not) exist[s]))";
 	}
 	public boolean check(Event e) {
 		if (StyleManager.contains(scoreboard.getSingle(e))) {

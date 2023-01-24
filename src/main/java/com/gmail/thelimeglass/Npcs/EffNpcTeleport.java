@@ -17,7 +17,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import net.citizensnpcs.api.npc.NPC;
 
-@Syntax("teleport (npc|citizen) %citizen% to %location% [with (1¦%-teleportcause%|2¦%-string%)]")
+@Syntax("teleport (npc|citizen) %citizen% to %location% [with (1Â¦%-teleportcause%|2Â¦%-string%)]")
 @Config("PluginHooks.Npc")
 @FullConfig
 @MainConfig
@@ -40,7 +40,7 @@ public class EffNpcTeleport extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "teleport (npc|citizen) %npc% to %location% [with (1¦%teleportcause%|2¦%string%)]";
+		return "teleport (npc|citizen) %npc% to %location% [with (1Â¦%teleportcause%|2Â¦%string%)]";
 	}
 	@Override
 	protected void execute(Event e) {

@@ -12,7 +12,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("[player] %player% (1¦can|2¦can([ ]no|')t) see [player] %player%")
+@Syntax("[player] %player% (1Â¦can|2Â¦can([ ]no|')t) see [player] %player%")
 @Config("PlayerCanSee")
 public class CondCanSeePlayer extends Condition {
 	
@@ -25,7 +25,7 @@ public class CondCanSeePlayer extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[player] %player% (1¦can|2¦can([ ]no|')t) see [player] %player%";
+		return "[player] %player% (1Â¦can|2Â¦can([ ]no|')t) see [player] %player%";
 	}
 	public boolean check(Event e) {
 		return viewer.getSingle(e).canSee(player.getSingle(e)) ? isNegated() : !isNegated();

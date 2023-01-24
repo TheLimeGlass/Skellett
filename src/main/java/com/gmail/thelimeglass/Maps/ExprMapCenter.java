@@ -18,7 +18,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-@Syntax({"center (1¦x|2¦z)[( |-)][(position|coord[inate])] (of|from|in) [map] %map%", "%map%'s center (1¦x|2¦z)[( |-)][(position|coord[inate])]"})
+@Syntax({"center (1Â¦x|2Â¦z)[( |-)][(position|coord[inate])] (of|from|in) [map] %map%", "%map%'s center (1Â¦x|2Â¦z)[( |-)][(position|coord[inate])]"})
 @Config("Main.Maps")
 @FullConfig
 @PropertyType(ExpressionType.COMBINED)
@@ -39,7 +39,7 @@ public class ExprMapCenter extends SimpleExpression<Number> {
 		return true;
 	}
 	public String toString(@Nullable Event arg0, boolean arg1) {
-		return "center (1¦x|2¦z) [(position|coord[inate])] (of|from|in) [map] %map%";
+		return "center (1Â¦x|2Â¦z) [(position|coord[inate])] (of|from|in) [map] %map%";
 	}
 	@Nullable
 	protected Number[] get(Event e) {

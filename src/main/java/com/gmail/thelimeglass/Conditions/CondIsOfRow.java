@@ -13,7 +13,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("[slot] %number% (1¦is|2¦is(n't| not)) (within|of|in) row %number% [(of|in|from) [inventory] %-inventory%]")
+@Syntax("[slot] %number% (1Â¦is|2Â¦is(n't| not)) (within|of|in) row %number% [(of|in|from) [inventory] %-inventory%]")
 @Config("OfRow")
 public class CondIsOfRow extends Condition {
 	
@@ -28,7 +28,7 @@ public class CondIsOfRow extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[slot] %number% (1¦is|2¦is(n't| not)) (within|of|in) row %number% [(of|in|from) [inventory] %-inventory%]";
+		return "[slot] %number% (1Â¦is|2Â¦is(n't| not)) (within|of|in) row %number% [(of|in|from) [inventory] %-inventory%]";
 	}
 	public boolean check(Event e) {
 		if (slot != null && row != null) {

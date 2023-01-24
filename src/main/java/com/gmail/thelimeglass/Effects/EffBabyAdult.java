@@ -14,7 +14,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("[(make|set)] [entity] %entity% [to] [a[n]] (1在aby|2地dult)")
+@Syntax("[(make|set)] [entity] %entity% [to] [a[n]] (1礎baby|2礎adult)")
 @Config("BabyAdult")
 public class EffBabyAdult extends Effect {
 	
@@ -29,7 +29,7 @@ public class EffBabyAdult extends Effect {
 	}
 	@Override
 	public String toString(@Nullable Event paramEvent, boolean paramBoolean) {
-		return "[(make|set)] [entity] %entity% [to] [a[n]] (1在aby|2地dult)";
+		return "[(make|set)] [entity] %entity% [to] [a[n]] (1礎baby|2礎adult)";
 	}
 	@Override
 	protected void execute(Event e) {
