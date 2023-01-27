@@ -1,0 +1,6 @@
+test "time values":
+	set {_time} to a day
+	assert days of {_time} is 1 with "A day did not have 1 day"
+	assert hours of {_time} is 24 with "A day did not have 24 hours"
+	assert minutes of {_time} is 1440 with "A day did not have 1440 minutes"
+	assert weeks of {_time} is 0.14285714285714285714285714285714 with "A day did not convert to weeks"

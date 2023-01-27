@@ -1,0 +1,32 @@
+name: Java 8 CI (MC 1.8-1.16)
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+
+jobs:
+    build:
+        if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  submodules: recursive
+            - name: Set up JDK 8
+              uses: actions/setup-java@v3
+              with:
+                  java-version: '8'
+                  distribution: 'adopt'
+                  cache: gradle
+            - name: Grant execute permission for gradlew
+              run: chmod +x gradlew
+            - name: Build Skellett and run test scripts
+              run: ./gradlew clean addonTestJava8
+            - name: Upload Nightly Build
+              uses: actions/upload-artifact@v3
+              if: success()
+              with:
+                  name: skellett-nightly
+                  path: build/libs/*

@@ -12,7 +12,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
-@Syntax("%entity% (1¦can|2¦can([ ]no|')t) [visibly] see %entity%")
+@Syntax("%entity% (1Â¦can|2Â¦can([ ]no|')t) [visibly] see %entity%")
 @Config("LineOfSight")
 public class CondLineOfSight extends Condition {
 	
@@ -25,7 +25,7 @@ public class CondLineOfSight extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "%entity% (1¦can|2¦can([ ]no|')t) [visibly] see %entity%";
+		return "%entity% (1Â¦can|2Â¦can([ ]no|')t) [visibly] see %entity%";
 	}
 	public boolean check(Event e) {
 		if (viewer.getSingle(e).hasLineOfSight(entity.getSingle(e))) {

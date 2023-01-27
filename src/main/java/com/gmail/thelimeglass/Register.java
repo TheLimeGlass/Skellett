@@ -80,9 +80,6 @@ import net.citizensnpcs.api.event.NPCSpawnEvent;
 import net.citizensnpcs.api.event.NPCTeleportEvent;
 import net.citizensnpcs.api.event.PlayerCreateNPCEvent;
 import net.citizensnpcs.api.npc.NPC;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class Register {
 
@@ -488,28 +485,6 @@ public class Register {
 		//TODO: registerEvent(PlayerInteractEntityEvent.class, "item[ ]frame rotate");
 	}
 	public static void types() {
-		if (Skellett.syntaxToggleData.getBoolean("Main.ChatComponent")) {
-			EnumClassInfo.create(ClickEvent.Action.class, "clickeventaction").register();
-			EnumClassInfo.create(HoverEvent.Action.class, "hovereventaction").register();
-			Classes.registerClass(new ClassInfo<TextComponent>(TextComponent.class, "textcomponent")
-				.name("textcomponent")
-				.description("A getter for bungeecord's chat textcomponent.")
-				.parser(new Parser<TextComponent>() {
-					@Override
-					@Nullable
-					public TextComponent parse(String obj, ParseContext context) {
-						return null;
-					}
-					@Override
-					public String toString(TextComponent t, int flags) {
-						return t.toLegacyText();
-					}
-					@Override
-					public String toVariableNameString(TextComponent t) {
-						return t.toLegacyText();
-					}
-			}));
-		}
 		if (Skellett.syntaxToggleData.getBoolean("Main.Scoreboards")) {
 			if (Classes.getExactClassInfo(Objective.class) == null)
 				Classes.registerClass(new ClassInfo<Objective>(Objective.class, "objective")

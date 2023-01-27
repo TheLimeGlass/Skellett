@@ -15,7 +15,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 
 @SuppressWarnings("deprecation")
-@Syntax("[piston] %block% (1¦is|2¦is(n't| not)) [a] sticky [piston]")
+@Syntax("[piston] %block% (1Â¦is|2Â¦is(n't| not)) [a] sticky [piston]")
 @Config("PistonSticky")
 public class CondIsSticky extends Condition {
 	
@@ -27,7 +27,7 @@ public class CondIsSticky extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[piston] %block% (1¦is|2¦is(n't| not)) [a] sticky [piston]";
+		return "[piston] %block% (1Â¦is|2Â¦is(n't| not)) [a] sticky [piston]";
 	}
 	public boolean check(Event e) {
 		MaterialData piston = block.getSingle(e).getState().getData();

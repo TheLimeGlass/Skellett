@@ -15,7 +15,7 @@ import ch.njol.util.Kleenean;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 
-@Syntax("[the] (npc|citizen) %citizen% (1¦is|2¦is(n't| not)) (navigating|moving)")
+@Syntax("[the] (npc|citizen) %citizen% (1Â¦is|2Â¦is(n't| not)) (navigating|moving)")
 @Config("PluginHooks.Npc")
 @FullConfig
 @MainConfig
@@ -29,7 +29,7 @@ public class CondNpcIsNavigating extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[the] (npc|citizen) %npc% (1¦is|2¦is(n't| not)) (navigating|moving)";
+		return "[the] (npc|citizen) %npc% (1Â¦is|2Â¦is(n't| not)) (navigating|moving)";
 	}
 	public boolean check(Event e) {
 		Navigator navigator = npc.getSingle(e).getNavigator();

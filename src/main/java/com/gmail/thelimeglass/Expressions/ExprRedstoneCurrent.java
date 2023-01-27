@@ -19,7 +19,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-@Syntax("[the] [skellett] (1¦(new|future)|2¦(old|past)) [event] [redstone] current")
+@Syntax("[the] [skellett] (1Â¦(new|future)|2Â¦(old|past)) [event] [redstone] current")
 @Config("RedstoneCurrent")
 @PropertyType(ExpressionType.COMBINED)
 public class ExprRedstoneCurrent extends SimpleExpression<Integer> {
@@ -40,7 +40,7 @@ public class ExprRedstoneCurrent extends SimpleExpression<Integer> {
 		return true;
 	}
 	public String toString(@Nullable Event arg0, boolean arg1) {
-		return "[the] [skellett] (1¦(new|future)|2¦(old|past)) [event] [redstone] current";
+		return "[the] [skellett] (1Â¦(new|future)|2Â¦(old|past)) [event] [redstone] current";
 	}
 	@Nullable
 	protected Integer[] get(Event e) {

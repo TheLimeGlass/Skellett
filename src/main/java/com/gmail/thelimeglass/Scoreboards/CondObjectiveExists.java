@@ -12,7 +12,7 @@ import ch.njol.util.Kleenean;
 
 public class CondObjectiveExists extends Condition {
 
-	//objective %string% [[(in|from)] (score[ ][board]|[skellett[ ]]board) [%-scoreboard%]] (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s]))
+	//objective %string% [[(in|from)] (score[ ][board]|[skellett[ ]]board) [%-scoreboard%]] (1Â¦(is set|[does] exist[s])|2Â¦(is(n't| not) set|does(n't| not) exist[s]))
 	
 	private Expression<String> obj;
 	private Expression<Scoreboard> scoreboard;
@@ -25,7 +25,7 @@ public class CondObjectiveExists extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "objective %string% [[(in|from)] (score[ ][board]|[skellett[ ]]board) [%-scoreboard%]] (1¦(is set|[does] exist[s])|2¦(is(n't| not) set|does(n't| not) exist[s])))";
+		return "objective %string% [[(in|from)] (score[ ][board]|[skellett[ ]]board) [%-scoreboard%]] (1Â¦(is set|[does] exist[s])|2Â¦(is(n't| not) set|does(n't| not) exist[s])))";
 	}
 	public boolean check(Event e) {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();

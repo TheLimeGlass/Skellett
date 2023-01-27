@@ -11,7 +11,7 @@ import ch.njol.util.Kleenean;
 
 public class CondTeamHasEntry extends Condition {
 
-	//(score[ ][board]|[skellett[ ]]board) (1¦(ha(s|ve)|contain[s])|2¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %team%
+	//(score[ ][board]|[skellett[ ]]board) (1Â¦(ha(s|ve)|contain[s])|2Â¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %team%
 	
 	private Expression<String> entry;
 	private Expression<Team> team;
@@ -24,7 +24,7 @@ public class CondTeamHasEntry extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "(score[ ][board]|[skellett[ ]]board) (1¦(ha(s|ve)|contain[s])|2¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %team%";
+		return "(score[ ][board]|[skellett[ ]]board) (1Â¦(ha(s|ve)|contain[s])|2Â¦(do[es](n't| not) have| do[es](n't| not) contain)) [the] [entry] %string% [(in|within)] the [team] %team%";
 	}
 	public boolean check(Event e) {
 		if (team.getSingle(e).hasEntry(entry.getSingle(e))) {

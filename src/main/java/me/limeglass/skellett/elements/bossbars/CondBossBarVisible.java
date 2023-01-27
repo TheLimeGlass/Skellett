@@ -4,12 +4,11 @@ import org.bukkit.boss.BossBar;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.conditions.base.PropertyCondition;
-import ch.njol.skript.util.Version;
 
 public class CondBossBarVisible extends PropertyCondition<BossBar> {
 
 	static {
-		if (Skript.getMinecraftVersion().isLargerThan(new Version(1, 8)))
+		if (Skript.classExists("org.bukkit.boss.BossBar"))
 			register(CondBossBarVisible.class, "[[boss[ ]]bar] visible", "bossbars");
 	}
 

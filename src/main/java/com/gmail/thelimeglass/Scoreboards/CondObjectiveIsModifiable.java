@@ -11,7 +11,7 @@ import ch.njol.util.Kleenean;
 
 public class CondObjectiveIsModifiable extends Condition {
 
-	//(score[ ][board]|[skellett[ ]]board) objective %objective% (1¦is modifiable|2¦is(n't| not) modifiable)
+	//(score[ ][board]|[skellett[ ]]board) objective %objective% (1ï¿½is modifiable|2ï¿½is(n't| not) modifiable)
 	
 	private Expression<Objective> obj;
 	Boolean boo = true;
@@ -22,7 +22,7 @@ public class CondObjectiveIsModifiable extends Condition {
 		return true;
 	}
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "(score[ ][board]|[skellett[ ]]board) objective %objective% (1¦is modifiable|2¦is(n't| not) modifiable)";
+		return "(score[ ][board]|[skellett[ ]]board) objective %objective% (1Â¦is modifiable|2ï¿½is(n't| not) modifiable)";
 	}
 	public boolean check(Event e) {
 		if (obj.getSingle(e).isModifiable()) {

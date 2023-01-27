@@ -31,7 +31,6 @@ Main:
 # Enables a bunch of world border stuff used for clientside management.
   ClientWorldBorders: true
   Jukebox: true
-  ChatComponent: true
 
 # Enable or disable different effect syntax here.
 Syntax:

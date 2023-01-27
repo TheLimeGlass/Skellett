@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
@@ -7,8 +8,12 @@ plugins {
 	id 'java'
 }
 
-compileJava.options.encoding = 'Cp1252'
-compileTestJava.options.encoding = 'Cp1252'
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+configurations {
+    testImplementation.extendsFrom testShadow
+}
 
 repositories {
 	mavenCentral()
@@ -41,30 +46,86 @@ dependencies {
 	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.2.700')
 
 	// Spigot
-	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.19-R0.1-SNAPSHOT')
+	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.19.3-R0.1-SNAPSHOT')
 
 	// Citizens
 	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.30-SNAPSHOT')
 
-	// ProtocolSupport
-	//implementation (group: 'com.github.ProtocolSupport', name: 'ProtocolSupport', version: 'master-SNAPSHOT')
-
-	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
-		transitive = false
-	}
-
-	//implementation (group: 'io.netty', name: 'netty-all', version: '4.1.41.Final')
-
-	//shadow (group: 'commons-io', name: 'commons-io', version: '2.6')
-
-	//implementation (group: 'com.google.code.findbugs', name: 'findbugs', version: '3.0.1')
+//	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
+//		transitive = false
+//	}
 
 	// JSON.org
-	shadow (group: 'org.json', name: 'json', version: '20220320')
+	shadow (group: 'org.json', name: 'json', version: '20220924')
+
+	// Due to Skript for the Testing system
+	testShadow (group: 'commons-lang', name: 'commons-lang', version: '2.6')
 
 	implementation fileTree(dir: 'libraries', include: '*.jar')
 
 }
+
+task addonTestJar(type: ShadowJar) {
+	dependsOn(shadowJar)
+	archiveName 'Skellett-TestJar-' + version + '.jar'
+	from sourceSets.test.output, sourceSets.main.output, project.configurations.testShadow
+}
+
+tasks.register('setupAddonTest') {
+	dependsOn addonTestJar
+	doLast {
+		copy {
+			from 'build/libs/Skellett-TestJar-' + version + '.jar'
+			into 'src/test/resources/runner_data/'
+			rename('Skellett-TestJar-' + version + '.jar', 'Skellett.jar')
+		}
+	}
+}
+
+// Create a test task with given name, environments dir/file, dev mode and java version.
+void createTestTask(String name, String environments, boolean devMode, int javaVersion) {
+	tasks.register(name, JavaExec) {
+		dependsOn setupAddonTest, shadowJar
+		javaLauncher = javaToolchains.launcherFor {
+			languageVersion = JavaLanguageVersion.of(javaVersion)
+		}
+		if (devMode) {
+			standardInput = System.in
+		}
+		group = 'execution'
+		classpath = files([
+			'src/test/resources/runner_data/Skellett.jar',
+			project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
+			sourceSets.main.runtimeClasspath
+		])
+		main = 'ch.njol.skript.tests.platform.PlatformMain'
+		args = [
+			'build/test_runners',
+			'src/test/resources/tests',
+			'src/test/resources/runner_data',
+			environments,
+			devMode,
+			false
+		]
+	}
+}
+
+def latestEnv = 'java17/paper-1.19.3.json'
+def latestJava = 17
+def oldestJava = 8
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs += ["-source", "" + oldestJava, "-target", "" + oldestJava]
+}
+
+// Register different Skript testing tasks
+createTestTask('quickTest', 'src/test/resources/environments/' + latestEnv, false, latestJava)
+createTestTask('addonTestJava17', 'src/test/resources/environments/java17', false, latestJava)
+createTestTask('addonTestJava8', 'src/test/resources/environments/java8', false, oldestJava)
+createTestTask('addonTestDev', 'src/test/resources/environments/' + (project.property('testEnv') == null
+	? latestEnv : project.property('testEnv') + '.json'), true, Integer.parseInt(project.property('testEnvJavaVersion') == null
+	? latestJava : project.property('testEnvJavaVersion')))
+tasks.register('addonTest') {dependsOn addonTestJava8, addonTestJava17}
 
 processResources {
 	filter ReplaceTokens, tokens: ["version": project.property("version")]

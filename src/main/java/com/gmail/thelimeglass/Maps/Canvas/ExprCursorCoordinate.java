@@ -18,7 +18,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 
-@Syntax("[skellett] map cursor (1¦x|2¦y)(-| )(coord[inate]|pos[ition]|loc[ation])[s] of [[map][ ]cursor] %mapcursor%")
+@Syntax("[skellett] map cursor (1Â¦x|2Â¦y)(-| )(coord[inate]|pos[ition]|loc[ation])[s] of [[map][ ]cursor] %mapcursor%")
 @Config("Main.Maps")
 @FullConfig
 @PropertyType(ExpressionType.COMBINED)
@@ -40,7 +40,7 @@ public class ExprCursorCoordinate extends SimpleExpression<Number> {
 	}
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
-		return "[skellett] map cursor (1¦x|2¦y|3¦z)(-| )(coord[inate]|pos[ition]|loc[ation])[s] of [[map][ ]cursor] %mapcursor%";
+		return "[skellett] map cursor (1Â¦x|2Â¦y|3Â¦z)(-| )(coord[inate]|pos[ition]|loc[ation])[s] of [[map][ ]cursor] %mapcursor%";
 	}
 	@Override
 	@Nullable
