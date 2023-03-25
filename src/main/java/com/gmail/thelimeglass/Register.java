@@ -70,7 +70,6 @@ import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
 import net.citizensnpcs.api.event.NPCDamageEntityEvent;
 import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.event.NPCDespawnEvent;
-import net.citizensnpcs.api.event.NPCEnderTeleportEvent;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCPushEvent;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
@@ -384,7 +383,6 @@ public class Register {
 			} catch( ClassNotFoundException e ) {
 				enderTp = false;
 			}
-			if (enderTp) registerEvent(NPCEnderTeleportEvent.class, "(npc|citizen) ender[[ ]pearl] [teleport]");
 			//TODO: Return and settable vector
 			registerEvent(NPCPushEvent.class, "(npc|citizen) (push|(vector|velocity) change)");
 			registerEvent(NPCRemoveEvent.class, "(npc|citizen) remove");
