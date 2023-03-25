@@ -67,7 +67,7 @@ dependencies {
 
 task addonTestJar(type: ShadowJar) {
 	dependsOn(shadowJar)
-	archiveName 'Skellett-TestJar-' + version + '.jar'
+	archiveFileName = 'Skellett-TestJar-' + version + '.jar'
 	from sourceSets.test.output, sourceSets.main.output, project.configurations.testShadow
 }
 
@@ -138,7 +138,5 @@ processResources {
 shadowJar {
 	configurations = [project.configurations.shadow]
 	archiveVersion = version
-	baseName = project.name
-	classifier = ''
 	minimize()
 }
