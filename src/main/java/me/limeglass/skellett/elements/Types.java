@@ -251,7 +251,6 @@ public class Types {
 						return fields;
 					}
 	
-					@SuppressWarnings("deprecation")
 					@Override
 					protected BossBar deserialize(Fields fields) throws StreamCorruptedException {
 						String key = fields.getObject("key", String.class);

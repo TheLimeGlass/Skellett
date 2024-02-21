@@ -261,7 +261,7 @@ public class Skellett extends JavaPlugin {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static int getTicks(Timespan time) {
+	public static long getTicks(Timespan time) {
 		if (Skript.methodExists(Timespan.class, "getTicks_i")) {
 			Number tick = time.getTicks_i();
 			return tick.intValue();

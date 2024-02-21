@@ -24,44 +24,49 @@ import ch.njol.util.coll.CollectionUtils;
 public class ExprMaxDamageTicks extends SimpleExpression<Timespan>{
 	
 	private Expression<LivingEntity> entity;
+
 	@Override
 	public Class<? extends Timespan> getReturnType() {
 		return Timespan.class;
 	}
+
 	@Override
 	public boolean isSingle() {
 		return true;
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] e, int arg1, Kleenean arg2, ParseResult arg3) {
 		entity = (Expression<LivingEntity>) e[0];
 		return true;
 	}
+
 	@Override
 	public String toString(@Nullable Event e, boolean arg1) {
 		return "[maximum] damage delay of %entity%";
 	}
-	@SuppressWarnings("deprecation")
+
 	@Override
 	@Nullable
 	protected Timespan[] get(Event e) {
 		return new Timespan[]{Timespan.fromTicks((int)(entity.getSingle(e)).getMaximumNoDamageTicks())};
 	}
-	@SuppressWarnings("deprecation")
+
 	@Override
 	public void change(Event e, Object[] delta, Changer.ChangeMode mode){
 		if (entity == null || entity.getSingle(e) == null)
 			return;
 		Timespan before = Timespan.fromTicks((int)(entity.getSingle(e)).getMaximumNoDamageTicks());
 		if (mode == ChangeMode.SET) {
-			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks(((Timespan)delta[0]).getTicks());
+			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks((int) ((Timespan)delta[0]).getTicks());
 		} else if (mode == ChangeMode.ADD) {
-			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks(before.getTicks() + ((Timespan)delta[0]).getTicks());
+			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks((int) (before.getTicks() + ((Timespan)delta[0]).getTicks()));
 		} else if (mode == ChangeMode.REMOVE) {
-			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks(before.getTicks() - ((Timespan)delta[0]).getTicks());
+			((LivingEntity)entity.getSingle(e)).setMaximumNoDamageTicks((int) (before.getTicks() - ((Timespan)delta[0]).getTicks()));
 		}
 	}
+
 	@Override
 	public Class<?>[] acceptChange(final Changer.ChangeMode mode) {
 		if (mode == ChangeMode.SET || mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
@@ -69,4 +74,5 @@ public class ExprMaxDamageTicks extends SimpleExpression<Timespan>{
 		}
 		return null;
 	}
+
 }

@@ -33,6 +33,11 @@ repositories {
 		url "https://oss.sonatype.org/content/repositories/snapshots/"
 	}
 
+    // Paper
+    maven {
+        url 'https://repo.papermc.io/repository/maven-public/'
+    }
+
 	// Skript
 	maven {
 		url 'https://repo.skriptlang.org/releases'
@@ -46,14 +51,19 @@ dependencies {
 	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.2.700')
 
 	// Spigot
-	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.20.1-R0.1-SNAPSHOT')
+	//implementation (group: 'io.papermc.paper', name: 'paper-api', version: '1.20.4-R0.1-SNAPSHOT')
+	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.20.4-R0.1-SNAPSHOT')
 
 	// Citizens
 	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.32-SNAPSHOT')
 
-//	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.6.3') {
-//		transitive = false
-//	}
+	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.8.2') {
+		transitive = false
+	}
+
+    // Skript has this
+    implementation group: 'net.kyori', name: 'adventure-text-serializer-bungeecord', version: '4.3.2'
+    //shadow group: 'net.kyori', name: 'adventure-platform-bukkit', version: '4.3.2'
 
 	// JSON.org
 	shadow (group: 'org.json', name: 'json', version: '20230618')
@@ -98,19 +108,23 @@ void createTestTask(String name, String environments, boolean devMode, int javaV
 			project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
 			sourceSets.main.runtimeClasspath
 		])
-		main = 'ch.njol.skript.tests.platform.PlatformMain'
+		main = 'ch.njol.skript.test.platform.PlatformMain'
 		args = [
 			'build/test_runners',
 			'src/test/resources/tests',
 			'src/test/resources/runner_data',
 			environments,
 			devMode,
-			false
+			false,
+			false,
+			true,
+			"null",
+			300000
 		]
 	}
 }
 
-def latestEnv = 'java17/paper-1.19.3.json'
+def latestEnv = 'java17/paper-1.20.4.json'
 def latestJava = 17
 def oldestJava = 8
 

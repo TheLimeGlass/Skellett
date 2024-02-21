@@ -23,12 +23,7 @@ public class ExprBossBarTitle extends PropertyExpression<BossBar, String> {
 	}
 
 	@Override
-	public Class<? extends String> getReturnType() {
-		return String.class;
-	}
-
 	@SuppressWarnings("unchecked")
-	@Override
 	public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
 		setExpr((Expression<? extends BossBar>) exprs[0]);
 		return true;
@@ -36,14 +31,9 @@ public class ExprBossBarTitle extends PropertyExpression<BossBar, String> {
 
 	@Override
 	protected String[] get(Event event, BossBar[] source) {
-		return Arrays.stream(source).map(bossbar -> bossbar.getTitle()).toArray(String[]::new);
-	}
-
-	@Override
-	public String toString(@Nullable Event event, boolean debug) {
-		if (event == null || debug)
-			return "titles of bossbars";
-		return "titles of bossbars " + getExpr().toString(event, debug);
+		return Arrays.stream(source)
+				.map(bossbar -> bossbar.getTitle())
+				.toArray(String[]::new);
 	}
 
 	@Override
@@ -60,6 +50,18 @@ public class ExprBossBarTitle extends PropertyExpression<BossBar, String> {
 			return;
 		for (BossBar bossbar : getExpr().getArray(event))
 			bossbar.setTitle(title);
+	}
+
+	@Override
+	public Class<? extends String> getReturnType() {
+		return String.class;
+	}
+
+	@Override
+	public String toString(@Nullable Event event, boolean debug) {
+		if (event == null || debug)
+			return "titles of bossbars";
+		return "titles of bossbars " + getExpr().toString(event, debug);
 	}
 
 }
