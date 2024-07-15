@@ -57,7 +57,7 @@ dependencies {
 	// Citizens
 	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.35-SNAPSHOT')
 
-	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.8.7') {
+	implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.9.0-pre2') {
 		transitive = false
 	}
 
