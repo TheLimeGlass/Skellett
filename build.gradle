@@ -66,7 +66,7 @@ dependencies {
     //shadow group: 'net.kyori', name: 'adventure-platform-bukkit', version: '4.3.2'
 
 	// JSON.org
-	shadow (group: 'org.json', name: 'json', version: '20230618')
+	shadow (group: 'org.json', name: 'json', version: '20250517')
 
 	// Due to Skript for the Testing system
 	testShadow (group: 'commons-lang', name: 'commons-lang', version: '2.6')
