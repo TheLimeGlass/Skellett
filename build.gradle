@@ -48,7 +48,7 @@ repositories {
 dependencies {
 
 	//Nullable annotation
-	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.2.800')
+	implementation (group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.4.0')
 
 	// Spigot
 	//implementation (group: 'io.papermc.paper', name: 'paper-api', version: '1.20.4-R0.1-SNAPSHOT')
