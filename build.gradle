@@ -62,7 +62,7 @@ dependencies {
 	}
 
     // Skript has this
-    implementation group: 'net.kyori', name: 'adventure-text-serializer-bungeecord', version: '4.3.4'
+    implementation group: 'net.kyori', name: 'adventure-text-serializer-bungeecord', version: '4.4.1'
     //shadow group: 'net.kyori', name: 'adventure-platform-bukkit', version: '4.3.2'
 
 	// JSON.org
